@@ -99,3 +99,4 @@ Bindings~/python/Pipfile
 Bindings~/python/Pipfile.lock
 Bindings~/python/altunityrunner.egg-info
 Assets/AltUnityTester/Editor/AltUnityTesterEditorSettings.asset
+AltUnityTesterLog.txt

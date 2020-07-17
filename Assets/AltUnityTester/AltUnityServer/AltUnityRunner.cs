@@ -12,6 +12,8 @@ public class AltUnityRunner : UnityEngine.MonoBehaviour, AltIClientSocketHandler
     public static AltUnityRunner _altUnityRunner;
     
     public UnityEngine.GameObject AltUnityPopUp;
+
+    public AltConsole AltConsole;
     public UnityEngine.UI.Image AltUnityIcon;
     public UnityEngine.UI.Text AltUnityPopUpText;
     public bool AltUnityIconPressed=false;
@@ -655,7 +657,11 @@ public class AltUnityRunner : UnityEngine.MonoBehaviour, AltIClientSocketHandler
         
         _inputsVisualiser.ShowClick(position);
     }
-    
+
+    public void ShowConsole() {
+        AltConsole.Show();
+    }
+
     public int ShowInput(UnityEngine.Vector2 position, int markId = -1)
     {
         if (!_showInputs || _inputsVisualiser == null)

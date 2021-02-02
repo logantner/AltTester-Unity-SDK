@@ -509,22 +509,22 @@ public class AltUnityRunner : UnityEngine.MonoBehaviour, AltIClientSocketHandler
     {
         destroyHightlight = false;
         UnityEngine.Renderer renderer = gameObject.GetComponent<UnityEngine.Renderer>();
-        System.Collections.Generic.List<UnityEngine.Shader> originalShaders = new System.Collections.Generic.List<UnityEngine.Shader>();
         if (renderer != null)
         {
-            foreach (var material in renderer.materials)
+            UnityEngine.Material[] originalMaterials = new UnityEngine.Material[renderer.materials.Length];
+            for (int i = 0; i < renderer.materials.Length; i++)
             {
-                originalShaders.Add(material.shader);
-                material.shader = outlineShader;
-                material.SetColor("_OutlineColor", color);
-                material.SetFloat("_OutlineWidth", width);
+                originalMaterials[i] = new UnityEngine.Material(renderer.materials[i]);
+                renderer.materials[i].shader = outlineShader;
+                renderer.materials[i].SetColor("_OutlineColor", color);
+                renderer.materials[i].SetFloat("_OutlineWidth", width);
             }
             yield return null;
             getScreenshotCommand.Execute();
             yield return null;
             for (var i = 0; i < renderer.materials.Length; i++)
             {
-                renderer.materials[i].shader = originalShaders[i];
+                renderer.materials = originalMaterials;
             }
         }
         else

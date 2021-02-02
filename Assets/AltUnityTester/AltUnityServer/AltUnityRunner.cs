@@ -3,7 +3,6 @@ using Assets.AltUnityTester.AltUnityServer.AltSocket;
 using Assets.AltUnityTester.AltUnityServer.Commands;
 using Newtonsoft.Json;
 using System;
-using System.Linq;
 using System.Net.Sockets;
 
 public class AltUnityRunner : UnityEngine.MonoBehaviour, AltIClientSocketHandlerDelegate
@@ -512,10 +511,10 @@ public class AltUnityRunner : UnityEngine.MonoBehaviour, AltIClientSocketHandler
         UnityEngine.Renderer renderer = gameObject.GetComponent<UnityEngine.Renderer>();
         if (renderer != null)
         {
-            var originalMaterials = renderer.materials.ToArray();
+            UnityEngine.Material[] originalMaterials = new UnityEngine.Material[renderer.materials.Length];
             for (int i = 0; i < renderer.materials.Length; i++)
             {
-                renderer.materials[i] = new UnityEngine.Material(renderer.materials[i]);
+                originalMaterials[i] = new UnityEngine.Material(renderer.materials[i]);
                 renderer.materials[i].shader = outlineShader;
                 renderer.materials[i].SetColor("_OutlineColor", color);
                 renderer.materials[i].SetFloat("_OutlineWidth", width);

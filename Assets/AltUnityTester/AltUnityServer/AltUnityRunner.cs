@@ -516,7 +516,7 @@ public class AltUnityRunner : UnityEngine.MonoBehaviour, AltIClientSocketHandler
             renderer.materials = new UnityEngine.Material[renderer.materials.Length];
             for (int i = 0; i < renderer.materials.Length; i++)
             {
-                renderer.materials[i] = new UnityEngine.Material(renderer.materials[i]);
+                renderer.materials[i] = new UnityEngine.Material(originalMaterials[i]);
                 renderer.materials[i].shader = outlineShader;
                 renderer.materials[i].SetColor("_OutlineColor", color);
                 renderer.materials[i].SetFloat("_OutlineWidth", width);

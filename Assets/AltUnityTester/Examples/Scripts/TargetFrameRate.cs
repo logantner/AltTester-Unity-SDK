@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.Rendering;
 
 public class TargetFrameRate : MonoBehaviour
 {
-    public int targetFrameRate = 15;
+    public int targetFrameRate = 5;
 
     protected void Awake()
     {
@@ -13,7 +12,6 @@ public class TargetFrameRate : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = targetFrameRate;
-        OnDemandRendering.renderFrameInterval = 3;
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 public class TargetFrameRate : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class TargetFrameRate : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = targetFrameRate;
+        OnDemandRendering.renderFrameInterval = 3;
     }
 
 }

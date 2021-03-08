@@ -2,11 +2,21 @@
 
 public class TargetFrameRate : MonoBehaviour
 {
+    private static TargetFrameRate _instance;
     public int targetFrameRate = 5;
 
     protected void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+
+        if (_instance != null)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            DontDestroyOnLoad(this);
+            _instance = this;
+        }
     }
     protected void Start()
     {

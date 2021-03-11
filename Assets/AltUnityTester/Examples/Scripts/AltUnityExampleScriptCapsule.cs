@@ -84,5 +84,9 @@ public class AltUnityExampleScriptCapsule : AltUnityInheritedFields
     {
         Jump((a + 4).ToString());
     }
+    public void WorldSpaceButtonPressed()
+    {
+        Jump("WorldSpaceButtonPressed");
+    }
 
 }

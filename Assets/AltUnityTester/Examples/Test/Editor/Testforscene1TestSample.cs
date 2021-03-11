@@ -1,10 +1,10 @@
-using Altom.AltUnityDriver;
-using Altom.AltUnityDriver.Commands;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Altom.AltUnityDriver;
+using Altom.AltUnityDriver.Commands;
+using NUnit.Framework;
 
 [Timeout(10000)]
 public class TestForScene1TestSample
@@ -1515,6 +1515,14 @@ public class TestForScene1TestSample
         var Text = altUnityDriver.FindObject(By.PATH, "/Canvas[1]/Text");
         Assert.AreEqual("Text", Text.name);
 
+    }
+    [Test]
+    public void TestClickButtonInWolrdSpaceCanvas()
+    {
+        var screenPosition = altUnityDriver.FindObject(By.NAME, "WorldSpaceButton").getScreenPosition();
+        altUnityDriver.TapCustom(screenPosition.x, screenPosition.y, 1);
+        var text = altUnityDriver.FindObject(By.NAME, "CapsuleInfo").GetText();
+        Assert.AreEqual("WorldSpaceButtonPressed", text);
     }
 
 

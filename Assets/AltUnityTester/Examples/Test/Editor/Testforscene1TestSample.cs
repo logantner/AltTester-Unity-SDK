@@ -1,10 +1,10 @@
-using Altom.AltUnityDriver;
-using Altom.AltUnityDriver.Commands;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Altom.AltUnityDriver;
+using Altom.AltUnityDriver.Commands;
+using NUnit.Framework;
 
 [Timeout(10000)]
 public class TestForScene1TestSample
@@ -676,7 +676,7 @@ public class TestForScene1TestSample
     public void TestGetAllComponents()
     {
         List<AltUnityComponent> components = altUnityDriver.FindObject(By.NAME, "Canvas").GetAllComponents();
-        Assert.AreEqual(4, components.Count);
+        Assert.AreEqual(5, components.Count);
         Assert.AreEqual("UnityEngine.RectTransform", components[0].componentName);
         Assert.AreEqual("UnityEngine.CoreModule", components[0].assemblyName);
     }
@@ -1479,6 +1479,18 @@ public class TestForScene1TestSample
         var data = altElement.CallComponentMethod("UnityEngine.GameObject", "CompareTag", "Untagged", "System.String", "UnityEngine.CoreModule");
         Assert.AreEqual("true", data);
     }
+
+    [Test]
+    public void TestFindObjectByAltId()
+    {
+        var capsule = altUnityDriver.FindObject(By.ID, "2b78431c-2251-4489-8d50-7634304a5630");
+        Assert.AreEqual("Capsule", capsule.name);
+        var plane = altUnityDriver.FindObject(By.PATH, "//*[@id=eff13b53-66de-4f98-82f3-a140b8949484]");
+        Assert.AreEqual("Plane", plane.name);
+        var mainCamera = altUnityDriver.FindObject(By.NAME, "Main Camera");
+        mainCamera = altUnityDriver.FindObject(By.ID, mainCamera.id.ToString());
+        Assert.AreEqual("Main Camera", mainCamera.name);
+    }
     [Test]
     public void TestCallMethodInsideSubObjectOfGameObject()
     {
@@ -1486,5 +1498,40 @@ public class TestForScene1TestSample
         var data = altElement.CallComponentMethod("UnityEngine.GameObject", "scene.IsValid", "", "", "UnityEngine.CoreModule");
         Assert.AreEqual("true", data);
     }
+
+    [Test]
+    public void TestFindNthChild()
+    {
+        var CapsuleInfo = altUnityDriver.FindObject(By.PATH, "/Canvas[0]");
+        Assert.AreEqual("CapsuleInfo", CapsuleInfo.name);
+        var UIButton = altUnityDriver.FindObject(By.PATH, "/Canvas[1]");
+        Assert.AreEqual("UIButton", UIButton.name);
+        var NextScene = altUnityDriver.FindObject(By.PATH, "/Canvas[-1]");
+        Assert.AreEqual("NextScene", NextScene.name);
+        var ButtonCounter = altUnityDriver.FindObject(By.PATH, "/Canvas[-2]");
+        Assert.AreEqual("ButtonCounter", ButtonCounter.name);
+        var InputField = altUnityDriver.FindObject(By.PATH, "/Canvas[@layer=UI][5]");
+        Assert.AreEqual("InputField", InputField.name);
+        var Text = altUnityDriver.FindObject(By.PATH, "/Canvas[1]/Text");
+        Assert.AreEqual("Text", Text.name);
+
+    }
+    [Test]
+    public void TestUnloadScene()
+    {
+        altUnityDriver.LoadScene("Scene 2 Draggable Panel", false);
+        Assert.AreEqual(2, altUnityDriver.GetAllLoadedScenes().Count);
+        altUnityDriver.UnloadScene("Scene 2 Draggable Panel");
+        Assert.AreEqual(1, altUnityDriver.GetAllLoadedScenes().Count);
+        Assert.AreEqual("Scene 1 AltUnityDriverTestScene", altUnityDriver.GetAllLoadedScenes()[0]);
+    }
+    [Test]
+    public void TestUnloadOnlyScene()
+    {
+        Assert.Throws<CouldNotPerformOperationException>(() => altUnityDriver.UnloadScene("Scene 1 AltUnityDriverTestScene"));
+        Assert.Throws<CouldNotPerformOperationException>(() => altUnityDriver.UnloadScene("Scene 2 Draggable Panel"));
+    }
+
+
 }
 

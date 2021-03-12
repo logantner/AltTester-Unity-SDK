@@ -766,7 +766,7 @@ class PythonTests(unittest.TestCase):
         self.altdriver.load_scene('Scene 1 AltUnityDriverTestScene')
         components = self.altdriver.find_object(
             By.NAME, "Canvas").get_all_components()
-        self.assertEqual(4, len(components))
+        self.assertEqual(5, len(components))
         self.assertEqual("UnityEngine.RectTransform",
                          components[0]["componentName"])
         self.assertEqual("UnityEngine.CoreModule",
@@ -1112,6 +1112,20 @@ class PythonTests(unittest.TestCase):
         element = self.altdriver.find_object(By.NAME, 'Canvas/CapsuleInfo')
         elementParent = element.get_parent()
         self.assertEqual('Canvas', elementParent.name)
+
+    def test_unload_scene(self):
+        self.altdriver.load_scene('Scene 1 AltUnityDriverTestScene', True)
+        self.altdriver.load_scene('Scene 2 Draggable Panel', False)
+        self.assertEqual(2, len(self.altdriver.get_all_loaded_scenes()))
+        self.altdriver.unload_scene('Scene 2 Draggable Panel')
+        self.assertEqual(1, len(self.altdriver.get_all_loaded_scenes()))
+        self.assertEqual("Scene 1 AltUnityDriverTestScene",
+                         self.altdriver.get_all_loaded_scenes()[0])
+
+    def test_unload_only_scene(self):
+        self.altdriver.load_scene('Scene 1 AltUnityDriverTestScene', True)
+        with self.assertRaises(CouldNotPerformOperationException):
+            self.altdriver.unload_scene('Scene 1 AltUnityDriverTestScene')
 
 
 if __name__ == '__main__':

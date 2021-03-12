@@ -575,7 +575,7 @@ class PythonTests(unittest.TestCase):
         for element in alt_elements:
             list_of_elements.append(element.name)
 
-        self.assertEqual(24, len(list_of_elements), list_of_elements)
+        self.assertEqual(25, len(list_of_elements), list_of_elements)
         self.assertTrue("EventSystem" in list_of_elements)
         self.assertTrue("Canvas" in list_of_elements)
         self.assertTrue("Panel Drag Area" in list_of_elements)
@@ -601,7 +601,7 @@ class PythonTests(unittest.TestCase):
         for element in alt_elements:
             list_of_elements.append(element.name)
 
-        self.assertEqual(29, len(list_of_elements))
+        self.assertEqual(30, len(list_of_elements))
         self.assertTrue("EventSystem" in list_of_elements)
         self.assertTrue("Canvas" in list_of_elements)
         self.assertTrue("Panel Drag Area" in list_of_elements)
@@ -1112,6 +1112,7 @@ class PythonTests(unittest.TestCase):
         element = self.altdriver.find_object(By.NAME, 'Canvas/CapsuleInfo')
         elementParent = element.get_parent()
         self.assertEqual('Canvas', elementParent.name)
+
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(PythonTests)

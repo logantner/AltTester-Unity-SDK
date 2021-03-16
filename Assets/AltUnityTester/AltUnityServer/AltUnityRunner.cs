@@ -628,30 +628,42 @@ public class AltUnityRunner : UnityEngine.MonoBehaviour, AltIClientSocketHandler
     #region private methods
     private UnityEngine.Vector3 getObjectScreenPosition(UnityEngine.GameObject gameObject, UnityEngine.Camera camera)
     {
-        UnityEngine.Vector3 position = gameObject.transform.position;
-        UnityEngine.Camera selectedCamera = camera;
+        var selectedCamera = camera;
+        var position = gameObject.transform.position;
         UnityEngine.Canvas canvas = gameObject.GetComponentInParent<UnityEngine.Canvas>();
-        if (canvas != null && canvas.renderMode != UnityEngine.RenderMode.ScreenSpaceOverlay && canvas.worldCamera != null)
+        if (canvas != null)
         {
-            selectedCamera = canvas.worldCamera;
-        }
-        var rectTransform = gameObject.GetComponent<UnityEngine.RectTransform>();
-        if (rectTransform != null)
-        {
-            UnityEngine.Vector3[] vector3S = new UnityEngine.Vector3[4];
-            rectTransform.GetWorldCorners(vector3S);
-            position = new UnityEngine.Vector3((vector3S[0].x + vector3S[2].x) / 2, (vector3S[0].y + vector3S[2].y) / 2, (vector3S[0].z + vector3S[2].z) / 2);
-        }
-        else
-        {
-            var collider = gameObject.GetComponent<UnityEngine.Collider>();
-            if (collider != null)
+            if (canvas.renderMode != UnityEngine.RenderMode.ScreenSpaceOverlay)
             {
-                position = collider.bounds.center;
+                if (gameObject.GetComponent<UnityEngine.RectTransform>() != null)
+                {
+                    UnityEngine.Vector3[] vector3S = new UnityEngine.Vector3[4];
+                    gameObject.GetComponent<UnityEngine.RectTransform>().GetWorldCorners(vector3S);
+                    position = new UnityEngine.Vector3((vector3S[0].x + vector3S[2].x) / 2, (vector3S[0].y + vector3S[2].y) / 2, (vector3S[0].z + vector3S[2].z) / 2);
+                }
+                if (canvas.worldCamera != null)
+                {
+                    selectedCamera = canvas.worldCamera;
+                }
+                return selectedCamera.WorldToScreenPoint(position);
             }
 
+            if (gameObject.GetComponent<UnityEngine.RectTransform>() != null)
+            {
+                return gameObject.GetComponent<UnityEngine.RectTransform>().position;
+            }
+            return camera.WorldToScreenPoint(gameObject.transform.position);
         }
-        return selectedCamera.WorldToScreenPoint(position);
+
+        var collider = gameObject.GetComponent<UnityEngine.Collider>();
+        if (collider != null)
+        {
+            position = collider.bounds.center;
+        }
+
+        return camera.WorldToScreenPoint(position);
+
+
     }
     ///<summary>
     /// Iterate through all cameras until finds one that sees the object.

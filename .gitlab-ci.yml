@@ -294,9 +294,9 @@ add-unity-package-to-releases:
     - mac
   dependencies:
     - create-unity-package
-  script:
-    - curl -X POST "https://gitlab.com/altom/altunity/altunitytester/-/tags?tag_name=v.1.6.5&private_token=${PERSONAL_ACCESS_TOKEN}"
-    - curl --request POST --header "PRIVATE-TOKEN: ${PERSONAL_ACCESS_TOKEN}" \
+  script: |-
+    curl -X POST "https://gitlab.com/altom/altunity/altunitytester/-/tags?tag_name=v.1.6.5&private_token=${PERSONAL_ACCESS_TOKEN}"
+    curl --request POST --header "PRIVATE-TOKEN: ${PERSONAL_ACCESS_TOKEN}" \
           --data name="AltUnity Tester v.1.6.5" \
           --data url="https://gitlab.com/altom/altunity/altunitytester/-/jobs/${CI_JOB_TOKEN}/artifacts/file/public/${CI_COMMIT_REF_NAME}/AltUnityPackage/AltUnityTester.unitypackage" \
           --data filepath="/public/${CI_COMMIT_REF_NAME}/AltUnityPackage/AltUnityTester.unitypackage" \

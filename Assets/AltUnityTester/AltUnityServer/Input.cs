@@ -110,7 +110,7 @@ public class Input : UnityEngine.MonoBehaviour
 
     }
 
-    #region UnityEngine.Input.AltUnityTester.NotImplemented
+#region UnityEngine.Input.AltUnityTester.NotImplemented
 
     public static bool simulateMouseWithTouches
     {
@@ -219,10 +219,10 @@ public class Input : UnityEngine.MonoBehaviour
         UnityEngine.Input.ResetInputAxes();
     }
 
-    #endregion
+#endregion
 
 
-    #region UnityEngine.Input.AltUnityTester
+#region UnityEngine.Input.AltUnityTester
 
     public static bool anyKey
     {
@@ -642,7 +642,7 @@ public class Input : UnityEngine.MonoBehaviour
         return _useCustomInput ? _touches[index] : UnityEngine.Input.GetTouch(index);
     }
 
-    #endregion
+#endregion
 
     private static UnityEngine.Touch createTouch(UnityEngine.Vector3 screenPosition)
     {
@@ -1180,7 +1180,10 @@ public class Input : UnityEngine.MonoBehaviour
         if (mouseKeyCodes.Contains(keyCode))
         {
             var inputButton = keyCodeToInputButton(keyCode);
-            mouseTriggerInit(inputButton, out PointerEventData pointerEventData, out GameObject eventSystemTarget, out GameObject monoBehaviourTarget);
+PointerEventData pointerEventData;
+GameObject eventSystemTarget;
+GameObject monoBehaviourTarget;
+            mouseTriggerInit(inputButton, out pointerEventData, out eventSystemTarget, out monoBehaviourTarget);
             mouseDownTrigger(inputButton, pointerEventData, eventSystemTarget, monoBehaviourTarget);
             mouseDownPointerEventData = pointerEventData;
         }
@@ -1197,7 +1200,10 @@ public class Input : UnityEngine.MonoBehaviour
         if (mouseKeyCodes.Contains(keyCode))
         {
             var inputButton = keyCodeToInputButton(keyCode);
-            mouseTriggerInit(inputButton, out PointerEventData pointerEventData, out GameObject eventSystemTarget, out GameObject monoBehaviourTarget);
+            PointerEventData pointerEventData;
+            GameObject eventSystemTarget;
+            GameObject monoBehaviourTarget;
+            mouseTriggerInit(inputButton, out pointerEventData, out eventSystemTarget, out monoBehaviourTarget);
             mouseUpTrigger(inputButton, pointerEventData, eventSystemTarget, monoBehaviourTarget);
         }
         var keyStructure = new KeyStructure(keyCode, 1);
@@ -1292,7 +1298,10 @@ public class Input : UnityEngine.MonoBehaviour
 
     private static IEnumerator mouseEventTrigger(PointerEventData.InputButton mouseButton, float duration)
     {
-        mouseTriggerInit(mouseButton, out PointerEventData pointerEventData, out GameObject eventSystemTarget, out GameObject monoBehaviourTarget);
+        PointerEventData pointerEventData;
+        GameObject eventSystemTarget;
+        GameObject monoBehaviourTarget;
+        mouseTriggerInit(mouseButton, out pointerEventData , out eventSystemTarget, out monoBehaviourTarget);
         mouseDownTrigger(mouseButton, pointerEventData, eventSystemTarget, monoBehaviourTarget);
         yield return new WaitForSecondsRealtime(duration);
         mouseUpTrigger(mouseButton, pointerEventData, eventSystemTarget, monoBehaviourTarget);

@@ -108,7 +108,9 @@ public class CreateAltUnityPrefab : MonoBehaviour
         PopUpImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
         PopUpImage.type = Image.Type.Sliced;
         PopUpImage.fillCenter = true;
+#if UNITY_2019_1_OR_NEWER
         PopUpImage.pixelsPerUnitMultiplier = 1;
+#endif
 
 
 
@@ -243,9 +245,11 @@ public class CreateAltUnityPrefab : MonoBehaviour
         AltUnityrunner.ShowInputs = false;
         AltUnityrunner._inputsVisualiser = InputVisualiser.GetComponent<AltUnityInputsVisualiser>();
 
-
+#if UNITY_2019_1_OR_NEWER
         PrefabUtility.SaveAsPrefabAsset(Prefab, localPath, out success);
-
+#else
+        PrefabUtility.CreatePrefab(localPath,Prefab);
+#endif
 
     }
 }

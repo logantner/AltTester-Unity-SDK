@@ -46,7 +46,7 @@ cache:
     - .cache/pip
     - altunitytests/
 
-build-apk:
+.build-apk:
   stage: build
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
@@ -69,28 +69,78 @@ build-apk:
       - buildAndroid.log
       - sampleGame.apk
 
-# build-ipa:
-#     stage: build
-#     rules:
-#       - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
-#         when: never
-#       - when: always
-#     tags:
-#       - iPhone
-#     script:
-#       - whoami
-#       - ${UNITY_2019_2_HOME:-/Applications/Unity/Hub/Editor/2019.2.0f1/Unity.app/Contents/MacOS/Unity} -batchmode -projectPath $CI_PROJECT_DIR -executeMethod BuildAltUnityTester.IosBuildFromCommandLine -logFile buildIos.log -quit
-#       - cd sampleGame
-#       - xcodebuild build-for-testing -scheme Unity-iPhone -destination generic/platform=iOS -allowProvisioningUpdates
-#       - ls
-#     artifacts:
-#       when: always
-#       expire_in: 10 days
-#       paths:
-#         - sampleGame/
-#         - buildIos.log
+build-webgl:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
+      when: never
+    - when: always
+  tags:
+    - windows
+  script:
+    - whoami
+    - ${UNITY_2019_2_HOME:-unity} -batchmode -stackTraceLogType None -projectPath $CI_PROJECT_DIR -executeMethod BuildAltUnityTester.WebGLBuildFromCommandLine -logFile buildWebgl.log -quit
+    - ls
 
-run-csharp-unity-android-tests:
+  cache:
+    paths:
+      - build/webgl/**
+
+  artifacts:
+    when: always
+    expire_in: 10 days
+    paths:
+      - buildWebgl.log
+      - build/webgl/**
+
+run-csharp-dotnet-webgl-tests:
+  stage: test
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
+      when: never
+    - when: always
+  tags:
+    - windows
+  #before_script:
+  #-  clone altunity-proxy
+  script:
+    - http-server build/webgl
+    - start msedge http://localhost:8080/
+    #- run tests
+    - dotnet test Bindings~/dotnet/AltUnityDriver.Tests/AltUnityDriver.Tests.csproj
+
+  artifacts:
+    when: always
+    expire_in: 10 days
+    paths:
+      - AltUnityTesterLog.txt
+      #proxy logs
+      # driver logs
+      # game logs ??
+  needs: ["build-webgl"]
+
+.build-ipa:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
+      when: never
+    - when: always
+  tags:
+    - iPhone
+  script:
+    - whoami
+    - ${UNITY_2019_2_HOME:-/Applications/Unity/Hub/Editor/2019.2.0f1/Unity.app/Contents/MacOS/Unity} -batchmode -projectPath $CI_PROJECT_DIR -executeMethod BuildAltUnityTester.IosBuildFromCommandLine -logFile buildIos.log -quit
+    - cd sampleGame
+    - xcodebuild build-for-testing -scheme Unity-iPhone -destination generic/platform=iOS -allowProvisioningUpdates
+    - ls
+  artifacts:
+    when: always
+    expire_in: 10 days
+    paths:
+      - sampleGame/
+      - buildIos.log
+
+.run-csharp-unity-android-tests:
   stage: test
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
@@ -113,27 +163,7 @@ run-csharp-unity-android-tests:
       - AltUnityTesterLog.txt
   needs: ["build-apk"]
 
-run-csharp-dotnet-android-tests:
-  stage: test
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
-      when: never
-    - when: always
-  tags:
-    - android
-  script:
-    - *reinstall_and_start_android_app
-    - dotnet test Bindings~/dotnet/AltUnityDriver.Tests/AltUnityDriver.Tests.csproj
-  after_script:
-    - adb forward --remove-all
-  artifacts:
-    when: always
-    expire_in: 10 days
-    paths:
-      - AltUnityTesterLog.txt
-  needs: ["build-apk"]
-
-run-python-lint:
+.run-python-lint:
   stage: test
   tags:
     - mac
@@ -144,7 +174,7 @@ run-python-lint:
     - cd Bindings~/python/
     - flake8 altunityrunner
 
-run-python-android-tests:
+.run-python-android-tests:
   stage: test
   tags:
     - android
@@ -164,7 +194,7 @@ run-python-android-tests:
       - AltUnityTesterLog.txt
   needs: ["build-apk"]
 
-run-python-appium-android-tests:
+.run-python-appium-android-tests:
   stage: test
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
@@ -233,29 +263,29 @@ run-python-appium-android-tests:
       - "./Bindings~/java/target/altunitytester-java-client-jar-with-dependencies.jar"
   needs: ["build-apk"]
 
-# run-csharp-ios-tests:
-#     stage: test
-#     rules:
-#         - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
-#           when: never
-#         - when: always
-#     tags:
-#         - iPhone
-#     script:
-#         - cd sampleGame
-#         - iproxy 13000 13000 &
-#         - xcodebuild test-without-building -destination 'platform=iOS,name=iPhone' -scheme Unity-iPhone -allowProvisioningUpdates &
-#         - sleep 60
-#         - ${UNITY_2019_2_HOME:-/Applications/Unity/Hub/Editor/2019.2.0f1/Unity.app/Contents/MacOS/Unity} -projectPath $CI_PROJECT_DIR -executeMethod AltUnityTestRunner.RunTestFromCommandLine -logFile csharpIosTests.log -quit
-#         - killall iproxy || true
-#         - killall xcodebuild || true
-#     artifacts:
-#       when: always
-#       expire_in: 10 days
-#       paths:
-#         - sampleGame/
-#         - csharpIosTests.log
-#     needs: ["build-ipa"]
+.run-csharp-ios-tests:
+  stage: test
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
+      when: never
+    - when: always
+  tags:
+    - iPhone
+  script:
+    - cd sampleGame
+    - iproxy 13000 13000 &
+    - xcodebuild test-without-building -destination 'platform=iOS,name=iPhone' -scheme Unity-iPhone -allowProvisioningUpdates &
+    - sleep 60
+    - ${UNITY_2019_2_HOME:-/Applications/Unity/Hub/Editor/2019.2.0f1/Unity.app/Contents/MacOS/Unity} -projectPath $CI_PROJECT_DIR -executeMethod AltUnityTestRunner.RunTestFromCommandLine -logFile csharpIosTests.log -quit
+    - killall iproxy || true
+    - killall xcodebuild || true
+  artifacts:
+    when: always
+    expire_in: 10 days
+    paths:
+      - sampleGame/
+      - csharpIosTests.log
+  needs: ["build-ipa"]
 
 create-unity-package:
   stage: docs

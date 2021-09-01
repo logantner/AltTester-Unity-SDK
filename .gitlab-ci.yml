@@ -80,7 +80,7 @@ build-webgl:
     - unity
   script:
     - whoami
-    - \& $env:UNITY_2019_2_HOME -batchmode -stackTraceLogType None -projectPath $env:CI_PROJECT_DIR -executeMethod BuildAltUnityTester.WebGLBuildFromCommandLine -logFile buildWebgl.log -quit
+    - "& $env:UNITY_2019_2_HOME -batchmode -stackTraceLogType None -projectPath $env:CI_PROJECT_DIR -executeMethod BuildAltUnityTester.WebGLBuildFromCommandLine -logFile buildWebgl.log -quit"
     - ls
 
   cache:

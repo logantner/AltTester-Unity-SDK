@@ -77,9 +77,10 @@ build-webgl:
     - when: always
   tags:
     - windows
+    - unity
   script:
     - whoami
-    - ${UNITY_2019_2_HOME:-unity} -batchmode -stackTraceLogType None -projectPath $CI_PROJECT_DIR -executeMethod BuildAltUnityTester.WebGLBuildFromCommandLine -logFile buildWebgl.log -quit
+    - $env:UNITY_2019_2_HOME -batchmode -stackTraceLogType None -projectPath $env:CI_PROJECT_DIR -executeMethod BuildAltUnityTester.WebGLBuildFromCommandLine -logFile buildWebgl.log -quit
     - ls
 
   cache:
@@ -101,6 +102,7 @@ run-csharp-dotnet-webgl-tests:
     - when: always
   tags:
     - windows
+    - unity
   #before_script:
   #-  clone altunity-proxy
   script:

@@ -103,12 +103,12 @@ run-csharp-dotnet-webgl-tests:
   tags:
     - windows
     - unity
-  #before_script:
-  #-  clone altunity-proxy
+  before_script:
+    - git clone https://dorinaltom:$GITLAB_PROXY_REPO_KEY@gitlab.com/altom/altunity/altunity-proxy.git
   script:
-    - http-server build/webgl
-    - start msedge http://localhost:8080/
-    #- run tests
+    - $proxyProcessId = (Start-Process dotnet -ArgumentList "run --project altunity-proxy/AltUnityProxy/AltUnityProxy.csproj")
+    - $httpServerProcessId = (Start-Process http-server -PassThru -ArgumentList ".\build\webgl\"  -WorkingDirectory ($PWD).Path).Id
+    - $msedgeProcessId = (Start-Process msedge -ArgumentList http://localhost:8080/)
     - dotnet test Bindings~/dotnet/AltUnityDriver.Tests/AltUnityDriver.Tests.csproj
 
   artifacts:

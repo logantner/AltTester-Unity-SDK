@@ -43,7 +43,7 @@ public class BuildAltUnityTester
 
                 locationPathName = "sampleGame.apk",
                 target = BuildTarget.Android,
-                options = BuildOptions.Development | BuildOptions.AutoRunPlayer
+                options = BuildOptions.Development
             };
 
             AltUnityBuilder.AddAltUnityTesterInScritpingDefineSymbolsGroup(BuildTargetGroup.Android);
@@ -199,7 +199,7 @@ public class BuildAltUnityTester
 
                 locationPathName = "build/webgl",
                 target = BuildTarget.WebGL,
-                options = BuildOptions.Development | BuildOptions.AutoRunPlayer
+                options = BuildOptions.Development
             };
 
             AltUnityBuilder.AddAltUnityTesterInScritpingDefineSymbolsGroup(BuildTargetGroup.WebGL);

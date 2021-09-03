@@ -124,7 +124,7 @@ run-csharp-dotnet-webgl-tests:
       #proxy logs
       # driver logs
       # game logs ??
-  needs: ["build-webgl"]
+  #needs: ["build-webgl"]
 
 .build-ipa:
   stage: build

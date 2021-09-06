@@ -23,7 +23,6 @@ public class BuildAltUnityTester
             PlayerSettings.Android.bundleVersionCode = int.Parse(versionNumber);
             PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel23;
             PlayerSettings.SetApiCompatibilityLevel(BuildTargetGroup.Android, ApiCompatibilityLevel.NET_4_6);
-            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
 #if UNITY_2018_1_OR_NEWER
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARMv7;
 #endif
@@ -183,6 +182,8 @@ public class BuildAltUnityTester
             PlayerSettings.Android.bundleVersionCode = int.Parse(versionNumber);
             PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel23;
             PlayerSettings.SetApiCompatibilityLevel(BuildTargetGroup.WebGL, ApiCompatibilityLevel.NET_4_6);
+            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
+            PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.FullWithStacktrace;
 
             logger.Debug("Starting WebGL build..." + PlayerSettings.productName + " : " + PlayerSettings.bundleVersion);
             var buildPlayerOptions = new BuildPlayerOptions

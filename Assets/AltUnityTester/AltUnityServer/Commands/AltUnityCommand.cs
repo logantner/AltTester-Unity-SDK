@@ -124,7 +124,13 @@ namespace Assets.AltUnityTester.AltUnityServer.Commands
 
             string logs = string.Empty;
             if (exception != null)
+            {
                 logs = exception.Message + "\n" + exception.StackTrace;
+                if (exception.InnerException != null)
+                {
+                    logs = exception.Message + "\n" + exception.StackTrace + "\n-----_END_OF_INNER_EXCEPTION_------" + "\n" + logs;
+                }
+            }
 
 
             var cmdResponse = new CommandResponse<T>();

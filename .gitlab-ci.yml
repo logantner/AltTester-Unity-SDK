@@ -69,7 +69,7 @@ cache:
       - buildAndroid.log
       - sampleGame.apk
 
-build-webgl:
+.build-webgl:
   stage: build
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
@@ -106,8 +106,8 @@ run-csharp-dotnet-webgl-tests:
   before_script:
     - git clone https://dorinaltom:$GITLAB_PROXY_REPO_KEY@gitlab.com/altom/altunity/altunity-proxy.git
   script:
-    - docker run -d --rm -p 13000:13000 --name altunity-proxy altunity-proxy
-    - docker run -d --rm -p 8080:8080 --name http-server -v $env:CI_PROJECT_DIR\build\webgl:/samplescenes-webgl node:14 /bin/bash -c "npm i -g http-server && http-server /samplescenes-webgl"
+    - docker run -d -p 13000:13000 --name altunity-proxy altunity-proxy
+    - docker run -d -p 8080:8080 --name http-server -v $env:CI_PROJECT_DIR\build\webgl:/samplescenes-webgl node:14 /bin/bash -c "npm i -g http-server && http-server /samplescenes-webgl"
     - start-sleep 10
     - $msedgeProcessId = (Start-Process msedge -ArgumentList http://localhost:8080/)
     - dotnet test Bindings~/dotnet/AltUnityDriver.Tests/AltUnityDriver.Tests.csproj

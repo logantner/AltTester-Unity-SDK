@@ -1451,6 +1451,7 @@ public class TestForScene1TestSample
     }
 
     [Test]
+    [Category("WebGLUnsupported")]
     public void TestSetComponentPropertyComplexClass3()
     {
         const string componentName = "AltUnityExampleScriptCapsule";
@@ -1932,6 +1933,7 @@ public class TestForScene1TestSample
     }
 
     [Test]
+    [Category("WebGLUnsupported")]
     public void TestSetStructureProperty3()
     {
         var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");

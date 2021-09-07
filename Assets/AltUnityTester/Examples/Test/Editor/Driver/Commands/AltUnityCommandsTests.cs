@@ -10,6 +10,7 @@ public class AltUnityCommandsTests
     [OneTimeSetUp]
     public void SetUp()
     {
+        DriverLogManager.SetMinLogLevel(AltUnityLogger.Console, AltUnityLogLevel.Debug);
         altUnityDriver = new AltUnityDriver();
     }
 

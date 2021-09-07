@@ -67,8 +67,9 @@ namespace Altom.AltUnityDriver.Commands
                 Thread.Sleep(10);
             }
 
-            var message = JsonConvert.DeserializeObject<CommandResponse<T>>(messages.Dequeue());
-
+            var messageStr = messages.Dequeue();
+            logger.Trace("response received:" + trimLog(messageStr));
+            var message = JsonConvert.DeserializeObject<CommandResponse<T>>(messageStr);
 
             if (message.error != AltUnityErrors.errorInvalidCommand && (message.messageId != param.messageId || message.commandName != param.commandName))
                 throw new AltUnityRecvallMessageIdException(string.Format("Response received does not match command send. Expected {0}:{1}. Got {2}:{3}", param.commandName, param.messageId, message.commandName, message.messageId));
@@ -87,6 +88,7 @@ namespace Altom.AltUnityDriver.Commands
                 Culture = CultureInfo.InvariantCulture
             });
             this.wsClient.Send(message);
+            logger.Trace("command sent:" + trimLog(message));
         }
         public void Close()
         {
@@ -146,6 +148,12 @@ namespace Altom.AltUnityDriver.Commands
                 logger.Debug(error + " is not handled by driver");
                 throw new UnknownErrorException(logs);
             }
+        }
+        private string trimLog(string log, int maxLogLength = 1000)
+        {
+            if (string.IsNullOrEmpty(log)) return log;
+            if (log.Length <= maxLogLength) return log;
+            return log.Substring(0, maxLogLength) + "[...]";
         }
     }
 }

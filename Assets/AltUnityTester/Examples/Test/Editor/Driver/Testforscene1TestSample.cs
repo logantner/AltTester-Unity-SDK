@@ -5,7 +5,7 @@ using System.Threading;
 using Altom.AltUnityDriver;
 using NUnit.Framework;
 
-[Timeout(10000)]
+[Timeout(30000)]
 public class TestForScene1TestSample
 {
     private AltUnityDriver altUnityDriver;

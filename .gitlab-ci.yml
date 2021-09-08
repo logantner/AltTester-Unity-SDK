@@ -46,7 +46,7 @@ cache:
     - .cache/pip
     - altunitytests/
 
-.build-apk:
+build-apk:
   stage: build
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
@@ -147,7 +147,7 @@ run-csharp-dotnet-webgl-tests:
       - sampleGame/
       - buildIos.log
 
-.run-csharp-unity-android-tests:
+run-csharp-unity-android-tests:
   stage: test
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
@@ -170,7 +170,7 @@ run-csharp-dotnet-webgl-tests:
       - AltUnityTesterLog.txt
   needs: ["build-apk"]
 
-.run-python-lint:
+run-python-lint:
   stage: test
   tags:
     - mac
@@ -181,7 +181,7 @@ run-csharp-dotnet-webgl-tests:
     - cd Bindings~/python/
     - flake8 altunityrunner
 
-.run-python-android-tests:
+run-python-android-tests:
   stage: test
   tags:
     - android
@@ -201,7 +201,7 @@ run-csharp-dotnet-webgl-tests:
       - AltUnityTesterLog.txt
   needs: ["build-apk"]
 
-.run-python-appium-android-tests:
+run-python-appium-android-tests:
   stage: test
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'

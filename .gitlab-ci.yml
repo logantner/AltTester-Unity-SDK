@@ -111,10 +111,8 @@ run-csharp-dotnet-webgl-tests:
     - start-sleep 10
     - Start-Process msedge -ArgumentList http://localhost:8080/ -PassThru
     - dotnet test Bindings~/dotnet/AltUnityDriver.Tests/AltUnityDriver.Tests.csproj --filter "TestCategory!=Android&TestCategory!=WebGLUnsupported" --logger:"console;verbosity=detailed"
-    - Stop-Process -ID $msedgeProcessId -Force
   after_script:
     - Stop-Process -Name msedge -Force
-    - rm .msedge
     - docker container stop http-server
     - docker container stop altunity-proxy
 

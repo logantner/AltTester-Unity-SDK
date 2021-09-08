@@ -109,11 +109,11 @@ run-csharp-dotnet-webgl-tests:
     - docker run --rm -d -p 13000:13000 --name altunity-proxy altunity-proxy
     - docker run --rm -d -p 8080:8080 --name http-server -v $env:CI_PROJECT_DIR\build\webgl:/samplescenes-webgl node:14 /bin/bash -c "npm i -g http-server && http-server /samplescenes-webgl"
     - start-sleep 10
-    - (Start-Process msedge -ArgumentList http://localhost:8080/ -PassThru).Id | Out-File -FilePath .msedge
+    - Start-Process msedge -ArgumentList http://localhost:8080/ -PassThru
     - dotnet test Bindings~/dotnet/AltUnityDriver.Tests/AltUnityDriver.Tests.csproj --filter "TestCategory!=Android&TestCategory!=WebGLUnsupported" --logger:"console;verbosity=detailed"
     - Stop-Process -ID $msedgeProcessId -Force
   after_script:
-    - Stop-Process -ID (Get-Content -Path .msedge) -Force
+    - Stop-Process -Name msedge -Force
     - rm .msedge
     - docker container stop http-server
     - docker container stop altunity-proxy

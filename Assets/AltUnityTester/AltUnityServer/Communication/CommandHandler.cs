@@ -17,7 +17,9 @@ namespace Assets.AltUnityTester.AltUnityServer.Communication
         public CommandHandler()
         {
         }
+
         public SendMessageHandler OnSendMessage { get; set; }
+
         public void Send(string data)
         {
             if (this.OnSendMessage != null)
@@ -26,6 +28,7 @@ namespace Assets.AltUnityTester.AltUnityServer.Communication
                 logger.Debug("response sent: " + trimLog(data));
             }
         }
+
         public void OnMessage(string data)
         {
             logger.Debug("command received: " + trimLog(data));
@@ -307,7 +310,6 @@ namespace Assets.AltUnityTester.AltUnityServer.Communication
 
             return new AltUnityInvalidCommand(cmdParams, new CommandNotFoundException(string.Format("Command {0} not handled", cmdParams.commandName))).ExecuteAndSerialize;
         }
-
 
         private Type getCommandType(string commandName)
         {

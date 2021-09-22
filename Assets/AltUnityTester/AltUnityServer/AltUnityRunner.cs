@@ -7,6 +7,7 @@ using Altom.AltUnityInstrumentation.UI;
 using Altom.Server.Logging;
 using Assets.AltUnityTester.AltUnityServer.Communication;
 using NLog;
+using UnityEngine.SceneManagement;
 
 public class AltUnityRunner : UnityEngine.MonoBehaviour
 {
@@ -56,6 +57,13 @@ public class AltUnityRunner : UnityEngine.MonoBehaviour
     protected void Start()
     {
         _responseQueue = new AltResponseQueue();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UnityEngine.Debug.Log("OnSceneLoaded: " + scene.name);
+        UnityEngine.Debug.Log(mode);
     }
 
     protected void Update()

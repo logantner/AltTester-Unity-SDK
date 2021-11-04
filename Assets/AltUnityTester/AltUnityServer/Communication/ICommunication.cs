@@ -1,6 +1,6 @@
 using System;
 
-namespace Assets.AltUnityTester.AltUnityServer.Communication
+namespace Altom.AltUnityTester.Communication
 {
     public delegate void SendMessageHandler(string message);
     public delegate void CommunicationHandler();
@@ -26,14 +26,6 @@ namespace Assets.AltUnityTester.AltUnityServer.Communication
         SendMessageHandler OnSendMessage { get; set; }
         void Send(string data);
         void OnMessage(string data);
-    }
-
-    public class AddressInUseCommError : Exception
-    {
-        public AddressInUseCommError(string message) : base(message)
-        {
-
-        }
     }
 
     public class UnhandledStartCommError : Exception

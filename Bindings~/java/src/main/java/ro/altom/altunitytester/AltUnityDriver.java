@@ -10,14 +10,13 @@ import ro.altom.altunitytester.Commands.AltUnityCommands.AltUnitySetServerLoggin
 import ro.altom.altunitytester.Commands.FindObject.*;
 import ro.altom.altunitytester.Commands.InputActions.*;
 import ro.altom.altunitytester.Commands.UnityCommand.*;
+import ro.altom.altunitytester.Commands.ObjectCommand.AltGetComponentPropertyParameters;
 import ro.altom.altunitytester.UnityStruct.AltUnityKeyCode;
 import ro.altom.altunitytester.altUnityTesterExceptions.*;
 import ro.altom.altunitytester.position.Vector2;
 
 import java.io.IOException;
 import java.util.List;
-
-import javax.websocket.CloseReason;
 
 public class AltUnityDriver {
     static {
@@ -28,22 +27,20 @@ public class AltUnityDriver {
     private static final Logger log = LogManager.getLogger(AltUnityDriver.class);
 
     public static enum PlayerPrefsKeyType {
-        Int(1),
-        String(2),
-        Float(3);
+        Int(1), String(2), Float(3);
 
         private int val;
 
-        PlayerPrefsKeyType(int val){
+        PlayerPrefsKeyType(int val) {
             this.val = val;
         }
 
-        public int getVal(){
+        public int getVal() {
             return val;
         }
     }
 
-    public static final String VERSION = "1.6.6";
+    public static final String VERSION = "1.7.0-alpha";
     public static final int READ_TIMEOUT = 5 * 1000;
 
     private WebsocketConnection connection = null;
@@ -58,16 +55,20 @@ public class AltUnityDriver {
     }
 
     public AltUnityDriver(String host, int port, Boolean enableLogging) {
+        this(host, port, enableLogging, 60);
+    }
+
+    public AltUnityDriver(String host, int port, Boolean enableLogging, int connectTimeout) {
         if (!enableLogging)
             AltUnityDriverConfigFactory.DisableLogging();
 
         if (host == null || host.isEmpty()) {
-            throw new InvalidParamerException("Provided IP address is null or empty");
+            throw new InvalidParameterException("Provided host address is null or empty");
         }
 
-        this.connection = new WebsocketConnection(host, port);
+        this.connection = new WebsocketConnection(host, port, connectTimeout);
+        this.connection.connect();
         checkServerVersion();
-
     }
 
     private String[] splitVersion(String version) {
@@ -93,15 +94,15 @@ public class AltUnityDriver {
 
         if (!majorServer.equals(majorDriver) || !minorServer.equals(minorDriver)) {
             String message = "Version mismatch. AltUnity Driver version is " + AltUnityDriver.VERSION
-                    + ". AltUnity Server version is " + serverVersion + ".";
+                    + ". AltUnity Tester version is " + serverVersion + ".";
 
             log.warn(message);
             System.out.println(message);
         }
     }
 
-    public void stop(CloseReason closeReason) throws IOException {
-        this.connection.session.close(closeReason);
+    public void stop() throws IOException {
+        this.connection.close();
     }
 
     public String GetServerVersion() {
@@ -171,7 +172,8 @@ public class AltUnityDriver {
     }
 
     public <T> T callStaticMethod(AltCallStaticMethodParameters altCallStaticMethodParameters, Class<T> returnType) {
-        return new AltCallStaticMethod(this.connection.messageHandler, altCallStaticMethodParameters).Execute(returnType);
+        return new AltCallStaticMethod(this.connection.messageHandler, altCallStaticMethodParameters)
+                .Execute(returnType);
     }
 
     /**
@@ -467,7 +469,7 @@ public class AltUnityDriver {
 
     /**
      * Tap at screen coordinates
-     * 
+     *
      * @param parameters Tap parameters
      */
     public void tap(AltTapClickCoordinatesParameters parameters) {
@@ -476,76 +478,15 @@ public class AltUnityDriver {
 
     /**
      * Click at screen coordinates
-     * 
+     *
      * @param parameters Click parameters
      */
     public void click(AltTapClickCoordinatesParameters parameters) {
         new AltClickCoordinates(this.connection.messageHandler, parameters).Execute();
     }
 
-    /**
-     * Deprecated port forwarding methods are moved to AltUnityPortForwarding class.
-     * This is going to be removed in the future.
-     */
-
-    @Deprecated
-    public static void setupPortForwarding(String platform, String deviceID, int local_tcp_port, int remote_tcp_port) {
-        log.info("Setting up port forward for " + platform + " on port " + remote_tcp_port);
-        removePortForwarding();
-        if (platform.toLowerCase().equals("android".toLowerCase())) {
-            try {
-                String commandToRun;
-                if (deviceID.equals(""))
-                    commandToRun = "adb forward tcp:" + local_tcp_port + " tcp:" + remote_tcp_port;
-                else
-                    commandToRun = "adb -s " + deviceID + " forward  tcp:" + local_tcp_port + " tcp:" + remote_tcp_port;
-                Runtime.getRuntime().exec(commandToRun);
-                Thread.sleep(1000);
-                log.info("adb forward enabled.");
-            } catch (Exception e) {
-                log.warn("AltUnityServer - abd probably not installed\n" + e);
-            }
-
-        } else if (platform.toLowerCase().equals("ios".toLowerCase())) {
-            try {
-                String commandToRun;
-                if (deviceID.equals(""))
-                    commandToRun = "iproxy " + local_tcp_port + " " + remote_tcp_port + "&";
-                else
-                    commandToRun = "iproxy " + local_tcp_port + " " + remote_tcp_port + " " + deviceID + "&";
-                Runtime.getRuntime().exec(commandToRun);
-                Thread.sleep(1000);
-                log.info("iproxy forward enabled.");
-            } catch (Exception e) {
-                log.warn("AltUnityServer - no iproxy process was running/present\n" + e);
-            }
-        }
-    }
-
-    /**
-     * Deprecated port forwarding methods are moved to AltUnityPortForwarding class.
-     * This is going to be removed in the future.
-     */
-
-    @Deprecated
-    public static void removePortForwarding() {
-        try {
-            String commandToExecute = "killall iproxy";
-            Runtime.getRuntime().exec(commandToExecute);
-            Thread.sleep(1000);
-            log.info("Killed any iproxy process that may have been running...");
-        } catch (Exception e) {
-            log.warn("AltUnityServer - no iproxy process was running/present\n" + e);
-        }
-
-        try {
-            String commandToExecute = "adb forward --remove-all";
-            Runtime.getRuntime().exec(commandToExecute);
-            Thread.sleep(1000);
-            log.info("Removed existing adb forwarding...");
-        } catch (Exception e) {
-            log.warn("AltUnityServer - adb probably not installed\n" + e);
-        }
+    public <T> T GetStaticProperty(AltGetComponentPropertyParameters parameters, Class<T> returnType) {
+        return new AltGetStaticProperty(this.connection.messageHandler, parameters).Execute(returnType);
     }
 
     public enum By {

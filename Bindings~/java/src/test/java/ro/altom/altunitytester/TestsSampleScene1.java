@@ -30,9 +30,6 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.lang.Void;
 
-import javax.websocket.CloseReason;
-import javax.websocket.CloseReason.CloseCodes;
-
 import java.io.File;
 
 public class TestsSampleScene1 {
@@ -41,18 +38,30 @@ public class TestsSampleScene1 {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        altUnityDriver = new AltUnityDriver("127.0.0.1", 13000, true);
+        altUnityDriver = new AltUnityDriver("127.0.0.1", 13010, true);
     }
 
     @AfterClass
     public static void tearDown() throws Exception {
-        altUnityDriver.stop(new CloseReason(CloseCodes.getCloseCode(1000), "Connection stopped successfully"));
+        if (altUnityDriver != null) {
+            altUnityDriver.stop();
+        }
         Thread.sleep(1000);
     }
 
     @Before
     public void loadLevel() throws Exception {
         altUnityDriver.loadScene(new AltLoadSceneParameters.Builder("Scene 1 AltUnityDriverTestScene").build());
+    }
+
+    @Test
+    public void testLodeNonExistentScene() throws Exception {
+        try {
+            altUnityDriver.loadScene(new AltLoadSceneParameters.Builder("Scene 0").build());
+            assertTrue(false);
+        } catch (SceneNotFoundException e) {
+            assertTrue(true);
+        }
     }
 
     @Test
@@ -247,7 +256,7 @@ public class TestsSampleScene1 {
     @Test
     public void testFindElementByComponentWithNamespace() throws Exception {
         Thread.sleep(1000);
-        String componentName = "AltUnityTester.AltUnityServer.AltUnityRunner";
+        String componentName = "Altom.AltUnityTester.AltUnityRunner";
         AltFindObjectsParameters altFindObjectsParameters = new AltFindObjectsParameters.Builder(
                 AltUnityDriver.By.COMPONENT, componentName).build();
         AltUnityObject altElement = altUnityDriver.findObject(altFindObjectsParameters);
@@ -258,20 +267,20 @@ public class TestsSampleScene1 {
     @Test
     public void testGetComponentProperty() throws Exception {
         Thread.sleep(1000);
-        String componentName = "AltUnityRunner";
-        String propertyName = "InstrumentationSettings.ServerPort";
+        String componentName = "Altom.AltUnityTester.AltUnityRunner";
+        String propertyName = "InstrumentationSettings.ProxyPort";
         AltFindObjectsParameters altFindObjectsParameters = new AltFindObjectsParameters.Builder(AltUnityDriver.By.NAME,
                 "AltUnityRunnerPrefab").build();
         AltUnityObject altElement = altUnityDriver.findObject(altFindObjectsParameters);
         assertNotNull(altElement);
         String propertyValue = altElement.getComponentProperty(componentName, propertyName);
-        assertEquals(propertyValue, "13000");
+        assertEquals(propertyValue, "13010");
     }
 
     @Test(expected = PropertyNotFoundException.class)
     public void testGetNonExistingComponentProperty() throws Exception {
         Thread.sleep(1000);
-        String componentName = "AltUnityRunner";
+        String componentName = "Altom.AltUnityTester.AltUnityRunner";
         String propertyName = "socketPort";
         AltFindObjectsParameters altFindObjectsParameters = new AltFindObjectsParameters.Builder(AltUnityDriver.By.NAME,
                 "AltUnityRunnerPrefab").build();
@@ -535,10 +544,10 @@ public class TestsSampleScene1 {
 
     @Test
     public void TestCallStaticMethod() throws Exception {
-        altUnityDriver.callStaticMethod(
-                new AltCallStaticMethodParameters.Builder("UnityEngine.PlayerPrefs", "SetInt", new Object[]{"Test", "1"}).build(), String.class);
-        int a = altUnityDriver.callStaticMethod(
-                new AltCallStaticMethodParameters.Builder("UnityEngine.PlayerPrefs", "GetInt", new Object[]{"Test", "2"}).build(), Integer.class);
+        altUnityDriver.callStaticMethod(new AltCallStaticMethodParameters.Builder("UnityEngine.PlayerPrefs", "SetInt",
+                new Object[] { "Test", "1" }).build(), String.class);
+        int a = altUnityDriver.callStaticMethod(new AltCallStaticMethodParameters.Builder("UnityEngine.PlayerPrefs",
+                "GetInt", new Object[] { "Test", "2" }).build(), Integer.class);
         assertEquals(1, a);
     }
 
@@ -1123,9 +1132,28 @@ public class TestsSampleScene1 {
         altUnityDriver.getPNGScreeshot(path);
         assertTrue(new File(path).isFile());
     }
-}
 
-// TestsSampleScene1.testDeleteKey:450 PlayerPrefs key test not found
-// [ERROR]   TestsSampleScene1.testFindNonExistentObject:479 Object //NonExistent not found
-// [ERROR]   TestsSampleScene1.testFindNonExistentObjectByName:491 Object //NonExistent not found
-// [ERROR]   TestsSampleScene1.testSetNonExistingComponentProperty:333 Component not found
+    @Test
+    public void testGetStaticProperty() {
+        AltCallStaticMethodParameters altCallStaticMethodParameters = new AltCallStaticMethodParameters.Builder(
+                "UnityEngine.Screen", "SetResolution", new Object[] { "1920", "1080", "True" })
+                        .withTypeOfParameters(new String[] { "System.Int32", "System.Int32", "System.Boolean" })
+                        .withAssembly("UnityEngine.CoreModule").build();
+        altUnityDriver.callStaticMethod(altCallStaticMethodParameters, Integer.class);
+        AltGetComponentPropertyParameters altGetComponentPropertyParameters = new AltGetComponentPropertyParameters.Builder(
+                "UnityEngine.Screen", "currentResolution.width").withAssembly("UnityEngine.CoreModule").build();
+        int width = altUnityDriver.GetStaticProperty(altGetComponentPropertyParameters, Integer.class);
+        assertEquals(width, 1920);
+    }
+
+    @Test
+    public void testGetStaticPropertyInstanceNull() {
+        AltCallStaticMethodParameters altCallStaticMethodParameters = new AltCallStaticMethodParameters.Builder(
+                "UnityEngine.Screen", "get_width", new Object[] {}).withAssembly("UnityEngine.CoreModule").build();
+        int screenWidth = altUnityDriver.callStaticMethod(altCallStaticMethodParameters, Integer.class);
+        AltGetComponentPropertyParameters altGetComponentPropertyParameters = new AltGetComponentPropertyParameters.Builder(
+                "UnityEngine.Screen", "width").withAssembly("UnityEngine.CoreModule").build();
+        int width = altUnityDriver.GetStaticProperty(altGetComponentPropertyParameters, Integer.class);
+        assertEquals(screenWidth, width);
+    }
+}

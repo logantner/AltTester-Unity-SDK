@@ -14,18 +14,18 @@ namespace Altom.AltUnityDriver
     {
         private static readonly NLog.Logger logger = DriverLogManager.Instance.GetCurrentClassLogger();
         private readonly IDriverCommunication communicationHandler;
-        public static readonly string VERSION = "1.6.6";
+        public static readonly string VERSION = "1.7.0-alpha";
 
         public IDriverCommunication CommunicationHandler { get { return communicationHandler; } }
 
         /// <summary>
-        /// Initiates AltUnity Driver and begins connection to AltUnity Server
+        /// Initiates AltUnity Driver and begins connection with the instrumented Unity application through to AltUnity Proxy
         /// </summary>
-        /// <param name="tcp_ip">The ip or hostname  AltUnity Server is listening on.</param>
-        /// <param name="tcp_port">The port AltUnity Server is listening on.</param>
+        /// <param name="host">The ip or hostname  AltUnity Proxy is listening on.</param>
+        /// <param name="port">The port AltUnity Proxy is listening on.</param>
         /// <param name="enableLogging">If true it enables driver commands logging to log file and Unity.</param>
         /// <param name="connectTimeout">The connect timeout in seconds.</param>
-        public AltUnityDriver(string tcp_ip = "127.0.0.1", int tcp_port = 13000, bool enableLogging = false, int connectTimeout = 60)
+        public AltUnityDriver(string host = "127.0.0.1", int port = 13000, bool enableLogging = false, int connectTimeout = 60)
         {
             if (enableLogging)
             {
@@ -36,7 +36,8 @@ namespace Altom.AltUnityDriver
 #endif
                 DriverLogManager.SetupAltUnityDriverLogging(defaultLevels);
             }
-            communicationHandler = DriverCommunicationWebSocket.Connect(tcp_ip, tcp_port, connectTimeout);
+            communicationHandler = new DriverCommunicationWebSocket(host, port, connectTimeout);
+            communicationHandler.Connect();
 
             checkServerVersion();
         }
@@ -71,7 +72,7 @@ namespace Altom.AltUnityDriver
 
             if (majorServer != majorDriver || minorServer != minorDriver)
             {
-                string message = "Version mismatch. AltUnity Driver version is " + VERSION + ". AltUnity Server version is " + serverVersion + ".";
+                string message = "Version mismatch. AltUnity Driver version is " + VERSION + ". AltUnity Tester version is " + serverVersion + ".";
 
                 logger.Warn(message);
             }
@@ -132,6 +133,11 @@ namespace Altom.AltUnityDriver
                     object[] parameters, string[] typeOfParameters = null, string assemblyName = "")
         {
             return new AltUnityCallStaticMethod<T>(communicationHandler, typeName, methodName, parameters, typeOfParameters, assemblyName).Execute();
+        }
+
+        public T GetStaticProperty<T>(string componentName, string propertyName, string assemblyName, int maxDepth = 2)
+        {
+            return new AltUnityGetStaticProperty<T>(communicationHandler, componentName, propertyName, assemblyName, maxDepth).Execute();
         }
 
         public void DeletePlayerPref()

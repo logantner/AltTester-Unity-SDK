@@ -1,9 +1,9 @@
 using System;
 using Altom.AltUnityDriver;
 using Altom.AltUnityDriver.Commands;
-using Assets.AltUnityTester.AltUnityServer.Communication;
+using Altom.AltUnityTester.Communication;
 
-namespace Assets.AltUnityTester.AltUnityServer.Commands
+namespace Altom.AltUnityTester.Commands
 {
     class AltUnityUnloadSceneCommand : AltUnityCommand<AltUnityUnloadSceneParams, string>
     {
@@ -16,7 +16,6 @@ namespace Assets.AltUnityTester.AltUnityServer.Commands
 
         public override string Execute()
         {
-            string response = AltUnityErrors.errorNotFoundMessage;
             try
             {
                 var sceneLoadingOperation = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(CommandParams.sceneName);
@@ -31,8 +30,7 @@ namespace Assets.AltUnityTester.AltUnityServer.Commands
                 throw new CouldNotPerformOperationException("Cannot unload scene: " + CommandParams.sceneName);
             }
 
-            response = "Ok";
-            return response;
+            return "Ok";
         }
 
         private void sceneUnloaded(UnityEngine.AsyncOperation obj)

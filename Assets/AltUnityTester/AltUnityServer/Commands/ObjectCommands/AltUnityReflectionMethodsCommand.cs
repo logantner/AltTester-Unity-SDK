@@ -9,12 +9,12 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Altom.AltUnityDriver;
 using Altom.AltUnityDriver.Commands;
-using Altom.Server.Logging;
-using Assets.AltUnityTester.AltUnityServer.Commands;
+using Altom.AltUnityTester.Logging;
+using Altom.AltUnityTester.Commands;
 using Newtonsoft.Json;
 using NLog;
 
-namespace Assets.AltUnityTester.AltUnityServer
+namespace Altom.AltUnityTester.Commands
 {
     class AltUnityReflectionMethodsCommand<TParam, TResult> : AltUnityCommand<TParam, TResult> where TParam : CommandParams
     {
@@ -129,15 +129,15 @@ namespace Assets.AltUnityTester.AltUnityServer
             {
                 throw new ComponentNotFoundException("Component " + componentType.Name + " not found");
             }
-            object value = getValue(instance, memberInfo, index);
+            object value = GetValue(instance, memberInfo, index);
 
-            for (int i = 1; i < fieldArray.Length; i++)
+            for (int i = 1; i < fieldArray.Length && value != null; i++)
             {
                 index = getArrayIndex(fieldArray[i], out propertyName);
                 memberInfo = GetMemberForObjectComponent(value.GetType(), propertyName);
-                value = getValue(value, memberInfo, index);
+                value = GetValue(value, memberInfo, index);
             }
-            return serializeMemberValue(value, value.GetType(), maxDepth);
+            return SerializeMemberValue(value, maxDepth);
         }
 
 
@@ -157,7 +157,7 @@ namespace Assets.AltUnityTester.AltUnityServer
             string propertyName;
             int index = getArrayIndex(fieldArray[counter], out propertyName);
             MemberInfo memberInfo = GetMemberForObjectComponent(instance.GetType(), propertyName);
-            object value = getValue(instance, memberInfo, index);
+            object value = GetValue(instance, memberInfo, index);
             if (counter < fieldArray.Length - 1)
             {
                 counter++;
@@ -189,7 +189,7 @@ namespace Assets.AltUnityTester.AltUnityServer
             return getInstance(instance, methodPathSplited, 0, componentType);
         }
 
-        private object getValue(object instance, MemberInfo memberInfo, int index)
+        protected object GetValue(object instance, MemberInfo memberInfo, int index)
         {
             object value = null;
             if (memberInfo.MemberType == MemberTypes.Property)
@@ -252,7 +252,7 @@ namespace Assets.AltUnityTester.AltUnityServer
                     MethodInfo method = methodDefinition.MakeGenericMethod(type);
 
                     object value = deserializeMemberValue(valueString, type);
-                    var listValue = getValue(instance, memberInfo, -1);
+                    var listValue = GetValue(instance, memberInfo, -1);
 
                     listValue = method.Invoke(this, new object[] { index, listValue, value, propertyInfo.PropertyType }); ;
                     propertyInfo.SetValue(instance, listValue);
@@ -273,7 +273,7 @@ namespace Assets.AltUnityTester.AltUnityServer
                 {
                     var type = fieldInfo.FieldType.GetElementType() != null ? fieldInfo.FieldType.GetElementType() : fieldInfo.FieldType.GetGenericArguments().Single();
                     object value = deserializeMemberValue(valueString, type);
-                    var listValue = getValue(instance, memberInfo, -1);
+                    var listValue = GetValue(instance, memberInfo, -1);
 
                     MethodInfo method = methodDefinition.MakeGenericMethod(type);
                     listValue = method.Invoke(this, new object[] { index, listValue, value, fieldInfo.FieldType }); ;
@@ -310,13 +310,12 @@ namespace Assets.AltUnityTester.AltUnityServer
             throw new AltUnityException(AltUnityErrors.errorPropertyNotSet);
         }
 
-
-
-        private string serializeMemberValue(object value, System.Type type, int maxDepth)
+        public string SerializeMemberValue(object value, int maxDepth)
         {
             string response;
-            if (type == typeof(string))
-                return value.ToString();
+            if (value == null) return null;
+            if (value.GetType() == typeof(string)) return value.ToString();
+
             try
             {
                 using (var strWriter = new System.IO.StringWriter())
@@ -366,7 +365,7 @@ namespace Assets.AltUnityTester.AltUnityServer
             Type type = instance == null ? componentType : instance.GetType();//Checking for static fields
 
             MemberInfo memberInfo = GetMemberForObjectComponent(type, propertyName);
-            instance = getValue(instance, memberInfo, indexValue);
+            instance = GetValue(instance, memberInfo, indexValue);
             if (instance == null)
             {
                 string path = "";

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Altom.AltUnityDriver;
+using Altom.AltUnityDriver.Logging;
 using NUnit.Framework;
 
 [Timeout(30000)]
@@ -12,7 +13,12 @@ public class TestForScene1TestSample
     [OneTimeSetUp]
     public void SetUp()
     {
-        altUnityDriver = new AltUnityDriver(enableLogging: true);
+        string portStr = System.Environment.GetEnvironmentVariable("PROXY_PORT");
+        int port = 13000;
+        if (!string.IsNullOrEmpty(portStr)) port = int.Parse(portStr);
+        altUnityDriver = new AltUnityDriver(port: port, enableLogging: true);
+        DriverLogManager.SetMinLogLevel(AltUnityLogger.Console, AltUnityLogLevel.Info);
+        DriverLogManager.SetMinLogLevel(AltUnityLogger.Unity, AltUnityLogLevel.Info);
     }
 
     [OneTimeTearDown]
@@ -25,6 +31,12 @@ public class TestForScene1TestSample
     public void LoadLevel()
     {
         altUnityDriver.LoadScene("Scene 1 AltUnityDriverTestScene", true);
+    }
+
+    [Test]
+    public void TestLoadNonExistentScene()
+    {
+        Assert.Throws<SceneNotFoundException>(() => altUnityDriver.LoadScene("Scene 0", true));
     }
 
     [Test]
@@ -133,8 +145,6 @@ public class TestForScene1TestSample
         Assert.AreEqual("Scene 1 AltUnityDriverTestScene", currentScene);
     }
 
-
-
     [Test]
     public void TestWaitForExistingElementWhereNameContains()
     {
@@ -211,19 +221,21 @@ public class TestForScene1TestSample
     public void TestGetComponentProperty()
     {
         Thread.Sleep(1000);
-        const string componentName = "AltUnityRunner";
-        const string propertyName = "InstrumentationSettings.ServerPort";
+        const string componentName = "Altom.AltUnityTester.AltUnityRunner";
+        const string propertyName = "InstrumentationSettings.ProxyPort";
         var altElement = altUnityDriver.FindObject(By.NAME, "AltUnityRunnerPrefab");
         Assert.NotNull(altElement);
         var propertyValue = altElement.GetComponentProperty(componentName, propertyName);
-        Assert.AreEqual(propertyValue, "13000");
+        string portStr = System.Environment.GetEnvironmentVariable("PROXY_PORT");
+        if (string.IsNullOrEmpty(portStr)) portStr = "13000";
+        Assert.AreEqual(portStr, propertyValue);
     }
 
     [Test]
     public void TestGetComponentPropertyNotFoundWithAssembly()
     {
         Thread.Sleep(1000);
-        const string componentName = "AltUnityRunner";
+        const string componentName = "Altom.AltUnityTester.AltUnityRunner";
         const string propertyName = "InvalidProperty";
         var altElement = altUnityDriver.FindObject(By.NAME, "AltUnityRunnerPrefab");
         Assert.NotNull(altElement);
@@ -242,7 +254,7 @@ public class TestForScene1TestSample
     public void TestGetNonExistingComponentProperty()
     {
         Thread.Sleep(1000);
-        const string componentName = "AltUnityRunner";
+        const string componentName = "Altom.AltUnityTester.AltUnityRunner";
         const string propertyName = "socketPort";
         var altElement = altUnityDriver.FindObject(By.NAME, "AltUnityRunnerPrefab");
         Assert.NotNull(altElement);
@@ -289,6 +301,18 @@ public class TestForScene1TestSample
         var propertyValue = altElement.GetComponentProperty(componentName, propertyName);
         Assert.AreEqual("0", propertyValue);
     }
+
+    [Test]
+    public void TestGetComponentPropertyNullValue()
+    {
+        const string componentName = "AltUnityExampleScriptCapsule";
+        const string propertyName = "fieldNullValue";
+        var altElement = altUnityDriver.FindObject(By.NAME, "Capsule");
+        Assert.NotNull(altElement);
+        var propertyValue = altElement.GetComponentProperty(componentName, propertyName);
+        Assert.AreEqual(null, propertyValue);
+    }
+
     [Test]
     public void TestGetComponentPropertyStaticPublic()
     {
@@ -833,7 +857,7 @@ public class TestForScene1TestSample
             componenta.componentName.Equals("AltUnityExampleScriptCapsule") && componenta.assemblyName.Equals("Assembly-CSharp"));
 
         List<AltUnityProperty> fields = altElement.GetAllFields(component, AltUnityFieldsSelections.CLASSFIELDS);
-        Assert.AreEqual(14, fields.Count);
+        Assert.AreEqual(15, fields.Count);
     }
 
     [Test]
@@ -858,7 +882,7 @@ public class TestForScene1TestSample
         var component = componentList.First(componenta =>
             componenta.componentName.Equals("AltUnityExampleScriptCapsule") && componenta.assemblyName.Equals("Assembly-CSharp"));
         List<AltUnityProperty> fields = altElement.GetAllFields(component, AltUnityFieldsSelections.ALLFIELDS);
-        Assert.AreEqual(15, fields.Count);
+        Assert.AreEqual(16, fields.Count);
     }
 
     [Test]
@@ -1597,7 +1621,7 @@ public class TestForScene1TestSample
     {
         var capsule = altUnityDriver.FindObject(By.ID, "2b78431c-2251-4489-8d50-7634304a5630");
         Assert.AreEqual("Capsule", capsule.name);
-        var plane = altUnityDriver.FindObject(By.PATH, "//*[@id=eff13b53-66de-4f98-82f3-a140b8949484]");
+        var plane = altUnityDriver.FindObject(By.PATH, "//*[@id=5277849a-16c3-469e-b3aa-ead06f0a37d2]");
         Assert.AreEqual("Plane", plane.name);
         var mainCamera = altUnityDriver.FindObject(By.NAME, "Main Camera");
         mainCamera = altUnityDriver.FindObject(By.ID, mainCamera.id.ToString());
@@ -1614,7 +1638,6 @@ public class TestForScene1TestSample
     [TestCase("//Dialog[0]", "Title", false)]
     [TestCase("//Dialog[1]", "Message", false)]
     [TestCase("//Dialog[-1]", "CloseButton", false)]
-    [TestCase("//Dialog[-2]", "ActionButton", false)]
     public void TestFindNthChild(string path, string expectedResult, bool enabled)
     {
         var altElement = altUnityDriver.FindObject(By.PATH, path, enabled: enabled);
@@ -1965,4 +1988,20 @@ public class TestForScene1TestSample
         Assert.IsTrue(Convert.ToBoolean(inputField.GetComponentProperty("AltUnityInputFieldRaisedEvents", "onSubmitInvoked", "Assembly-CSharp")));
     }
 
+    [Test]
+    [Category("WebGLUnsupported")]
+    public void TestGetStaticProperty()
+    {
+        altUnityDriver.CallStaticMethod<string>("UnityEngine.Screen", "SetResolution", new string[] { "1920", "1080", "true" }, new string[] { "System.Int32", "System.Int32", "System.Boolean" }, "UnityEngine.CoreModule");
+        var width = altUnityDriver.GetStaticProperty<int>("UnityEngine.Screen", "currentResolution.width", "UnityEngine.CoreModule");
+        Assert.AreEqual(1920, width);
+    }
+
+    [Test]
+    public void TestGetStaticPropertyInstanceNull()
+    {
+        var screenWidth = altUnityDriver.CallStaticMethod<short>("UnityEngine.Screen", "get_width", new string[] { }, null, "UnityEngine.CoreModule");
+        var width = altUnityDriver.GetStaticProperty<int>("UnityEngine.Screen", "width", "UnityEngine.CoreModule");
+        Assert.AreEqual(screenWidth, width);
+    }
 }

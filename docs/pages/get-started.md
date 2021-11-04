@@ -19,24 +19,14 @@ To run the first test for your Unity game you need to:
 
 ## Import AltUnity Tester package in Unity Editor
 
-To instrument your game with AltUnity Server you first need to import the AltUnity Tester package into Unity. This can be done either by downloading from the Unity Asset Store or from the GitLab pages.
+To instrument your Unity application with AltUnity Tester you first need to import the AltUnity Tester package into Unity.
 
 ```eval_rst
 
-.. tabs::
+    1. Download `AltUnity Tester Alpha <https://altom.com/app/uploads/altUnityProAlpha/AltUnityTester.unitypackage>`_.
 
-    .. tab:: From Unity Asset Store
-
-        1. Download from Unity `Asset Store - link <https://assetstore.unity.com/packages/tools/utilities/altunitytester-112101>`_.
-        2. Go to your Asset Store Downloads Manager from Unity Editor.
-        3. Import the package into your Unity project.
-
-
-    .. tab:: UnityPackage from GitLab pages
-
-        1. Download from `GitLab pages (deployed using CI) - link <https://altom.gitlab.io/altunity/altunitytester/master/AltUnityPackage/AltUnityTester.unitypackage>`_.
-        2. Import it by drag and drop inside your Unity project.
-
+    2. Import it by drag and drop inside your Unity project.
+    
 ```
 
 ```important:: To make sure the import was correct, check if you can open AltUnity Tester Editor Window from Unity Editor -> AltUnity Tools -> AltUnityTester.
@@ -45,52 +35,37 @@ To instrument your game with AltUnity Server you first need to import the AltUni
 
 ![window menu with altUnity Tester](../_static/images/DownloadingImportingAltUnityTesterWindow.png)
 
-## Instrument your game with AltUnity Server
-
-In order for the tests to have access to Unity objects via AltUnity Driver you need to instrument the game with AltUnity Server.
+## Instrument your game with AltUnity Tester Alpha
 
 Steps:
+1. Open AltUnity Tester Editor window from Unity Editor -> AltUnity Tools -> AltUnityTester
+2. In the Build Settings section set the **Proxy host** to the IP/hostname of the device where the Proxy is running. Set the **Proxy port** to the port configured in the Proxy.
+3. In the Scene Manager section select the scenes you want to include in your build
+4. In the Platform section select desired platform and set the path to where you want to save the build
+5. Press "Build Only" to instrument the game or "Build & Run" to start your instrumented game
+after the build succeeded
+6. Check the console to see if the build was successful.
 
-1. Open AltUnity Tester Window from Unity Editor -> AltUnity Tools -> AltUnityTester.
-2. Select Scenes in Build
-3. Select on what platform you want to build the game.
-4. Press "Build Only" to instrument the game.
-5. Check the console to see if the build was successful.
+![webgl](../_static/images/webgl.png)
 
 ```eval_rst
-
-.. important::
-
-    Make sure to set the "Api Compatibility Level" to ".NET 4.x" in Unity when building using the Standalone option.
-
-    This setting can be found under Edit menu -> Project Settings -> Player -> Other Settings -> Configuration.
-
-.. important::
-
-    AltUnity Server is intended to be used only in debug builds, and it will not work in release mode out of the box. You need to make sure you don't release a production build instrumented with AltUnity Server.
-
-.. note::
-
-    Your build files are available in the configured Output path. By default, the Output path is a folder with the same name as your game.
-
-.. note::
-
-    If you have a custom build, check how you can build from the command line using the instructions in the `Advanced Usage section <advanced-usage.html#Build-games-from-the-command-line>`_.
-
-.. note::
-
-    If changes are made inside a test, rebuilding the application is not necessary.
-    A rebuild is needed only if changes are made inside the Unity project.
-
 .. note::
 
     To be able to run your instrumented game in the background, go to File -> Build Settings -> Player Settings -> Project Settings -> Player -> Resolution and presentation and check the box next to Run in background*.
-
 ```
+```eval_rst
+.. note::
+
+    When running the WebGL build of your game in browser, even with the Run in background* setting enabled, you still might experience slow performance if the tab with your content is not on focus. Make sure that the tab with your app is visible, otherwise your content will only update once per second in most browsers.
+```
+
+## Start the Proxy Module
+
+The Proxy Module is incorporated in AltUnity Pro Alpha. In order to start it, all you have to do is to start AltUnity Pro Alpha.
 
 ## Run your game in Unity or on desired platform
 
-Before running your tests you need to start the game instrumented with AltUnity Server. Upon startup, your game should display a popup with the message: "waiting for connection on port 13000".
+Before running your tests you need to start the instrumented Unity application. Upon startup, your instrumented Unity app should display a popup with the message: "Connecting to AltUnity Proxy on {ProxyHost}:{ProxyPort}". The popup disappears when your app has successfully connected to the proxy.
 
 ```eval_rst
 
@@ -144,8 +119,17 @@ Before running your tests you need to start the game instrumented with AltUnity 
             Check the following link to see how to build and run your game for iOS (.ipa file) -- `link <https://altom.com/testing-ios-applications-using-java-and-altunity-tester/>`_.
 
 
-        .. note::
-            For more details read about `port forwarding at this link <advanced-usage.html#what-is-port-forwarding-and-when-to-use-it>`_.
+    .. tab:: WebGL
+
+        Prerequisites:
+
+        * Use the Unity Hub to install WebGL Build Support 
+
+        Steps:
+
+        1. Open AltUnity Tester Window
+        2. In platform section select WebGL
+        3. Click Build & Run
 
 ```
 
@@ -159,7 +143,7 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
 .. tabs::
 
-    .. tab:: C#
+    .. tab:: C#-Unity
 
         AltUnity C# Driver is already included in AltUnity Tester package. If you are writing tests in C# then you can create your tests directly from Unity.
 
@@ -172,30 +156,44 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
         Example test file:
 
-        .. tabs::
+        .. literalinclude:: other~/test-files/cSharp-test.cs
+            :language: c#
 
-            .. tab:: Unity Editor & PC
-
-                .. literalinclude:: other~/test-files/cSharp-test.cs
-                    :language: c#
-
-            .. tab:: Android
-
-                .. literalinclude:: other~/test-files/cSharp-Android-test.cs
-                    :language: c#
-                    :emphasize-lines: 11,19
-
-            .. tab:: iOS
-
-                .. literalinclude:: other~/test-files/cSharp-iOS-test.cs
-                    :language: c#
-                    :emphasize-lines: 11,19
 
         Run your test file from the command line by using the following command:
 
         .. code-block:: console
 
             <UnityPath>/Unity -projectPath $PROJECT_DIR -executeMethod AltUnityTestRunner.RunTestFromCommandLine -tests MyFirstTest.TestStartGame -logFile logFile.log -batchmode -quit
+
+    .. tab:: C#
+
+        AltUnityDriver is available also as a nuget package. You can use the nuget package to write your tests in a separate tests project, independent of the Unity application.
+
+        Create a new test project 
+
+        .. code-block:: console
+
+            dotnet new nunit
+
+        Install AltUnityDriver nuget package
+
+        .. code-block:: console
+
+            dotnet add package AltUnityDriver --version 1.7.0-alpha
+
+
+        Example test file:
+
+        .. literalinclude:: other~/test-files/cSharp-test.cs
+            :language: c#
+
+
+        Run your tests 
+
+        .. code-block:: console
+        
+            dotnet test
 
     .. tab:: Java
 
@@ -208,7 +206,7 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
                 <dependency>
                     <groupId>com.altom</groupId>
                     <artifactId>altunitytester-java-client</artifactId>
-                    <version>1.6.6</version>
+                    <version>1.7.0-alpha</version>
                 </dependency>
 
 
@@ -220,29 +218,14 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
                 .. code-block:: console
 
-                    mvn install:install-file -Dfile=./target/altunitytester-java-client-jar-with-dependencies.jar -DgroupId=ro.altom -DartifactId=altunitytester -Dversion=1.6.6 -Dpackaging=jar``
+                    mvn install:install-file -Dfile=./target/altunitytester-java-client-jar-with-dependencies.jar -DgroupId=ro.altom -DartifactId=altunitytester -Dversion=1.7.0-alpha -Dpackaging=jar``
 
 
         Example test file:
 
-        .. tabs::
+        .. literalinclude:: other~/test-files/java-test.java
+            :language: java
 
-            .. tab:: Unity Editor & PC
-
-                .. literalinclude:: other~/test-files/java-test.java
-                    :language: java
-
-            .. tab:: Android
-
-                .. literalinclude:: other~/test-files/java-Android-test.java
-                    :language: java
-                    :emphasize-lines: 19,26
-
-            .. tab:: iOS
-
-                .. literalinclude:: other~/test-files/java-iOS-test.java
-                    :language: java
-                    :emphasize-lines: 19,26
 
         Run your tests by using the following command (in the test project folder):
 
@@ -258,7 +241,7 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
             .. code-block:: console
 
-                pip install altunityrunner
+                pip install --pre altunityrunner
 
             **Method 2**: Install from the source code in the repository:
 
@@ -270,24 +253,9 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
         Example test file:
 
-        .. tabs::
+        .. literalinclude:: other~/test-files/python-test.py
+            :language: py
 
-            .. tab:: Unity Editor & PC
-
-                .. literalinclude:: other~/test-files/python-test.py
-                    :language: py
-
-            .. tab:: Android
-
-                .. literalinclude:: other~/test-files/python-Android-test.py
-                    :language: py
-                    :emphasize-lines: 16,22
-
-            .. tab:: iOS
-
-                .. literalinclude:: other~/test-files/python-iOS-test.py
-                    :language: py
-                    :emphasize-lines: 16,22
 
         Run your test file by using the following command:
 
@@ -300,5 +268,5 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 Now your project can use all the [AltUnity Driver Commands](./commands.md).
 
 ```note::
-        Before running your tests, start the instrumented game and wait for popup with the message: "waiting for connection on port 13000".
+        Before running your tests, start the Proxy and the Instrumented Unity app.
 ```

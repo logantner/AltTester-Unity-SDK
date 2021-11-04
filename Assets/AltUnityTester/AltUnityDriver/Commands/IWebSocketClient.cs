@@ -13,6 +13,13 @@ namespace Altom.AltUnityDriver.Commands
         // Summary:
         //     Occurs when the WebSocketSharp.WebSocket receives a message.
         event EventHandler<string> OnMessage;
+
+        //
+        // Summary:
+        // Occurs when the WebSocketSharp.WebSocket was closed
+        //     
+        event EventHandler<CloseEventArgs> OnClose;
+
         //
         // Summary:
         //     Sends text data using the WebSocket connection.
@@ -25,5 +32,6 @@ namespace Altom.AltUnityDriver.Commands
         // Summary:
         //     Closes the WebSocket connection, and releases all associated resources.
         void Close();
+        bool IsAlive();
     }
 }

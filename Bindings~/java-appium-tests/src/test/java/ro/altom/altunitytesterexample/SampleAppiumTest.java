@@ -20,15 +20,12 @@ import java.io.File;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import javax.websocket.CloseReason;
-import javax.websocket.CloseReason.CloseCodes;
-
 import static org.junit.Assert.*;
 
 public class SampleAppiumTest {
 
     private static AltUnityDriver altUnityDriver;
-    private static AndroidDriver appiumDriver;
+    private static AndroidDriver<MobileElement> appiumDriver;
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -41,15 +38,13 @@ public class SampleAppiumTest {
         appiumDriver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         appiumDriver.manage().timeouts().implicitlyWait(80, TimeUnit.SECONDS);
         Thread.sleep(1000);
-        AltUnityDriver.setupPortForwarding("android", "", 13000, 13000);
-        altUnityDriver = new AltUnityDriver("127.0.0.1", 13000);
+        altUnityDriver = new AltUnityDriver("127.0.0.1", 13010);
     }
 
     @AfterClass
     public static void tearDown() throws Exception {
-        altUnityDriver.stop(new CloseReason(CloseCodes.getCloseCode(1000), "Connection stopped successfully"));
+        altUnityDriver.stop();
         appiumDriver.quit();
-        AltUnityDriver.removePortForwarding();
     }
 
     @Before
@@ -62,16 +57,16 @@ public class SampleAppiumTest {
     public void testTapOnButton() throws Exception {
         assertEquals("Scene 1 AltUnityDriverTestScene", altUnityDriver.getCurrentScene());
 
-        AltFindObjectsParameters altFindObjectsParameters = 
-            new AltFindObjectsParameters.Builder(AltUnityDriver.By.NAME,"Capsule").build();
+        AltFindObjectsParameters altFindObjectsParameters = new AltFindObjectsParameters.Builder(AltUnityDriver.By.NAME,
+                "Capsule").build();
         AltUnityObject capsule = altUnityDriver.findObject(altFindObjectsParameters);
         TouchAction tapButton = new TouchAction(appiumDriver);
         tapButton.tap(new PointOption().withCoordinates(capsule.x, capsule.mobileY)).perform();
 
-        AltFindObjectsParameters altFindObjectsParameters2 = 
-            new AltFindObjectsParameters.Builder(AltUnityDriver.By.PATH, "//CapsuleInfo[@text=Capsule was clicked to jump!]").build();
-        AltWaitForObjectsParameters altWaitForObjectsParameters = 
-            new AltWaitForObjectsParameters.Builder(altFindObjectsParameters2).build();
+        AltFindObjectsParameters altFindObjectsParameters2 = new AltFindObjectsParameters.Builder(
+                AltUnityDriver.By.PATH, "//CapsuleInfo[@text=Capsule was clicked to jump!]").build();
+        AltWaitForObjectsParameters altWaitForObjectsParameters = new AltWaitForObjectsParameters.Builder(
+                altFindObjectsParameters2).build();
         String text = altUnityDriver.waitForObject(altWaitForObjectsParameters).getText();
         assertEquals("Capsule was clicked to jump!", text);
     }

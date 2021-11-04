@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Altom.AltUnityDriver;
+using Altom.AltUnityDriver.Logging;
 using NUnit.Framework;
 
 public class TestForScene5KeyboardAndMouseInput
@@ -13,7 +14,12 @@ public class TestForScene5KeyboardAndMouseInput
     [OneTimeSetUp]
     public void SetUp()
     {
-        altUnityDriver = new AltUnityDriver(enableLogging: true);
+        string portStr = System.Environment.GetEnvironmentVariable("PROXY_PORT");
+        int port = 13000;
+        if (!string.IsNullOrEmpty(portStr)) port = int.Parse(portStr);
+        altUnityDriver = new AltUnityDriver(port: port, enableLogging: true);
+        DriverLogManager.SetMinLogLevel(AltUnityLogger.Console, AltUnityLogLevel.Info);
+        DriverLogManager.SetMinLogLevel(AltUnityLogger.Unity, AltUnityLogLevel.Info);
     }
 
     //At the end of the test closes the connection with the socket

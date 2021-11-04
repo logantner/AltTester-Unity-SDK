@@ -1,10 +1,10 @@
 using System;
-using Altom.AltUnity.Instrumentation;
-using Altom.Server.Logging;
-using Assets.AltUnityTester.AltUnityServer.Communication;
+using Altom.AltUnityTester;
+using Altom.AltUnityTester.Logging;
+using Altom.AltUnityTester.Communication;
 using NLog;
 
-namespace Altom.AltUnityInstrumentation.UI
+namespace Altom.AltUnityTester.UI
 {
     public class AltUnityDialog : UnityEngine.MonoBehaviour
     {
@@ -22,10 +22,6 @@ namespace Altom.AltUnityInstrumentation.UI
         [UnityEngine.SerializeField]
         public UnityEngine.UI.Text MessageText = null;
         [UnityEngine.SerializeField]
-        public UnityEngine.UI.Button ActionButton = null;
-        [UnityEngine.SerializeField]
-        public UnityEngine.UI.Text ActionButtonText = null;
-        [UnityEngine.SerializeField]
         public UnityEngine.UI.Button CloseButton = null;
         [UnityEngine.SerializeField]
         public UnityEngine.UI.Image Icon = null;
@@ -37,13 +33,13 @@ namespace Altom.AltUnityInstrumentation.UI
 
 
         private readonly AltResponseQueue _updateQueue = new AltResponseQueue();
+        private bool wasConnectedBefore = false;
 
         protected void Start()
         {
             Dialog.SetActive(InstrumentationSettings.ShowPopUp);
             CloseButton.onClick.AddListener(ToggleDialog);
             Icon.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(ToggleDialog);
-            ActionButton.onClick.AddListener(OnActionButtonPressed);
             TitleText.text = "AltUnity Tester v." + AltUnityRunner.VERSION;
 
             startCommProtocol();
@@ -64,38 +60,23 @@ namespace Altom.AltUnityInstrumentation.UI
             Dialog.SetActive(!Dialog.activeSelf);
         }
 
-        public void OnActionButtonPressed()
-        {
-            communication.Stop();
-            startCommProtocol();
-        }
-
         private void setDialog(string message, UnityEngine.Color color, bool visible)
         {
             Dialog.SetActive(visible);
             MessageText.text = message;
-            ActionButtonText.text = InstrumentationSettings.InstrumentationMode == AltUnityInstrumentationMode.Server ? "Restart server" : "Reconnect";
             Dialog.GetComponent<UnityEngine.UI.Image>().color = color;
         }
 
         private void initCommProtocol()
         {
-            if (InstrumentationSettings.InstrumentationMode == AltUnityInstrumentationMode.Server && communication != null && communication.IsListening) return;
             var cmdHandler = new CommandHandler();
 
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        communication = new WebSocketWebGLCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
+            communication = new WebSocketWebGLCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
 #else
 
-            if (InstrumentationSettings.InstrumentationMode == AltUnityInstrumentationMode.Server)
-            {
-                communication = new WebSocketServerCommunication(cmdHandler, "0.0.0.0", InstrumentationSettings.ServerPort);
-            }
-            else
-            {
-                communication = new WebSocketClientCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
-            }
+            communication = new WebSocketClientCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
 #endif
             communication.OnConnect += onConnect;
             communication.OnDisconnect += onDisconnect;
@@ -114,11 +95,7 @@ namespace Altom.AltUnityInstrumentation.UI
                 if (!communication.IsConnected) // display dialog onlyy if not connected 
                     onStart();
             }
-            catch (AddressInUseCommError)
-            {
-                setDialog("Cannot start AltUnity Server. Another process is listening on port " + InstrumentationSettings.ServerPort, ERROR_COLOR, true);
-                logger.Error("Cannot start AltUnity Server. Another process is listening on port" + InstrumentationSettings.ServerPort);
-            }
+
             catch (UnhandledStartCommError ex)
             {
                 setDialog("An unexpected error occured while starting the communication protocol.", ERROR_COLOR, true);
@@ -132,24 +109,17 @@ namespace Altom.AltUnityInstrumentation.UI
         }
         private void onStart()
         {
-            if (InstrumentationSettings.InstrumentationMode == AltUnityInstrumentationMode.Server)
-            {
-                setDialog("Waiting for connections on port: " + InstrumentationSettings.ServerPort, SUCCESS_COLOR, true);
-            }
-            else
-            {
-                setDialog("Connecting to AltUnity Proxy on " + InstrumentationSettings.ProxyHost + ":" + InstrumentationSettings.ProxyPort, SUCCESS_COLOR, true);
-            }
+            setDialog("Connecting to AltUnity Proxy on " + InstrumentationSettings.ProxyHost + ":" + InstrumentationSettings.ProxyPort, SUCCESS_COLOR, Dialog.activeSelf || wasConnectedBefore);
+            wasConnectedBefore = false;
         }
         private void onConnect()
         {
 
-            string message = InstrumentationSettings.InstrumentationMode == AltUnityInstrumentationMode.Server ?
-                "Client connected." :
-                "Connected AUT Proxy on " + InstrumentationSettings.ProxyHost + ":" + InstrumentationSettings.ProxyPort;
+            string message = "Connected to AltUnity Proxy on " + InstrumentationSettings.ProxyHost + ":" + InstrumentationSettings.ProxyPort;
             _updateQueue.ScheduleResponse(() =>
             {
                 setDialog(message, SUCCESS_COLOR, false);
+                wasConnectedBefore = true;
             });
         }
 

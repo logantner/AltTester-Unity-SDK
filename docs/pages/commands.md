@@ -3,19 +3,17 @@
 ## AltUnityDriver
 
 The **AltUnityDriver** class represents the main game driver component. When you instantiate an AltUnityDriver in your tests, you can use it to "drive" your game like one of your users would, by interacting with all the game objects, their properties and methods.
-An AltUnityDriver instance will connect to the AltUnity Server that is running inside the game. In the constructor, we need to tell the driver where (on what IP and on what port) the server is running. We can also set some more advanced parameters, as shown in the table below:
+An AltUnityDriver instance will connect to the AltUnity Proxy that bridges the connection with the instrumented Unity application. In the constructor, we need to tell the driver where (on what IP and on what port) the proxy is running. We can also set some more advanced parameters, as shown in the table below:
 
 **_Parameters_**
 
 | Name             | Type    | Required | Description                               |
 | ---------------- | ------- | -------- | ----------------------------------------- |
-| tcp_ip           | string  | No       | The default value for this is "127.0.0.1" |
-| tcp_port         | int     | No       | The default value for this is 13000       |
-| requestSeparator | string  | No       | The default value for this is ";"         |
-| requestEnding    | string  | No       | The default value for this is "&"         |
-| logFlag          | boolean | No       | The default value for this is false       |
+| host             | string  | No       | The ip or hostname  AltUnity Proxy is listening on. The default value for this is "127.0.0.1" |
+| port             | int     | No       | The default value for this is 13000                                                           |
+| enableLogging    | boolean | No       | If true, enables logging on the driver. The default value for this is false                   |
+| connectTimeout   | int     | No       | Number of seconds to retry connection to proxy. The default value for this is 60 seconds      |
 
-For more information about the AltUnityDriver parameters you can read the [Server Settings page](altunity-tester-editor.html#server-settings).
 
 Once you have an instance of the _AltUnityDriver_, you can use all the available commands to interact with the game. The available methods are the following:
 
@@ -723,7 +721,6 @@ Simulates that a specific key was released.
 | Name     | Type           | Required | Description                                                                               |
 | -------- | -------------- | -------- | ----------------------------------------------------------------------------------------- |
 | keyCode | AltUnityKeyCode| Yes      | The keyCode of the key simulated to be released. |
-| power | int          | Yes      | A value between [-1,1] used for joysticks to indicate how hard the button was pressed. |
 
 **_Returns_**
 
@@ -1031,7 +1028,7 @@ Simulates key press action in your game. This command waits for the action to fi
 | -------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | keycode  | AltUnityKeyCode | Yes      | Name of the button. |
 | power    | float           | Yes      | A value from \[-1,1\] that defines how strong the key was pressed. This is mostly used for joystick button since the keyboard button will always be 1 or -1.                                                                                |
-| duration | float           | Yes      | The time measured in seconds to move the mouse from current position to the set location.                                                                                                                                                  |
+| duration | float           | Yes      | The time measured in seconds from the key press to the key release.                                                                                                                                                   |
 
 **_Returns_**
 
@@ -1123,7 +1120,7 @@ Simulates key press action in your game. This command does not wait for the acti
 | -------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | keycode  | AltUnityKeyCode | Yes      | Name of the button. |
 | power    | float           | Yes      | A value from \[-1,1\] that defines how strong the key was pressed. This is mostly used for joystick button since the keyboard button will always be 1 or -1                                                                                |
-| duration | float           | Yes      | The time measured in seconds to move the mouse from current position to the set location.                                                                                                                                                  |
+| duration | float           | Yes      | The time measured in seconds from the key press to the key release.                                                                                                                                        |
 
 **_Returns_**
 
@@ -1214,7 +1211,7 @@ Simulates scroll mouse action in your game. This command waits for the action to
 | Name     | Type  | Required | Description                                                                                  |
 | -------- | ----- | -------- | -------------------------------------------------------------------------------------------- |
 | speed    | float | Yes      | Set how fast to scroll. Positive values will scroll up and negative values will scroll down. |
-| duration | float | Yes      | The time measured in seconds to move the mouse from current position to the set location.    |
+| duration | float | Yes      | The time measured in seconds to scroll.    |
 
 **_Returns_**
 
@@ -1282,7 +1279,7 @@ Simulates scroll mouse action in your game. This command does not wait for the a
 | Name     | Type  | Required | Description                                                                                  |
 | -------- | ----- | -------- | -------------------------------------------------------------------------------------------- |
 | speed    | float | Yes      | Set how fast to scroll. Positive values will scroll up and negative values will scroll down. |
-| duration | float | Yes      | The time measured in seconds to move the mouse from current position to the set location.    |
+| duration | float | Yes      | The time measured in seconds to scroll.    |
 
 **_Returns_**
 
@@ -2964,7 +2961,7 @@ Waits for the scene to be loaded for a specified amount of time. It returns the 
             assertTrue(time / 1000 < 20);
             assertNotNull(currentScene);
             assertEquals("Scene 1 AltUnityDriverTestScene", currentScene);
-        }   
+        }
 
     .. code-tab:: py
 
@@ -2991,6 +2988,56 @@ Returns the value of the time scale.
 **_Returns_**
 
 -   float
+
+**_Examples_**
+
+```eval_rst
+.. tabs::
+
+    .. code-tab:: c#
+
+        [Test]
+        public void TestTimeScale()
+        {
+            altUnityDriver.SetTimeScale(0.1f);
+            Thread.Sleep(1000);
+            var timeScaleFromGame = altUnityDriver.GetTimeScale();
+            Assert.AreEqual(0.1f, timeScaleFromGame);
+        }
+
+    .. code-tab:: java
+
+        @Test
+        public void TestTimeScale() {
+            altUnityDriver.setTimeScale(0.1f);
+            float timeScale = altUnityDriver.getTimeScale();
+            assertEquals(0.1f, timeScale, 0);
+        }
+
+    .. code-tab:: py
+
+        def test_time_scale(self):
+            self.altUnityDriver.set_time_scale(0.1)
+            time.sleep(1)
+            time_scale = self.altUnityDriver.get_time_scale()
+            self.assertEqual(0.1, time_scale)
+
+```
+
+#### SetTimeScale
+
+Sets the value of the time scale.
+
+**_Parameters_**
+
+| Name     | Type            | Required | Description                                                                               |
+| -------- | --------------- | -------- | ----------------------------------------------------------------------------------------- |
+| timeScale| float           | Yes      | The value you want to set the time scale to.    |
+
+
+**_Returns_**
+
+-   None
 
 **_Examples_**
 
@@ -3087,11 +3134,65 @@ Invokes static methods from your game.
 
 ```
 
+#### GetStaticProperty
+
+Gets the value of the static field or property given as parameter.
+
+**_Parameters_**
+
+| Name     | Type            | Required | Description                                                                               |
+| -------- | --------------- | -------- | ----------------------------------------------------------------------------------------- |
+| componentName| string      | Yes      | The name of the component which has the static field or property to be retrieved.              |
+| propertyName | string      | Yes      | The name of the static field or property to be retrieved. |
+| assembly| string       | Yes      | The name of the assembly the component belongs to. |
+| maxDepth    | int           | Optional | The maximum depth in the hierarchy to look for the static field or property. Its value is 2 by default. |
+
+**_Returns_**
+
+-   This is a generic method. The return type depends on the type of the static field or property to be retrieved.
+
+**_Examples_**
+
+```eval_rst
+.. tabs::
+
+    .. code-tab:: c#
+
+        [Test] 
+        public void TestGetStaticProperty()
+        {
+            altUnityDriver.CallStaticMethod<string>("UnityEngine.Screen", "SetResolution", new string[] {"1920", "1080", "true"}, new string[] {"System.Int32", "System.Int32", "System.Boolean"}, "UnityEngine.CoreModule");
+            var width = altUnityDriver.GetStaticProperty<int>("UnityEngine.Screen", "currentResolution.width", "UnityEngine.CoreModule");
+            Assert.AreEqual(1920, width);
+        }
+
+    .. code-tab:: java
+
+        @Test
+        public void testGetStaticProperty() {
+            AltCallStaticMethodParameters altCallStaticMethodParameters = new AltCallStaticMethodParameters.Builder("UnityEngine.Screen", "SetResolution", new Object[] {"1920", "1080", "True"}).withTypeOfParameters(new String[] {"System.Int32", "System.Int32", "System.Boolean"}).withAssembly("UnityEngine.CoreModule").build();
+            altUnityDriver.callStaticMethod(altCallStaticMethodParameters, Integer.class);
+            AltGetComponentPropertyParameters altGetComponentPropertyParameters = new AltGetComponentPropertyParameters.Builder("UnityEngine.Screen", "currentResolution.width").withAssembly("UnityEngine.CoreModule").build();
+            int width = altUnityDriver.GetStaticProperty(altGetComponentPropertyParameters, Integer.class);
+            assertEquals(width, 1920);
+        }
+
+    .. code-tab:: py
+
+        def test_get_static_property(self):
+            self.altdriver.load_scene('Scene 1 AltUnityDriverTestScene')
+            self.altdriver.call_static_method("UnityEngine.Screen", "SetResolution", ["1920", "1080", "True"], ["System.Int32", "System.Int32", "System.Boolean"], "UnityEngine.CoreModule")
+            width = self.altdriver.get_static_property(
+                "UnityEngine.Screen", "currentResolution.width", "UnityEngine.CoreModule")
+            self.assertEqual(int(width), 1920)
+
+```
+
 ### AltUnity Commands
 
 #### SetServerLogging
 
-Sets the level of logging on AltUnity Server
+Sets the level of logging in AltUnity Tester instrumented Unity application
 
 **_Parameters_**
 
@@ -3229,12 +3330,12 @@ Returns the value of the given component property.
 
 **_Parameters_**
 
-| Name          | Type   | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| ------------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| componentName | string | Yes      | name of the component. If the component has a namespace the format should look like this: "namespace.componentName" )                                                                                                                                                                                                                                                                                                               |
-| propertyName  | string | Yes      | Name of the property of which value you want. If the property is an array you can specify which element of the array to return by doing property[index], or if you want a property inside of another property you can get by doing property.property2 for example position.x.                                                                                                                                                       |
-| assemblyName  | string | No       | name of the assembly containing the component                                                                                                                                                                                                                                                                                                                                                                                       |
-| maxDepth      | int    | No       | Set how deep the serialization of the property to do. For example for position property in transform the result are following: maxDepth=2 {"normalized":{"magnitude":1.0,"sqrMagnitude":1.0,"x":0.871575534,"y":0.490261227,"z":0.0},"magnitude":1101.45361,"sqrMagnitude":1213200.0,"x":960.0,"y":540.0,"z":0.0} and for maxDepth=1 :{"normalized":{},"magnitude":1101.45361,"sqrMagnitude":1213200.0,"x":960.0,"y":540.0,"z":0.0} |
+| Name          | Type   | Required | Description |
+| ------------- | ------ | -------- | ------------|
+| componentName | string | Yes      | name of the component. If the component has a namespace the format should look like this: "namespace.componentName" |
+| propertyName  | string | Yes      | Name of the property of which value you want. If the property is an array you can specify which element of the array to return by doing property[index], or if you want a property inside of another property you can get by doing property.property2 for example position.x.|
+| assemblyName  | string | No       | name of the assembly containing the component
+| maxDepth      | int    | No       | Set how deep the serialization of the property to do. For example for position property in transform the result are following: maxDepth=2 {"normalized":{"magnitude":1.0, "sqrMagnitude":1.0, "x":0.871575534, "y":0.490261227, "z":0.0}, "magnitude":1101.45361, "sqrMagnitude":1213200.0, "x":960.0,"y":540.0, "z":0.0} and for maxDepth=1 :{"normalized":{},"magnitude":1101.45361, "sqrMagnitude":1213200.0, "x":960.0,"y":540.0, "z":0.0}|
 
 **_Returns_**
 
@@ -4086,60 +4187,3 @@ Is a solution offered by AltUnity Tester in order to find object easier. This is
 To add AltId to every object simply just click AddAltIdToEveryObject from AltUnityTester menu.
 ![addAltId](../_static/images/AddAltId.png)
 
-## AltUnityPortForwarding
-
-API to interact with adb and iproxy programatically
-
-### ForwardAndroid
-
-Calls `adb forward [-s {deviceId}] tcp:{localPort} tcp:{remotePort}`
-
-**_Parameters_**
-
-| Name       | Type   | Required | Description                                                                                                                                                                                |
-| ---------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| localPort  | int    | No       | The local port to forward from                                                                                                                                                             |
-| remotePort | int    | No       | The device port to forward to                                                                                                                                                              |
-| deviceId   | string | No       | The id of the device                                                                                                                                                                       |
-| adbPath    | string | No       | The adb path. If no adb path is provided, it tries to use adb from ${ANDROID_SDK_ROOT}/platform-tools/adb. If ANDROID_SDK_ROOT env varibale is not set, it tries to execute adb from PATH. |
-
-### RemoveForwardAndroid
-
-Calls `adb forward --remove [-s {deviceId}] tcp:{localPort}` or `adb forward --remove-all` if no localport provided
-
-**_Parameters_**
-
-| Name      | Type   | Required | Description                                                                                                                                                                                |
-| --------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| localPort | int    | No       | The local port to be removed                                                                                                                                                               |
-| deviceId  | string | No       | The id of the device to be removed                                                                                                                                                         |
-| adbPath   | string | No       | The adb path. If no adb path is provided, it tries to use adb from ${ANDROID_SDK_ROOT}/platform-tools/adb. If ANDROID_SDK_ROOT env varibale is not set, it tries to execute adb from PATH. |
-
-### RemoveAllForwardAndroid
-
-Calls `adb forward --remove-all`
-
-**_Parameters_**
-
-| Name    | Type   | Required | Description                                                                                                                                                                                |
-| ------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| adbPath | string | No       | The adb path. If no adb path is provided, it tries to use adb from ${ANDROID_SDK_ROOT}/platform-tools/adb. If ANDROID_SDK_ROOT env varibale is not set, it tries to execute adb from PATH. |
-
-### ForwardIos
-
-Calls `iproxy {localport} {remotePort} -u {deviceId}`.
-
-_Requires iproxy 2.0.2_.
-
-**_Parameters_**
-
-| Name       | Type   | Required | Description                                                                           |
-| ---------- | ------ | -------- | ------------------------------------------------------------------------------------- |
-| localPort  | int    | No       | The local port to forward from                                                        |
-| remotePort | int    | No       | The device port to forward to                                                         |
-| deviceId   | string | No       | The id of the device                                                                  |
-| iproxyPath | string | No       | The path to iProxy. If iproxyPath is not provided, iproxy should be available in PATH |
-
-### KillAllIproxyProcess
-
-Kills iproxy process by name. Calls `killall iproxy`

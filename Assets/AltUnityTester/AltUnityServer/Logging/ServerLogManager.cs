@@ -6,7 +6,7 @@ using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
 
-namespace Altom.Server.Logging
+namespace Altom.AltUnityTester.Logging
 {
     public class ServerLogManager
     {
@@ -25,7 +25,7 @@ namespace Altom.Server.Logging
             Instance.GetCurrentClassLogger().Info(AltUnityLogLevel.Info.ToNLogLevel());
             AltUnityLogLevel level;
             if (!string.IsNullOrEmpty(logsFilePath) && minLogLevels.TryGetValue(AltUnityLogger.File, out level) && level != AltUnityLogLevel.Off)
-                Instance.GetCurrentClassLogger().Info("AltUnity Server logs are saved at: " + logsFilePath);
+                Instance.GetCurrentClassLogger().Info("AltUnity Tester logs are saved at: " + logsFilePath);
         }
 
 

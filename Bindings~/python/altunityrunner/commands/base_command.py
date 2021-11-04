@@ -4,11 +4,33 @@ from datetime import datetime
 
 from loguru import logger
 
-import altunityrunner.altUnityExceptions as exceptions
+import altunityrunner.exceptions as exceptions
 from altunityrunner.by import By
 
 
 EPOCH = datetime.utcfromtimestamp(0)
+
+
+def validate_coordinates(coordinates):
+    if isinstance(coordinates, (list, tuple)):
+        if len(coordinates) != 2:
+            raise exceptions.InvalidParameterValueException("ValueError: coordinates must have two items for x and y.")
+
+        return {
+            "x": coordinates[0],
+            "y": coordinates[1]
+        }
+    elif isinstance(coordinates, dict):
+        if "x" not in coordinates and "y" not in coordinates:
+            raise exceptions.InvalidParameterValueException("ValueError: coordinates must have an x and y key.")
+
+        return coordinates
+    else:
+        raise exceptions.InvalidParameterTypeException(
+            parameter_name="coordinates",
+            expected_types=(list, tuple, dict),
+            received_type=type(coordinates)
+        )
 
 
 class Command(metaclass=abc.ABCMeta):
@@ -68,7 +90,7 @@ class Command(metaclass=abc.ABCMeta):
 
 
 class BaseCommand(Command):
-    """"A base command that sends and recives data from the AltUnityServer."""
+    """"A base command that sends and receive data from the AltUnity."""
 
     def __init__(self, connection, command_name):
         self.connection = connection
@@ -80,7 +102,7 @@ class BaseCommand(Command):
 
     @property
     def _parameters(self):
-        """Returns command parammeters that will be sent to the AltUnityServer."""
+        """Returns command parammeters that will be sent to the AltUnity."""
 
         return {
             "commandName": self.command_name,
@@ -106,6 +128,7 @@ class BaseCommand(Command):
         error_map = {
             "ALTUNITYTESTERNotAddedAsDefineVariable": exceptions.AltUnityInputModuleException,
             "notFound": exceptions.NotFoundException,
+            "sceneNotFound": exceptions.SceneNotFoundException,
             "objectNotFound": exceptions.ObjectNotFoundException,
             "cameraNotFound": exceptions.CameraNotFoundException,
             "propertyNotFound": exceptions.PropertyNotFoundException,
@@ -132,7 +155,7 @@ class BaseCommand(Command):
             raise exceptions.AltUnityInvalidServerResponse(expected, received)
 
     def send(self):
-        """Send a command to the AltUnityServer and return the response."""
+        """Send a command to the AltUnity and return the response."""
 
         self.connection.send(self._parameters)
         response = self.connection.recv()
@@ -141,7 +164,7 @@ class BaseCommand(Command):
         return response.get("data")
 
     def recv(self):
-        """Wait for a response from the AltUnityServer."""
+        """Wait for a response from the AltUnity."""
 
         response = self.connection.recv()
         self.handle_response(response)

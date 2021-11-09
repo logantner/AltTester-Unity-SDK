@@ -1,6 +1,8 @@
 using System;
 using Altom.AltUnityDriver.Logging;
+using Altom.AltUnityDriver.Notifications;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
 
 namespace Altom.AltUnityDriver.Commands
 {
@@ -48,12 +50,13 @@ namespace Altom.AltUnityDriver.Commands
         public string trace;
     }
 
-    public class CommandResponse<T>
+    public class CommandResponse
     {
         public string messageId;
         public string commandName;
         public CommandError error;
-        public T data;
+        public String data;
+        public bool isNotification;
     }
 
     public class BaseFindObjectsParams : CommandParams
@@ -690,4 +693,16 @@ namespace Altom.AltUnityDriver.Commands
             this.fingerId = fingerId;
         }
     }
+    [Command("setNotification")]
+    public class AltUnitySetNotificationParams : CommandParams
+    {
+        public NotificationType NotificationType;
+
+        public AltUnitySetNotificationParams(NotificationType notificationType)
+        {
+            NotificationType = notificationType;
+        }
+    }
+
+
 }

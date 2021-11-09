@@ -1,7 +1,7 @@
 using System;
 using Altom.AltUnityTester;
-using Altom.AltUnityTester.Logging;
 using Altom.AltUnityTester.Communication;
+using Altom.AltUnityTester.Logging;
 using NLog;
 
 namespace Altom.AltUnityTester.UI
@@ -70,13 +70,13 @@ namespace Altom.AltUnityTester.UI
         private void initCommProtocol()
         {
             var cmdHandler = new CommandHandler();
-
+            var notificationHandler = new NotificationHandler();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            communication = new WebSocketWebGLCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
+            communication = new WebSocketWebGLCommunication(cmdHandler,notificationHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
 #else
 
-            communication = new WebSocketClientCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
+            communication = new WebSocketClientCommunication(cmdHandler, notificationHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
 #endif
             communication.OnConnect += onConnect;
             communication.OnDisconnect += onDisconnect;
@@ -92,19 +92,19 @@ namespace Altom.AltUnityTester.UI
                 if (communication == null || !communication.IsListening) // start only if it is not already listening
                     communication.Start();
 
-                if (!communication.IsConnected) // display dialog onlyy if not connected 
+                if (!communication.IsConnected) // display dialog only if not connected 
                     onStart();
             }
 
             catch (UnhandledStartCommError ex)
             {
-                setDialog("An unexpected error occured while starting the communication protocol.", ERROR_COLOR, true);
-                logger.Error(ex.InnerException, "An unexpected error occured while starting the communication protocol.");
+                setDialog("An unexpected error occurred while starting the communication protocol.", ERROR_COLOR, true);
+                logger.Error(ex.InnerException, "An unexpected error occurred while starting the communication protocol.");
             }
             catch (Exception ex)
             {
-                setDialog("An unexpected error occured while starting the communication protocol.", ERROR_COLOR, true);
-                logger.Error(ex, "An unexpected error occured while starting the communication protocol.");
+                setDialog("An unexpected error occurred while starting the communication protocol.", ERROR_COLOR, true);
+                logger.Error(ex, "An unexpected error occurred while starting the communication protocol.");
             }
         }
         private void onStart()

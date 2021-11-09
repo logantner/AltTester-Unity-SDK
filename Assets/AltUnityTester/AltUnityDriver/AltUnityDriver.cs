@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Altom.AltUnityDriver.Commands;
 using Altom.AltUnityDriver.Logging;
+using Altom.AltUnityDriver.Notifications;
 
 namespace Altom.AltUnityDriver
 {
@@ -25,7 +26,7 @@ namespace Altom.AltUnityDriver
         /// <param name="port">The port AltUnity Proxy is listening on.</param>
         /// <param name="enableLogging">If true it enables driver commands logging to log file and Unity.</param>
         /// <param name="connectTimeout">The connect timeout in seconds.</param>
-        public AltUnityDriver(string host = "127.0.0.1", int port = 13000, bool enableLogging = false, int connectTimeout = 60)
+        public AltUnityDriver(string host = "127.0.0.1", int port = 13000, bool enableLogging = false, int connectTimeout = 60, INotificationCallbacks notificationCallbacks = null)
         {
             if (enableLogging)
             {
@@ -36,7 +37,11 @@ namespace Altom.AltUnityDriver
 #endif
                 DriverLogManager.SetupAltUnityDriverLogging(defaultLevels);
             }
-            communicationHandler = new DriverCommunicationWebSocket(host, port, connectTimeout);
+            if (notificationCallbacks == null)
+            {
+                notificationCallbacks = new BaseNotificationCallBacks();
+            }
+            communicationHandler = new DriverCommunicationWebSocket(host, port, connectTimeout, notificationCallbacks);
             communicationHandler.Connect();
 
             checkServerVersion();
@@ -345,6 +350,10 @@ namespace Altom.AltUnityDriver
         public void EndTouch(int fingerId)
         {
             new AltUnityEndTouch(communicationHandler, fingerId).Execute();
+        }
+        public void SetNotification(NotificationType notificationType)
+        {
+            new AltUnitySetNotification(communicationHandler, notificationType).Execute();
         }
 
     }

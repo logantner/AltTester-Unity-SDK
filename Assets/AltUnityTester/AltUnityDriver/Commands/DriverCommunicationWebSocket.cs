@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Security.Permissions;
 using System.Threading;
 using Altom.AltUnityDriver.Logging;
+using Altom.AltUnityDriver.Notifications;
 using Newtonsoft.Json;
 using WebSocketSharp;
 
@@ -17,16 +19,20 @@ namespace Altom.AltUnityDriver.Commands
         private readonly int _port;
         private readonly string _uri;
         private readonly int _connectTimeout;
-        private Queue<string> messages;
+        private Queue<CommandResponse> messages;
 
-        public DriverCommunicationWebSocket(string host, int port, int connectTimeout)
+        private INotificationCallbacks notificationCallbacks;
+
+        public DriverCommunicationWebSocket(string host, int port, int connectTimeout, INotificationCallbacks notificationCallbacks)
         {
             _host = host;
             _port = port;
             _uri = "ws://" + host + ":" + port + "/altws";
             _connectTimeout = connectTimeout;
 
-            messages = new Queue<string>();
+            this.notificationCallbacks = notificationCallbacks;
+
+            messages = new Queue<CommandResponse>();
         }
 
         public void Connect()
@@ -77,7 +83,7 @@ namespace Altom.AltUnityDriver.Commands
             };
         }
 
-        public CommandResponse<T> Recvall<T>(CommandParams param)
+        public T Recvall<T>(CommandParams param)
         {
             while (messages.Count == 0 && wsClient.IsAlive())
             {
@@ -87,8 +93,7 @@ namespace Altom.AltUnityDriver.Commands
             {
                 throw new AltUnityException("Driver disconnected");
             }
-
-            var message = JsonConvert.DeserializeObject<CommandResponse<T>>(messages.Dequeue());
+            var message = messages.Dequeue();
 
             if (message.error != null && message.error.type != AltUnityErrors.errorInvalidCommand && (message.messageId != param.messageId || message.commandName != param.commandName))
             {
@@ -96,8 +101,7 @@ namespace Altom.AltUnityDriver.Commands
             }
 
             handleErrors(message.error);
-
-            return message;
+            return JsonConvert.DeserializeObject<T>(message.data);
         }
 
         public void Send(CommandParams param)
@@ -120,8 +124,31 @@ namespace Altom.AltUnityDriver.Commands
 
         protected void OnMessage(object sender, string data)
         {
-            messages.Enqueue(data);
-            logger.Debug("response received: " + trimLog(data));
+            var message = JsonConvert.DeserializeObject<CommandResponse>(data);
+
+            if (message.isNotification)
+            {
+                handleNotification(message);
+            }
+            else
+            {
+                messages.Enqueue(message);
+                logger.Debug("response received: " + trimLog(data));
+            }
+
+        }
+
+        private void handleNotification(CommandResponse message)
+        {
+
+            handleErrors(message.error);
+            switch (message.commandName)
+            {
+                case "loadSceneNotification":
+                    AltUnityLoadSceneNotificationResultParams data = JsonConvert.DeserializeObject<AltUnityLoadSceneNotificationResultParams>(message.data);
+                    notificationCallbacks.SceneLoadedCallback(data);
+                    break;
+            }
         }
 
         private void handleErrors(CommandError error)

@@ -5,9 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Altom.AltUnityDriver;
+using Altom.AltUnityTester;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Altom.AltUnityTester;
 
 public class Input : UnityEngine.MonoBehaviour
 {
@@ -110,7 +110,7 @@ public class Input : UnityEngine.MonoBehaviour
 
     }
 
-#region UnityEngine.Input.AltUnityTester.NotImplemented
+    #region UnityEngine.Input.AltUnityTester.NotImplemented
 
     public static bool simulateMouseWithTouches
     {
@@ -219,10 +219,10 @@ public class Input : UnityEngine.MonoBehaviour
         UnityEngine.Input.ResetInputAxes();
     }
 
-#endregion
+    #endregion
 
 
-#region UnityEngine.Input.AltUnityTester
+    #region UnityEngine.Input.AltUnityTester
 
     public static bool anyKey
     {
@@ -642,7 +642,7 @@ public class Input : UnityEngine.MonoBehaviour
         return _useCustomInput ? _touches[index] : UnityEngine.Input.GetTouch(index);
     }
 
-#endregion
+    #endregion
 
     private static UnityEngine.Touch createTouch(UnityEngine.Vector3 screenPosition)
     {
@@ -874,7 +874,7 @@ public class Input : UnityEngine.MonoBehaviour
     private static IEnumerator tapClickElementLifeCycle(UnityEngine.GameObject target, int count, float interval, bool tap)
     {
         UnityEngine.Vector3 screenPosition;
-        AltUnityRunner._altUnityRunner.findCameraThatSeesObject(target, out screenPosition);
+        AltUnityRunner._altUnityRunner.FindCameraThatSeesObject(target, out screenPosition);
         yield return new WaitForEndOfFrame();//run after Update
 
         var pointerEventData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current)

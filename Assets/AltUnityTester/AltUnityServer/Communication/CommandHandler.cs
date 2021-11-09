@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reflection;
 using Altom.AltUnityDriver;
 using Altom.AltUnityDriver.Commands;
-using Altom.AltUnityTester.Logging;
 using Altom.AltUnityTester.Commands;
+using Altom.AltUnityTester.Logging;
 using Newtonsoft.Json;
 
 namespace Altom.AltUnityTester.Communication
@@ -306,6 +306,10 @@ namespace Altom.AltUnityTester.Communication
             if (cmdParams is AltUnitySetServerLoggingParams)
             {
                 return new AltUnitySetServerLoggingCommand(cmdParams as AltUnitySetServerLoggingParams).ExecuteAndSerialize;
+            }
+            if (cmdParams is AltUnitySetNotificationParams)
+            {
+                return new AltUnitySetNotificationCommand(cmdParams as AltUnitySetNotificationParams).ExecuteAndSerialize;
             }
 
             return new AltUnityInvalidCommand(cmdParams, new CommandNotFoundException(string.Format("Command {0} not handled", cmdParams.commandName))).ExecuteAndSerialize;

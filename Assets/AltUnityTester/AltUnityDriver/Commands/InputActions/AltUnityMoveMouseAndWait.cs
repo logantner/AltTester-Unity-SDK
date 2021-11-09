@@ -22,7 +22,7 @@ namespace Altom.AltUnityDriver.Commands
             do
             {
                 CommHandler.Send(actionFinishedParams);
-                data = CommHandler.Recvall<string>(actionFinishedParams).data;
+                data = CommHandler.Recvall<string>(actionFinishedParams);
             } while (data == "No");
 
             ValidateResponse("Yes", data);

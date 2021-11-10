@@ -23,14 +23,15 @@ namespace Altom.AltUnityDriver.Commands
 
         private INotificationCallbacks notificationCallbacks;
 
-        public DriverCommunicationWebSocket(string host, int port, int connectTimeout, INotificationCallbacks notificationCallbacks)
+        public INotificationCallbacks NotificationCallbacks { get => notificationCallbacks; set => notificationCallbacks = value; }
+
+        public DriverCommunicationWebSocket(string host, int port, int connectTimeout)
         {
             _host = host;
             _port = port;
             _uri = "ws://" + host + ":" + port + "/altws";
             _connectTimeout = connectTimeout;
 
-            this.notificationCallbacks = notificationCallbacks;
 
             messages = new Queue<CommandResponse>();
         }
@@ -146,7 +147,7 @@ namespace Altom.AltUnityDriver.Commands
             {
                 case "loadSceneNotification":
                     AltUnityLoadSceneNotificationResultParams data = JsonConvert.DeserializeObject<AltUnityLoadSceneNotificationResultParams>(message.data);
-                    notificationCallbacks.SceneLoadedCallback(data);
+                    NotificationCallbacks.SceneLoadedCallback(data);
                     break;
             }
         }

@@ -17,6 +17,8 @@ namespace Altom.AltUnityDriver
         private readonly IDriverCommunication communicationHandler;
         public static readonly string VERSION = "1.7.0-alpha";
 
+        private INotificationCallbacks notificationCallbacks;
+
         public IDriverCommunication CommunicationHandler { get { return communicationHandler; } }
 
         /// <summary>
@@ -26,7 +28,7 @@ namespace Altom.AltUnityDriver
         /// <param name="port">The port AltUnity Proxy is listening on.</param>
         /// <param name="enableLogging">If true it enables driver commands logging to log file and Unity.</param>
         /// <param name="connectTimeout">The connect timeout in seconds.</param>
-        public AltUnityDriver(string host = "127.0.0.1", int port = 13000, bool enableLogging = false, int connectTimeout = 60, INotificationCallbacks notificationCallbacks = null)
+        public AltUnityDriver(string host = "127.0.0.1", int port = 13000, bool enableLogging = false, int connectTimeout = 60)
         {
             if (enableLogging)
             {
@@ -37,11 +39,8 @@ namespace Altom.AltUnityDriver
 #endif
                 DriverLogManager.SetupAltUnityDriverLogging(defaultLevels);
             }
-            if (notificationCallbacks == null)
-            {
-                notificationCallbacks = new BaseNotificationCallBacks();
-            }
-            communicationHandler = new DriverCommunicationWebSocket(host, port, connectTimeout, notificationCallbacks);
+
+            communicationHandler = new DriverCommunicationWebSocket(host, port, connectTimeout);
             communicationHandler.Connect();
 
             checkServerVersion();
@@ -351,8 +350,15 @@ namespace Altom.AltUnityDriver
         {
             new AltUnityEndTouch(communicationHandler, fingerId).Execute();
         }
-        public void SetNotification(NotificationType notificationType)
+        public void SetNotification(NotificationType notificationType, INotificationCallbacks notificationCallbacks = null)
         {
+            this.notificationCallbacks = notificationCallbacks;
+            if (this.notificationCallbacks == null)
+            {
+                notificationCallbacks = new BaseNotificationCallBacks();
+            }
+            communicationHandler.NotificationCallbacks = notificationCallbacks;
+
             new AltUnitySetNotification(communicationHandler, notificationType).Execute();
         }
 

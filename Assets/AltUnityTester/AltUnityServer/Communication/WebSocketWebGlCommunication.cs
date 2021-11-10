@@ -41,7 +41,7 @@ namespace Altom.AltUnityTester.Communication
     public class WebSocketWebGLCommunication : ICommunication
     {
         WebGLWebSocket webglWebSocket;
-        public WebSocketWebGLCommunication(ICommandHandler cmdHandler, INotificationHandler notificationHandler, string host, int port)
+        public WebSocketWebGLCommunication(ICommandHandler cmdHandler, string host, int port)
         {
             Uri uri;
             if (!Uri.TryCreate(string.Format("ws://{0}:{1}/altws/game", host, port), UriKind.Absolute, out uri))
@@ -51,7 +51,7 @@ namespace Altom.AltUnityTester.Communication
 
             webglWebSocket = new WebGLWebSocket(uri.ToString());
 
-            var webGLWebSocketHandler = new AltWebGLWebSocketHandler(cmdHandler, webglWebSocket, notificationHandler);
+            var webGLWebSocketHandler = new AltWebGLWebSocketHandler(cmdHandler, webglWebSocket);
 
             webglWebSocket.OnOpen += () =>
             {

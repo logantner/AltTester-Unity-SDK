@@ -5,6 +5,7 @@ namespace Altom.AltUnityDriver.Notifications
     public enum NotificationType
     {
         None = 0,
-        LOADSCENE = 1
+        LOADSCENE = 1,
+        UNLOADSCENE = 2,
     }
 }

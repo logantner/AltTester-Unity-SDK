@@ -7,7 +7,14 @@ namespace Altom.AltUnityTester.Notification
 {
     public class BaseNotification
     {
-        public static void SendNotification<T>(T data, string commandName)
+        private ICommandHandler commandHandler;
+
+        public BaseNotification(ICommandHandler commandHandler)
+        {
+            this.commandHandler = commandHandler;
+        }
+
+        public void SendNotification<T>(T data, string commandName)
         {
             var cmdResponse = new CommandResponse
             {
@@ -23,7 +30,7 @@ namespace Altom.AltUnityTester.Notification
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 Culture = CultureInfo.InvariantCulture
             });
-            BaseWebSocketHandler.NotificationHandler.Send(notification);
+            commandHandler.Send(notification);
 
         }
     }

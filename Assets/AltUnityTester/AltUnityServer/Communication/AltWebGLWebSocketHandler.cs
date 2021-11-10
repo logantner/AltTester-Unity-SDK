@@ -8,7 +8,7 @@ namespace Altom.AltUnityTester.Communication
     {
         protected readonly WebGLWebSocket _webSocket;
 
-        public AltWebGLWebSocketHandler(ICommandHandler cmdHandler, WebGLWebSocket webSocket, INotificationHandler notificationHandler) : base(cmdHandler, notificationHandler)
+        public AltWebGLWebSocketHandler(ICommandHandler cmdHandler, WebGLWebSocket webSocket) : base(cmdHandler)
         {
             this._webSocket = webSocket;
             this._webSocket.OnMessage += this.onMessage;
@@ -18,10 +18,7 @@ namespace Altom.AltUnityTester.Communication
                  this._webSocket.SendText(message).ConfigureAwait(false).GetAwaiter().GetResult();
              };
 
-            NotificationHandler.OnSendMessage += (message) =>
-            {
-                this._webSocket.SendText(message).ConfigureAwait(false).GetAwaiter().GetResult();
-            };
+
 
         }
         private void onMessage(byte[] data)

@@ -8,15 +8,13 @@ namespace Altom.AltUnityTester.Communication
         private readonly WebSocket _webSocket;
 
 
-        public AltClientWebSocketHandler(WebSocket webSocket, ICommandHandler commandHandler, INotificationHandler notificationHandler) : base(commandHandler, notificationHandler)
+        public AltClientWebSocketHandler(WebSocket webSocket, ICommandHandler commandHandler) : base(commandHandler)
         {
             this._webSocket = webSocket;
             webSocket.OnMessage += this.onMessage;
 
 
             this._commandHandler.OnSendMessage += webSocket.Send;
-
-            notificationHandler.OnSendMessage += webSocket.Send;
         }
 
         private void onMessage(object sender, MessageEventArgs message)

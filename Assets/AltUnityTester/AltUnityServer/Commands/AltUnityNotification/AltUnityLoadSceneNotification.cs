@@ -1,11 +1,12 @@
 using Altom.AltUnityDriver.Notifications;
+using Altom.AltUnityTester.Communication;
 using UnityEngine.SceneManagement;
 
 namespace Altom.AltUnityTester.Notification
 {
     public class AltUnityLoadSceneNotification : BaseNotification
     {
-        public static void SetNotification(bool isOn)
+        public AltUnityLoadSceneNotification(ICommandHandler commandHandler, bool isOn) : base(commandHandler)
         {
             if (isOn)
             {
@@ -17,11 +18,11 @@ namespace Altom.AltUnityTester.Notification
                 SceneManager.sceneLoaded -= onSceneLoaded;
             }
         }
-        static void onSceneLoaded(Scene scene, LoadSceneMode mode)
+
+        void onSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             var data = new AltUnityLoadSceneNotificationResultParams(scene.name, mode);
             SendNotification(data, "loadSceneNotification");
-
         }
     }
 }

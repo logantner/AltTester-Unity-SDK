@@ -25,18 +25,7 @@ namespace Altom.AltUnityInstrumentation.Tests
         }
     }
 
-    public class MockNotificationHandler : INotificationHandler
-    {
-        public SendMessageHandler OnSendMessage { get; set; }
 
-        public void Send(string data)
-        {
-            if (this.OnSendMessage != null)
-            {
-                this.OnSendMessage.Invoke(data);
-            }
-        }
-    }
 
     public class MockServerHandler : WebSocketBehavior
     {
@@ -63,9 +52,8 @@ namespace Altom.AltUnityInstrumentation.Tests
         public void TestConnectWithNoServer()
         {
             var cmdHandler = new MockCommandHandler();
-            var notificationHandler = new MockNotificationHandler();
 
-            var client = new WebSocketClientCommunication(cmdHandler, notificationHandler, "localhost", 13420);
+            var client = new WebSocketClientCommunication(cmdHandler, "localhost", 13420);
             bool onConnect = false;
             client.OnConnect += () =>
             {
@@ -95,7 +83,6 @@ namespace Altom.AltUnityInstrumentation.Tests
         public void TestConnectWithServer()
         {
             var cmdHandler = new MockCommandHandler();
-            var notificationHandler = new MockNotificationHandler();
 
             var wsServer = new WebSocketServer("ws://0.0.0.0:13420");
 
@@ -113,7 +100,7 @@ namespace Altom.AltUnityInstrumentation.Tests
                 bool connected = false;
                 bool disconnected = false;
 
-                var client = new WebSocketClientCommunication(cmdHandler, notificationHandler, "localhost", 13420);
+                var client = new WebSocketClientCommunication(cmdHandler, "localhost", 13420);
 
                 client.OnConnect += () =>
                 {

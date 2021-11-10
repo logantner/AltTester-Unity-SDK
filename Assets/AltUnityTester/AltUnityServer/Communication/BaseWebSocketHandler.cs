@@ -4,12 +4,10 @@ namespace Altom.AltUnityTester.Communication
     {
         protected readonly ICommandHandler _commandHandler;
 
-        public static INotificationHandler NotificationHandler;
 
-        public BaseWebSocketHandler(ICommandHandler commandHandler, INotificationHandler notificationHandler)
+        public BaseWebSocketHandler(ICommandHandler commandHandler)
         {
             _commandHandler = commandHandler;
-            NotificationHandler = notificationHandler;
         }
     }
 }

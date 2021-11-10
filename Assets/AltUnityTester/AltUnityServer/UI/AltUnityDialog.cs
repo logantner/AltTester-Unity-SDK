@@ -70,13 +70,12 @@ namespace Altom.AltUnityTester.UI
         private void initCommProtocol()
         {
             var cmdHandler = new CommandHandler();
-            var notificationHandler = new NotificationHandler();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-            communication = new WebSocketWebGLCommunication(cmdHandler,notificationHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
+            communication = new WebSocketWebGLCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
 #else
 
-            communication = new WebSocketClientCommunication(cmdHandler, notificationHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
+            communication = new WebSocketClientCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
 #endif
             communication.OnConnect += onConnect;
             communication.OnDisconnect += onDisconnect;

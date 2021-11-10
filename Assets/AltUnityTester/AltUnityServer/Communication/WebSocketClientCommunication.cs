@@ -12,7 +12,7 @@ namespace Altom.AltUnityTester.Communication
         private readonly int port;
         private readonly string host;
 
-        public WebSocketClientCommunication(ICommandHandler cmdHandler, INotificationHandler notificationHandler, string host, int port)
+        public WebSocketClientCommunication(ICommandHandler cmdHandler, string host, int port)
         {
             this.port = port;
             this.host = host;
@@ -24,7 +24,7 @@ namespace Altom.AltUnityTester.Communication
 
             wsClient = new WebSocket(uri.ToString());
             wsClient.Log.Level = LogLevel.Fatal;
-            websocketHandler = new AltClientWebSocketHandler(wsClient, cmdHandler, notificationHandler);
+            websocketHandler = new AltClientWebSocketHandler(wsClient, cmdHandler);
             wsClient.OnOpen += (sender, message) =>
             {
                 if (this.OnConnect != null) this.OnConnect();

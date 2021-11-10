@@ -309,7 +309,7 @@ namespace Altom.AltUnityTester.Communication
             }
             if (cmdParams is AltUnitySetNotificationParams)
             {
-                return new AltUnitySetNotificationCommand(cmdParams as AltUnitySetNotificationParams).ExecuteAndSerialize;
+                return new AltUnitySetNotificationCommand(this, cmdParams as AltUnitySetNotificationParams).ExecuteAndSerialize;
             }
 
             return new AltUnityInvalidCommand(cmdParams, new CommandNotFoundException(string.Format("Command {0} not handled", cmdParams.commandName))).ExecuteAndSerialize;

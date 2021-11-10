@@ -296,7 +296,7 @@ namespace Altom.AltUnityTesterEditor
             }
             finally
             {
-                built = true;
+                Built = true;
                 resetBuildSetup(UnityEditor.BuildTargetGroup.iOS);
             }
 

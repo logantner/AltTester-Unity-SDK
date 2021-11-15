@@ -7,14 +7,14 @@ namespace Altom.AltUnityTester.Notification
 {
     public class BaseNotification
     {
-        private ICommandHandler commandHandler;
+        private static ICommandHandler commandHandler;
 
-        public BaseNotification(ICommandHandler commandHandler)
+        public BaseNotification(ICommandHandler commandHandlerParam)
         {
-            this.commandHandler = commandHandler;
+            commandHandler = commandHandlerParam;
         }
 
-        public void SendNotification<T>(T data, string commandName)
+        protected static void SendNotification<T>(T data, string commandName)
         {
             var cmdResponse = new CommandResponse
             {

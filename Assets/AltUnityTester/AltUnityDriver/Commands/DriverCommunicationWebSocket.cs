@@ -141,8 +141,12 @@ namespace Altom.AltUnityDriver.Commands
 
         private void handleNotification(CommandResponse message)
         {
-
             handleErrors(message.error);
+            if (notificationCallbacks == null)
+            {
+                notificationCallbacks = new BaseNotificationCallBacks();
+            }
+
             switch (message.commandName)
             {
                 case "loadSceneNotification":

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import ro.altom.altunitytester.AltUnityDriver.By;
 import ro.altom.altunitytester.Commands.AltCallStaticMethodParameters;
+import ro.altom.altunitytester.Commands.AltUnityCommands.AltUnitySetNotificationParams;
 import ro.altom.altunitytester.Commands.FindObject.AltFindObjectsParameters;
 import ro.altom.altunitytester.Commands.FindObject.AltGetAllElementsParameters;
 import ro.altom.altunitytester.Commands.FindObject.AltWaitForObjectsParameters;
@@ -51,6 +52,9 @@ public class TestsSampleScene1 {
 
     @Before
     public void loadLevel() throws Exception {
+        AltUnitySetNotificationParams altUnitySetNotificationParams = new AltUnitySetNotificationParams.Builder()
+                .addNotificationForLoadScene().build();
+        altUnityDriver.SetNotification(altUnitySetNotificationParams, null);
         altUnityDriver.loadScene(new AltLoadSceneParameters.Builder("Scene 1 AltUnityDriverTestScene").build());
     }
 
@@ -62,6 +66,11 @@ public class TestsSampleScene1 {
         } catch (SceneNotFoundException e) {
             assertTrue(true);
         }
+    }
+
+    @Test
+    public void emptyTest() throws Exception {
+
     }
 
     @Test

@@ -6,10 +6,13 @@ import org.apache.logging.log4j.LogManager;
 
 import ro.altom.altunitytester.Commands.*;
 import ro.altom.altunitytester.Commands.AltUnityCommands.AltSetServerLoggingParameters;
+import ro.altom.altunitytester.Commands.AltUnityCommands.AltUnitySetNotification;
+import ro.altom.altunitytester.Commands.AltUnityCommands.AltUnitySetNotificationParams;
 import ro.altom.altunitytester.Commands.AltUnityCommands.AltUnitySetServerLogging;
 import ro.altom.altunitytester.Commands.FindObject.*;
 import ro.altom.altunitytester.Commands.InputActions.*;
 import ro.altom.altunitytester.Commands.UnityCommand.*;
+import ro.altom.altunitytester.Notifications.INotificationCallbacks;
 import ro.altom.altunitytester.Commands.ObjectCommand.AltGetComponentPropertyParameters;
 import ro.altom.altunitytester.UnityStruct.AltUnityKeyCode;
 import ro.altom.altunitytester.altUnityTesterExceptions.*;
@@ -487,6 +490,15 @@ public class AltUnityDriver {
 
     public <T> T GetStaticProperty(AltGetComponentPropertyParameters parameters, Class<T> returnType) {
         return new AltGetStaticProperty(this.connection.messageHandler, parameters).Execute(returnType);
+    }
+
+    public void SetNotification(AltUnitySetNotificationParams parameters,
+            INotificationCallbacks notificationCallbacks) {
+
+        if (notificationCallbacks != null) {
+            this.connection.messageHandler.setNotificationCallbacks(notificationCallbacks);
+        }
+        new AltUnitySetNotification(this.connection.messageHandler, parameters).Execute();
     }
 
     public enum By {

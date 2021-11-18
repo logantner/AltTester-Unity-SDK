@@ -13,9 +13,7 @@ namespace Altom.AltUnityTester.Notification
 
             if (isOn)
             {
-                UnityEngine.Debug.Log("What is happening " + isOn);
                 SceneManager.sceneLoaded += onSceneLoaded;
-
             }
 
         }

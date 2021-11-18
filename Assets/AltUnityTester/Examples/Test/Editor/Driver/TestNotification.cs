@@ -1,3 +1,4 @@
+using System.Threading;
 using Altom.AltUnityDriver;
 using Altom.AltUnityDriver.Logging;
 using Altom.AltUnityDriver.Notifications;
@@ -5,7 +6,7 @@ using Altom.AltUnityTester.MockClasses;
 using NUnit.Framework;
 using UnityEngine.Playables;
 
-public class TestNOtification
+public class TestNotification
 {
     private AltUnityDriver altUnityDriver;
     [OneTimeSetUp]
@@ -37,6 +38,7 @@ public class TestNOtification
     [Test]
     public void TestLoadSceneNotification()
     {
+        Thread.Sleep(1000);
         Assert.AreEqual("Scene 1 AltUnityDriverTestScene", MockNotificationCallBacks.LastSceneLoaded);
     }
 

@@ -5,9 +5,9 @@ from threading import Thread
 
 from loguru import logger
 import websocket
-from altunityrunner.commands.Notifications.base_notification_callbacks import *
-from altunityrunner.commands.Notifications.load_scene_notification_result import *
-from altunityrunner.commands.Notifications.load_scene_mode import *
+from altunityrunner.commands.Notifications.base_notification_callbacks import BaseNotificationCallbacks
+from altunityrunner.commands.Notifications.load_scene_notification_result import LoadSceneNotificationResult
+from altunityrunner.commands.Notifications.load_scene_mode import LoadSceneMode
 
 from .exceptions import ConnectionError, ConnectionTimeoutError
 

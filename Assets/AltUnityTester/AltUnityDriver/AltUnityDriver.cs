@@ -17,8 +17,6 @@ namespace Altom.AltUnityDriver
         private readonly IDriverCommunication communicationHandler;
         public static readonly string VERSION = "1.7.0-alpha";
 
-        private INotificationCallbacks notificationCallbacks;
-
         public IDriverCommunication CommunicationHandler { get { return communicationHandler; } }
 
         /// <summary>
@@ -352,8 +350,7 @@ namespace Altom.AltUnityDriver
         }
         public void SetNotification(NotificationType notificationType, INotificationCallbacks notificationCallbacks = null)
         {
-            this.notificationCallbacks = notificationCallbacks;
-            if (this.notificationCallbacks == null)
+            if (notificationCallbacks == null)
             {
                 notificationCallbacks = new BaseNotificationCallBacks();
             }

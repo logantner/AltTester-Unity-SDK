@@ -731,10 +731,9 @@ class AltUnityDriver:
 
     def set_notification(self, notification_type, notification_callback=None):
         """Sets what notifications will the tester send and what to do with those notifications
-        //TODO
         Args:
-            notification_type (:obj:`int`): 
-            notification_callback (:obj:`str`): 
+            notification_type (:obj:`int`): Flag that sets which notification to be turned on
+            notification_callback (:obj:`class`): Class which contains callbacks used by notifications 
         """
         self._connection.notification_callbacks = notification_callback
         commands.SetNotification.run(self._connection, notification_type)

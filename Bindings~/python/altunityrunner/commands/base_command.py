@@ -5,7 +5,7 @@ from loguru import logger
 
 import altunityrunner.altUnityExceptions as exceptions
 from altunityrunner.by import By
-
+import codecs
 
 BUFFER_SIZE = 1024
 EPOCH = datetime.utcfromtimestamp(0)
@@ -22,6 +22,7 @@ class BaseCommand(object):
 
     def recvall(self):
         data = ''
+        dec = codecs.getincrementaldecoder('utf8')()
 
         if self._remaining.find("::altend") >= 0:
             data = self._remaining
@@ -38,10 +39,11 @@ class BaseCommand(object):
                         continue
                     else:
                         raise Exception('Server is not yet reachable')
-                decodedPart = str(part.decode('utf-8'))
+                decodedPart = str(dec.decode(part))
                 data += decodedPart
                 partToSeeAltEnd = previousPart + decodedPart
                 if '::altend' in partToSeeAltEnd:
+                    dec.reset()
                     break
                 previousPart = decodedPart
 

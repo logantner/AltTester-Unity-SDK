@@ -5,6 +5,9 @@ from threading import Thread
 
 from loguru import logger
 import websocket
+from altunityrunner.commands.Notifications.base_notification_callbacks import *
+from altunityrunner.commands.Notifications.load_scene_notification_result import *
+from altunityrunner.commands.Notifications.load_scene_mode import *
 
 from .exceptions import ConnectionError, ConnectionTimeoutError
 
@@ -64,6 +67,7 @@ class WebsocketConnection:
             self.port,
             self.timeout,
         )
+    notification_callbacks = None
 
     def _create_connection(self):
         # TODO: Enable and disable the trace based on an environment variable or config option
@@ -114,7 +118,19 @@ class WebsocketConnection:
         logger.debug("Message: {}", message)
 
         response = json.loads(message)
-        self._store.push(response.get("commandName"), response)
+        if(response.get("isNotification")):
+            self.handle_notification(response)
+        else:
+            self._store.push(response.get("commandName"), response)
+
+    def handle_notification(self, message):
+        if (self.notification_callbacks is None):
+            self.notification_callbacks = BaseNotificationCallbacks()
+        if(message.get("commandName") == "loadSceneNotification"):
+            data = json.loads(message.get("data"))
+            load_scene_result = LoadSceneNotificationResult(
+                data.get("sceneName"), LoadSceneMode(data.get("loadSceneMode")))
+            self.notification_callbacks.scene_loaded_callback(load_scene_result)
 
     def _on_error(self, ws, error):
         """A callback which is called when the connection gets an error."""

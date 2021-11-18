@@ -151,7 +151,7 @@ class BaseCommand(Command):
         raise exception(error.get("message"))
 
     def validate_response(self, expected, received):
-        if expected != received:
+        if expected != received.strip('\"'):
             raise exceptions.AltUnityInvalidServerResponse(expected, received)
 
     def send(self):
@@ -160,7 +160,6 @@ class BaseCommand(Command):
         self.connection.send(self._parameters)
         response = self.connection.recv()
         self.handle_response(response)
-
         return response.get("data")
 
     def recv(self):

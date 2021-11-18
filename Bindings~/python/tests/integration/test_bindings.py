@@ -5,12 +5,14 @@ import pytest
 
 from altunityrunner import *
 from altunityrunner.__version__ import VERSION
-from altunityrunner.commands import GetServerVersion
+from altunityrunner.commands import GetServerVersion, Notifications
+from tests.integration.notification_callbacks_for_testing import TestNotificationCallback
+from altunityrunner.commands.Notifications.notification_type import NotificationType
 
 
 @pytest.fixture(scope="session")
 def altdriver():
-    altdriver = AltUnityDriver(port=13010, enable_logging=True, timeout=None)
+    altdriver = AltUnityDriver(port=13000, enable_logging=True, timeout=None)
     yield altdriver
     altdriver.stop()
 
@@ -665,8 +667,8 @@ class TestPythonBindings:
         assert alt_element.name == "Main Camera"
 
     def test_get_chinese_letters(self):
-        self.altdriver.load_scene("Scene 1 AltUnityDriverTestScene")
 
+        self.altdriver.load_scene("Scene 1 AltUnityDriverTestScene")
         text = self.altdriver.find_object(By.NAME, "ChineseLetters").get_text()
         assert text == "哦伊娜哦"
 
@@ -1274,3 +1276,12 @@ class TestPythonBindings:
         )
 
         assert int(width) == screen_width
+
+    def test_load_scene_notification(self):
+        test_notification_callbacks = TestNotificationCallback()
+        notification_type = NotificationType.LOADSCENE
+        self.altdriver.set_notification(notification_type, test_notification_callbacks)
+        self.altdriver.load_scene("Scene 1 AltUnityDriverTestScene")
+        assert test_notification_callbacks.last_scene_loaded == "Scene 1 AltUnityDriverTestScene"
+        notification_type = NotificationType.NONE
+        self.altdriver.set_notification(notification_type)

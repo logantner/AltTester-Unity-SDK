@@ -37,22 +37,22 @@ class WaitForObject(Command):
 
     def execute(self):
         t = 0
-        alt_element = None
+        alt_unity_object = None
 
         while (t <= self.timeout):
             try:
-                alt_element = FindObject.run(
+                alt_unity_object = FindObject.run(
                     self.connection,
                     self.by, self.value, self.camera_by, self.camera_value, self.enabled
                 )
 
                 break
             except NotFoundException:
-                logger.debug("Waiting for element {}...".format(self.value))
+                logger.debug("Waiting for element {}...", self.value)
                 time.sleep(self.interval)
                 t += self.interval
 
         if t >= self.timeout:
             raise WaitTimeOutException("Element {} not found after {} seconds".format(self.value, self.timeout))
 
-        return alt_element
+        return alt_unity_object

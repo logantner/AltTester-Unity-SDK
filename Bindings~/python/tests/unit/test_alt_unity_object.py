@@ -1,12 +1,12 @@
 import json
 
-from altunityrunner import AltElement
+from altunityrunner.altUnityObject import AltUnityObject
 
 
-class TestAltElement:
+class TestAltUnityObject:
 
     def test_repr(self):
-        element = AltElement(None, {"name": "ElementName", "id": "1" , "transformId": "100"})
+        element = AltUnityObject(None, {"name": "ElementName", "id": "1" , "transformId": "100"})
         reconstructed = eval(repr(element), globals(), {"altdriver": None})
 
         assert element._altdriver == reconstructed._altdriver
@@ -24,14 +24,14 @@ class TestAltElement:
             "mobileY": "40",
             "type": "ElementType",
             "enabled": "true",
-            "worldX": "100",
-            "worldY": "200",
-            "worldZ": "300",
+            "worldX": "100.0",
+            "worldY": "200.0",
+            "worldZ": "300.0",
             "transformParentId": "TransformParrentId",
             "transformId": "TransformId",
             "idCamera": "idCamera"
         }
-        element = AltElement(None, data)
+        element = AltUnityObject(None, data)
 
         assert str(element) == json.dumps(data)
 
@@ -45,13 +45,13 @@ class TestAltElement:
             "mobileY": "40",
             "type": "ElementType",
             "enabled": "true",
-            "worldX": "100",
-            "worldY": "200",
-            "worldZ": "300",
+            "worldX": "100.0",
+            "worldY": "200.0",
+            "worldZ": "300.0",
             "transformParentId": "TransformParrentId",
             "transformId": "TransformId",
             "idCamera": "idCamera"
         }
 
-        element = AltElement(None, data)
+        element = AltUnityObject(None, data)
         assert data == element.to_json()

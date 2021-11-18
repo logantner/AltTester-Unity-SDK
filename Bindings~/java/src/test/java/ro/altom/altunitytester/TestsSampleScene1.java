@@ -988,7 +988,7 @@ public class TestsSampleScene1 {
 
     @Test
     public void TestGetServerVersion() {
-        String serverVersion = altUnityDriver.GetServerVersion();
+        String serverVersion = altUnityDriver.getServerVersion();
         assertEquals(serverVersion, AltUnityDriver.VERSION);
     }
 
@@ -1120,8 +1120,8 @@ public class TestsSampleScene1 {
         altUnityDriver.moveMouse(altMoveMouseParameters);
         Thread.sleep(1000);
         AltKeyParameters altKeyParameters = new AltKeyParameters.Builder(AltUnityKeyCode.Mouse0).build();
-        altUnityDriver.KeyDown(altKeyParameters);
-        altUnityDriver.KeyUp(AltUnityKeyCode.Mouse0);
+        altUnityDriver.keyDown(altKeyParameters);
+        altUnityDriver.keyUp(AltUnityKeyCode.Mouse0);
         capsule = altUnityDriver.findObject(findCapsuleParameters);
         Vector2 finalCapsPos = capsule.getWorldPosition();
         assertNotEquals(initialCapsPos, finalCapsPos);
@@ -1138,7 +1138,7 @@ public class TestsSampleScene1 {
     @Test
     public void testScreenshot() {
         String path = "testJava2.png";
-        altUnityDriver.getPNGScreeshot(path);
+        altUnityDriver.getPNGScreenshot(path);
         assertTrue(new File(path).isFile());
     }
 

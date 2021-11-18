@@ -38,7 +38,6 @@ import ro.altom.altunitytester.altUnityTesterExceptions.SceneNotFoundException;
 import ro.altom.altunitytester.altUnityTesterExceptions.UnknownErrorException;
 
 public class MessageHandler implements IMessageHandler {
-
     private Session session;
     private Queue<AltMessageResponse> responses = new LinkedList<AltMessageResponse>();
     private static final Logger logger = LogManager.getLogger(MessageHandler.class);
@@ -71,14 +70,12 @@ public class MessageHandler implements IMessageHandler {
 
         T response = new Gson().fromJson(responseMessage.data, type);
         return response;
-
     }
 
     public void send(AltMessage altMessage) {
         String message = new Gson().toJson(altMessage);
         session.getAsyncRemote().sendText(message);
         logger.debug("command sent: {}", trimLogData(message));
-
     }
 
     public void onMessage(String message) {
@@ -112,6 +109,8 @@ public class MessageHandler implements IMessageHandler {
         if (error == null) {
             return;
         }
+        logger.error(error.type + ": " + error.message);
+        logger.error(error.trace);
 
         switch (error.type) {
         case AltUnityErrors.errorNotFound:

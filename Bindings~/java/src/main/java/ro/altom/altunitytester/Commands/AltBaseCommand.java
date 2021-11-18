@@ -10,7 +10,6 @@ import ro.altom.altunitytester.CommandError;
 import ro.altom.altunitytester.altUnityTesterExceptions.*;
 
 public class AltBaseCommand {
-
     protected static final Logger logger = LogManager.getLogger(AltBaseCommand.class);
 
     protected IMessageHandler messageHandler;

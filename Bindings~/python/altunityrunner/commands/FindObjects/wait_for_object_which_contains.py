@@ -37,18 +37,18 @@ class WaitForObjectWhichContains(Command):
 
     def execute(self):
         t = 0
-        alt_element = None
+        alt_unity_object = None
 
         while (t <= self.timeout):
             try:
-                alt_element = FindObjectWhichContains.run(
+                alt_unity_object = FindObjectWhichContains.run(
                     self.connection,
                     self.by, self.value, self.camera_by, self.camera_value, self.enabled
                 )
 
                 break
             except NotFoundException:
-                logger.debug("Waiting for element where name contains {}...".format(self.value))
+                logger.debug("Waiting for element where name contains {}...", self.value)
                 time.sleep(self.interval)
                 t += self.interval
 
@@ -58,4 +58,4 @@ class WaitForObjectWhichContains(Command):
                 self.timeout
             ))
 
-        return alt_element
+        return alt_unity_object

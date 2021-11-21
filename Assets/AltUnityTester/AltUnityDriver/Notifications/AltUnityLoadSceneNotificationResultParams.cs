@@ -1,13 +1,12 @@
-using UnityEngine.SceneManagement;
 
 namespace Altom.AltUnityDriver.Notifications
 {
     public class AltUnityLoadSceneNotificationResultParams
     {
         public string sceneName;
-        public LoadSceneMode loadSceneMode;
+        public AltUnityLoadSceneMode loadSceneMode;
 
-        public AltUnityLoadSceneNotificationResultParams(string sceneName, LoadSceneMode loadSceneMode)
+        public AltUnityLoadSceneNotificationResultParams(string sceneName, AltUnityLoadSceneMode loadSceneMode)
         {
             this.sceneName = sceneName;
             this.loadSceneMode = loadSceneMode;

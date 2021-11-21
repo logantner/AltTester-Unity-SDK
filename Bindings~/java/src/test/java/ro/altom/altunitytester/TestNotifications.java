@@ -16,7 +16,7 @@ public class TestNotifications {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        altUnityDriver = new AltUnityDriver("127.0.0.1", 13000, true);
+        altUnityDriver = new AltUnityDriver("127.0.0.1", 13010, true);
     }
 
     @AfterClass

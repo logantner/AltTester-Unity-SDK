@@ -12,7 +12,7 @@ from altunityrunner.commands.Notifications.notification_type import Notification
 
 @pytest.fixture(scope="session")
 def altdriver():
-    altdriver = AltUnityDriver(port=13000, enable_logging=True, timeout=None)
+    altdriver = AltUnityDriver(port=13010, enable_logging=True, timeout=None)
     yield altdriver
     altdriver.stop()
 

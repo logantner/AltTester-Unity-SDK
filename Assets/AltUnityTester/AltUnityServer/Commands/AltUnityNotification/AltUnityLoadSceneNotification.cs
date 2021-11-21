@@ -20,7 +20,7 @@ namespace Altom.AltUnityTester.Notification
 
         static void onSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            var data = new AltUnityLoadSceneNotificationResultParams(scene.name, mode);
+            var data = new AltUnityLoadSceneNotificationResultParams(scene.name, (AltUnityLoadSceneMode)mode);
             SendNotification(data, "loadSceneNotification");
         }
     }

@@ -2,8 +2,6 @@ using System;
 using Altom.AltUnityDriver.Logging;
 using Altom.AltUnityDriver.Notifications;
 using Newtonsoft.Json;
-using UnityEngine.SceneManagement;
-
 namespace Altom.AltUnityDriver.Commands
 {
     public class CommandParams

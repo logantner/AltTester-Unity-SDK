@@ -4,7 +4,6 @@ using Altom.AltUnityDriver.Logging;
 using Altom.AltUnityDriver.Notifications;
 using Altom.AltUnityTester.MockClasses;
 using NUnit.Framework;
-using UnityEngine.Playables;
 
 public class TestNotification
 {

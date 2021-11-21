@@ -1,8 +1,8 @@
 using System.Threading;
 using Altom.AltUnityDriver;
 using Altom.AltUnityDriver.Logging;
+using Altom.AltUnityDriver.MockClasses;
 using Altom.AltUnityDriver.Notifications;
-using Altom.AltUnityTester.MockClasses;
 using NUnit.Framework;
 
 public class TestNotification

@@ -23,13 +23,19 @@ public class AltUnitySetNotificationParams extends AltMessage {
         }
 
         public Builder addNotificationForEverything() {
-            notificationType = notificationType | NotificationType.ALL;
+            notificationType = NotificationType.ALL;
+            return this;
+        }
+
+        public Builder setAllNotificationOff() {
+            notificationType = NotificationType.NONE;
             return this;
         }
 
         public AltUnitySetNotificationParams build() {
             return new AltUnitySetNotificationParams(notificationType);
         }
+
     }
 
     AltUnitySetNotificationParams(int notificationType) {

@@ -1,5 +1,5 @@
 using Altom.AltUnityDriver.Notifications;
-namespace Altom.AltUnityTester.MockClasses
+namespace Altom.AltUnityDriver.MockClasses
 {
     internal class MockNotificationCallBacks : INotificationCallbacks
     {

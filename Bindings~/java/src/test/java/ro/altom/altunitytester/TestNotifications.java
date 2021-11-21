@@ -1,7 +1,6 @@
 package ro.altom.altunitytester;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,10 +16,17 @@ public class TestNotifications {
     @BeforeClass
     public static void setUp() throws Exception {
         altUnityDriver = new AltUnityDriver("127.0.0.1", 13010, true);
+        AltUnitySetNotificationParams altUnitySetNotificationParams = new AltUnitySetNotificationParams.Builder()
+                .addNotificationForLoadScene().build();
+        altUnityDriver.SetNotification(altUnitySetNotificationParams, new MockNotificationCallBacks());
     }
 
     @AfterClass
     public static void tearDown() throws Exception {
+
+        AltUnitySetNotificationParams altUnitySetNotificationParams = new AltUnitySetNotificationParams.Builder()
+                .setAllNotificationOff().build();
+        altUnityDriver.SetNotification(altUnitySetNotificationParams, new MockNotificationCallBacks());
         if (altUnityDriver != null) {
             altUnityDriver.stop();
         }
@@ -29,9 +35,7 @@ public class TestNotifications {
 
     @Before
     public void loadLevel() throws Exception {
-        AltUnitySetNotificationParams altUnitySetNotificationParams = new AltUnitySetNotificationParams.Builder()
-                .addNotificationForLoadScene().build();
-        altUnityDriver.SetNotification(altUnitySetNotificationParams, new MockNotificationCallBacks());
+
         altUnityDriver.loadScene(new AltLoadSceneParameters.Builder("Scene 1 AltUnityDriverTestScene").build());
     }
 

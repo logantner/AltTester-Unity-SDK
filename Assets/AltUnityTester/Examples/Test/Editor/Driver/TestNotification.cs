@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Altom.AltUnityDriver;
 using Altom.AltUnityDriver.Logging;
@@ -37,9 +38,18 @@ public class TestNotification
     [Test]
     public void TestLoadSceneNotification()
     {
-        Thread.Sleep(1000);
+        waitForNotificationToBeSent(MockNotificationCallBacks.LastSceneLoaded, "Scene 1 AltUnityDriverTestScene", 10);
         Assert.AreEqual("Scene 1 AltUnityDriverTestScene", MockNotificationCallBacks.LastSceneLoaded);
     }
 
-
+    private void waitForNotificationToBeSent(string lastSceneLoaded, string expectedValue, float timeout)
+    {
+        while (!lastSceneLoaded.Equals(expectedValue))
+        {
+            Thread.Sleep(200);
+            timeout -= 0.2f;
+            if (timeout <= 0)
+                throw new TimeoutException("Notification variable not set to the desired value in time");
+        }
+    }
 }

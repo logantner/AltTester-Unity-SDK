@@ -36,6 +36,7 @@ import ro.altom.altunitytester.altUnityTesterExceptions.ObjectWasNotFoundExcepti
 import ro.altom.altunitytester.altUnityTesterExceptions.PropertyNotFoundException;
 import ro.altom.altunitytester.altUnityTesterExceptions.SceneNotFoundException;
 import ro.altom.altunitytester.altUnityTesterExceptions.UnknownErrorException;
+import ro.altom.altunitytester.altUnityTesterExceptions.CommandResponseTimeoutException;
 
 public class MessageHandler implements IMessageHandler {
     private Session session;
@@ -51,17 +52,27 @@ public class MessageHandler implements IMessageHandler {
         this.notificationCallbacks = notificationCallbacks;
     }
 
+    private double commandTimeout = 20;
+
     public MessageHandler(Session session) {
         this.session = session;
     }
 
     public <T> T receive(AltMessage data, Class<T> type) {
-        while (responses.isEmpty() && session.isOpen()) {
+        double time = 0;
+        double delay = 0.1;
+        long sleepDelay = (long) (delay * 100);
+
+        while (responses.isEmpty() && session.isOpen() && commandTimeout >= time) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(sleepDelay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            time += delay;
+        }
+        if (commandTimeout < time) {
+            throw new CommandResponseTimeoutException();
         }
         if (!session.isOpen()) {
             throw new AltUnityException("Driver disconnected");

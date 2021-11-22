@@ -150,6 +150,21 @@ namespace Altom.AltUnityTesterEditor
             UnityEngine.Debug.Log("AltUnityTester - Unity Package done.");
         }
 
+        public static void CreateSampleScenesPackage()
+        {
+            UnityEngine.Debug.Log("SampleScenes - Unity Package creation started...");
+            string packageName = "SampleScenes.unitypackage";
+            string assetPathNames = "Assets/AltUnityTester/Examples";
+            UnityEditor.AssetDatabase.ExportPackage(assetPathNames, packageName, UnityEditor.ExportPackageOptions.Recurse);
+            UnityEngine.Debug.Log("SampleScenes - Unity Package done.");
+        }
+
+        public static void CreatePackages()
+        {
+            CreateAltUnityTesterPackage();
+            CreateSampleScenesPackage();
+        }
+
         private void Awake()
         {
             if (EditorConfiguration == null)
@@ -445,10 +460,12 @@ namespace Altom.AltUnityTesterEditor
             }
             else
             {
+                EditorGUI.BeginDisabledGroup(UnityEngine.Application.isPlaying || UnityEditor.EditorApplication.isCompiling);
                 UnityEditor.EditorGUILayout.BeginHorizontal();
                 EditorConfiguration.platform = (AltUnityPlatform)UnityEngine.GUILayout.SelectionGrid((int)EditorConfiguration.platform, System.Enum.GetNames(typeof(AltUnityPlatform)), System.Enum.GetNames(typeof(AltUnityPlatform)).Length, guiStyleRadioButton);
 
                 UnityEditor.EditorGUILayout.EndHorizontal();
+                EditorGUI.EndDisabledGroup();
             }
 
 

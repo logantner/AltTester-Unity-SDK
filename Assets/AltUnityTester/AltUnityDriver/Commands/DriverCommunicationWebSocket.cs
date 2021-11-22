@@ -24,6 +24,7 @@ namespace Altom.AltUnityDriver.Commands
         private INotificationCallbacks notificationCallbacks;
 
         public INotificationCallbacks NotificationCallbacks { get => notificationCallbacks; set => notificationCallbacks = value; }
+        private int commandTimeout = 20;
 
         public DriverCommunicationWebSocket(string host, int port, int connectTimeout)
         {
@@ -86,10 +87,15 @@ namespace Altom.AltUnityDriver.Commands
 
         public T Recvall<T>(CommandParams param)
         {
-            while (messages.Count == 0 && wsClient.IsAlive())
+
+            Stopwatch watch = Stopwatch.StartNew();
+            while (messages.Count == 0 && wsClient.IsAlive() && commandTimeout >= watch.Elapsed.TotalSeconds)
             {
                 Thread.Sleep(10);
             }
+            if (commandTimeout < watch.Elapsed.TotalSeconds)
+                throw new CommandResponseTimeoutException();
+
             if (!wsClient.IsAlive())
             {
                 throw new AltUnityException("Driver disconnected");
@@ -100,10 +106,10 @@ namespace Altom.AltUnityDriver.Commands
             {
                 throw new AltUnityRecvallMessageIdException(string.Format("Response received does not match command send. Expected {0}:{1}. Got {2}:{3}", param.commandName, param.messageId, message.commandName, message.messageId));
             }
-
             handleErrors(message.error);
             return JsonConvert.DeserializeObject<T>(message.data);
         }
+
 
         public void Send(CommandParams param)
         {

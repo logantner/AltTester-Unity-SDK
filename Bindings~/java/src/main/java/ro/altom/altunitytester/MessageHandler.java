@@ -67,7 +67,7 @@ public class MessageHandler implements IMessageHandler {
             throw new AltUnityException("Driver disconnected");
         }
         AltMessageResponse responseMessage = responses.remove();
-
+        handleErrors(responseMessage.error);
         T response = new Gson().fromJson(responseMessage.data, type);
         return response;
     }
@@ -82,7 +82,6 @@ public class MessageHandler implements IMessageHandler {
         logger.debug("response received: {}", trimLogData(message));
 
         AltMessageResponse response = new Gson().fromJson(message, AltMessageResponse.class);
-        handleErrors(response.error);
 
         if (response.isNotification) {
             handleNotification(response);

@@ -60,6 +60,7 @@ class WebsocketConnection:
         self._websocket = None
         self._is_open = False
         self.url = "ws://{}:{}/altws/".format(host, port)
+        self.notification_callbacks = None
 
     def __repr__(self):
         return "{}({!r}, {!r}, {!r})".format(
@@ -68,7 +69,6 @@ class WebsocketConnection:
             self.port,
             self.timeout,
         )
-    notification_callbacks = None
 
     def _create_connection(self):
         # TODO: Enable and disable the trace based on an environment variable or config option

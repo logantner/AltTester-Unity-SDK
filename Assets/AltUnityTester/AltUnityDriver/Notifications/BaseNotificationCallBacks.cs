@@ -10,5 +10,9 @@ namespace Altom.AltUnityDriver.Notifications
         {
             logger.Log(LogLevel.Info, String.Format("Scene {0} was loaded {1}", altUnityLoadSceneNotificationResultParams.sceneName, altUnityLoadSceneNotificationResultParams.loadSceneMode.ToString()));
         }
+        public void HierarchyCallback(AltUnityHierarchyNotificationResultParams altUnityHierarchyNotificationResultParams)
+        {
+            logger.Log(LogLevel.Info, String.Format("Object {0} was updated to {1}", altUnityHierarchyNotificationResultParams.objectName, altUnityHierarchyNotificationResultParams.hierarchyMode.ToString()));
+        }
     }
 }

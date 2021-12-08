@@ -20,11 +20,14 @@ namespace Altom.AltUnityDriver.Commands
         private Queue<string> messages;
         private int commandTimeout = 20;
 
-        public DriverCommunicationWebSocket(string host, int port, int connectTimeout)
+        public DriverCommunicationWebSocket(string host, int port, int connectTimeout, IGameParams gameParams)
         {
             _host = host;
             _port = port;
-            _uri = "ws://" + host + ":" + port + "/altws";
+            if (gameParams == null)
+                _uri = "ws://" + host + ":" + port + "/altws";
+            else
+                _uri = "ws://" + host + ":" + port + "/altws" + "?game=" + gameParams.Game + "&token=" + gameParams.Token;
             _connectTimeout = connectTimeout;
 
             messages = new Queue<string>();

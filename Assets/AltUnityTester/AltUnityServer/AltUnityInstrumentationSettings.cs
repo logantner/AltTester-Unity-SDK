@@ -18,6 +18,9 @@ namespace Altom.AltUnityTester
         /// </summary>
         public int ProxyPort = 13000;
 
+        public string Game;
+        public string Token;
+
 
         /// <summary>
         /// If true, it will show where an action happens on screen ( e.g. swipe or clikc )

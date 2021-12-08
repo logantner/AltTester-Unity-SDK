@@ -975,6 +975,8 @@ namespace Altom.AltUnityTesterEditor
 
                 labelAndInputFieldHorizontalLayout("Proxy host", ref EditorConfiguration.ProxyHost, Uri.CheckHostName(EditorConfiguration.ProxyHost.Trim()) != UriHostNameType.Unknown);
                 labelAndInputFieldHorizontalLayout("Proxy port", ref EditorConfiguration.ProxyPort);
+                labelAndInputFieldHorizontalLayout("Game", ref EditorConfiguration.Game);
+                labelAndInputFieldHorizontalLayout("Token", ref EditorConfiguration.Token);
             }
             switch (EditorConfiguration.platform)
             {

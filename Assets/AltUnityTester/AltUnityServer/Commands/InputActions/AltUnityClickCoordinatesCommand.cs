@@ -5,13 +5,10 @@ using Altom.AltUnityTester.Communication;
 
 namespace Altom.AltUnityTester.Commands
 {
-    public class AltUnityClickCoordinatesCommand : AltUnityCommand<AltUnityClickCoordinatesParams, string>
+    public class AltUnityClickCoordinatesCommand : AltUnityCommandWithWait<AltUnityClickCoordinatesParams, string>
     {
-        private readonly ICommandHandler handler;
-
-        public AltUnityClickCoordinatesCommand(ICommandHandler handler, AltUnityClickCoordinatesParams cmdParams) : base(cmdParams)
+        public AltUnityClickCoordinatesCommand(ICommandHandler handler, AltUnityClickCoordinatesParams cmdParams) : base(cmdParams, handler, cmdParams.wait)
         {
-            this.handler = handler;
         }
         public override string Execute()
         {
@@ -21,18 +18,6 @@ namespace Altom.AltUnityTester.Commands
 #else
             throw new AltUnityInputModuleException(AltUnityErrors.errorInputModule);
 #endif
-        }
-        private void onFinish(Exception err)
-        {
-            if (CommandParams.wait)
-                if (err != null)
-                {
-                    handler.Send(ExecuteAndSerialize<string>(() => throw new AltUnityInnerException(err)));
-                }
-                else
-                {
-                    handler.Send(ExecuteAndSerialize(() => "Finished"));
-                }
         }
     }
 }

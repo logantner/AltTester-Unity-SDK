@@ -8,6 +8,10 @@ namespace Altom.AltUnityDriver.Notifications
         None = 0,
         LOADSCENE = 1,
         UNLOADSCENE = 2,
-        ALL = 3 //modify every time when a flag is added so the value for ALL is equal to the sum of other flag(to have all 1 in binary)
+        ADDOBJECT = 3,
+        DESTROYOBJECT = 4,
+        CHANGEOBJECTPARENT = 5,
+
+        ALL = 6 //modify every time when a flag is added so the value for ALL is equal to the sum of other flag(to have all 1 in binary)
     }
 }

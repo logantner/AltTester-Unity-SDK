@@ -159,6 +159,10 @@ namespace Altom.AltUnityDriver.Commands
                     AltUnityLoadSceneNotificationResultParams data = JsonConvert.DeserializeObject<AltUnityLoadSceneNotificationResultParams>(message.data);
                     NotificationCallbacks.SceneLoadedCallback(data);
                     break;
+                case "addedObjectNotification":
+                    AltUnityHierarchyNotificationResultParams dataObject = JsonConvert.DeserializeObject<AltUnityHierarchyNotificationResultParams>(message.data);
+                    NotificationCallbacks.HierarchyChangesCallback(dataObject);
+                    break;
             }
         }
 

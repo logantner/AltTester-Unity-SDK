@@ -656,3 +656,20 @@ class AltUnityDriver:
         """
         self._connection.notification_callbacks = notification_callback
         commands.SetNotification.run(self._connection, notification_type)
+
+    def add_notification_listener(self, notification_type, notification_callback, overwrite=True):
+        """Activates a notification that the tester will send
+        Args:
+            notification_type (:obj:`int`): Flag that indicates which notification to be turned on
+            notification_callback (:obj:`method`): callback used when a notification is received
+            overwrite (:obj:'bool'): Flag to set if the new callback will overwrite the other
+                                    callbacks or just append
+        """
+        commands.AddNotificationListener.run(self._connection, notification_type, notification_callback, overwrite)
+
+    def remove_notification_listener(self, notification_type):
+        """Clear list of callback for the notification type and turn off the notification in tester
+        Args:
+            notification_type (:obj:`int`): Flag that indicates which notification to be turned off
+        """
+        commands.RemoveNotificationListener.run(self._connection, notification_type)

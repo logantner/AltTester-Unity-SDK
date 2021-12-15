@@ -17,14 +17,14 @@ public class TestNotification
         if (!string.IsNullOrEmpty(portStr)) port = int.Parse(portStr);
         altUnityDriver = new AltUnityDriver(port: port, enableLogging: true);
         INotificationCallbacks notificationCallbacks = new MockNotificationCallBacks();
-        altUnityDriver.SetNotification(NotificationType.ALL, notificationCallbacks);
+        altUnityDriver.AddNotificationListener<AltUnityLoadSceneNotificationResultParams>(NotificationType.LOADSCENE, notificationCallbacks.SceneLoadedCallback, true);
         DriverLogManager.SetMinLogLevel(AltUnityLogger.Console, AltUnityLogLevel.Info);
         DriverLogManager.SetMinLogLevel(AltUnityLogger.Unity, AltUnityLogLevel.Info);
     }
     [OneTimeTearDown]
     public void TearDown()
     {
-        altUnityDriver.SetNotification(NotificationType.None);
+        altUnityDriver.RemoveNotificationListener(NotificationType.LOADSCENE);
         altUnityDriver.Stop();
     }
 

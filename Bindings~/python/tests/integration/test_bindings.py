@@ -1273,12 +1273,11 @@ class TestPythonBindings:
 
     def test_load_scene_notification(self):
         test_notification_callbacks = TestNotificationCallback()
-        notification_type = NotificationType.LOADSCENE
-        self.altdriver.set_notification(notification_type, test_notification_callbacks)
+        self.altdriver.add_notification_listener(
+            NotificationType.LOADSCENE, test_notification_callbacks.scene_loaded_callback)
         self.altdriver.load_scene("Scene 1 AltUnityDriverTestScene")
         assert test_notification_callbacks.last_scene_loaded == "Scene 1 AltUnityDriverTestScene"
-        notification_type = NotificationType.NONE
-        self.altdriver.set_notification(notification_type)
+        self.altdriver.remove_notification_listener(NotificationType.LOADSCENE)
 
     def test_float_world_coordinates(self):
         self.altdriver.load_scene("Scene 1 AltUnityDriverTestScene")

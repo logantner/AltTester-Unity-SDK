@@ -1,5 +1,6 @@
 package ro.altom.altunitytester;
 
+import ro.altom.altunitytester.Commands.AltUnityCommands.NotificationType;
 import ro.altom.altunitytester.Notifications.INotificationCallbacks;
 
 public interface IMessageHandler {
@@ -10,5 +11,9 @@ public interface IMessageHandler {
 
     public void onMessage(String message);
 
-    public void setNotificationCallbacks(INotificationCallbacks notificationCallbacks);
+    public void addNotificationListener(NotificationType notificationType, INotificationCallbacks callbacks,
+            boolean overwrite);
+
+    public void removeNotificationListener(NotificationType notificationType);
+
 }

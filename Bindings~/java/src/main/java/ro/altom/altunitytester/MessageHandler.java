@@ -1,6 +1,8 @@
 package ro.altom.altunitytester;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.lang.Thread;
 
@@ -13,8 +15,8 @@ import org.apache.logging.log4j.Logger;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import ro.altom.altunitytester.Commands.AltUnityCommands.NotificationType;
 import ro.altom.altunitytester.Notifications.AltUnityLoadSceneNotificationResultParams;
-import ro.altom.altunitytester.Notifications.BaseNotificationCallbacks;
 import ro.altom.altunitytester.Notifications.INotificationCallbacks;
 import ro.altom.altunitytester.altUnityTesterExceptions.AltUnityErrors;
 import ro.altom.altunitytester.altUnityTesterExceptions.AltUnityException;
@@ -42,15 +44,7 @@ public class MessageHandler implements IMessageHandler {
     private Session session;
     private Queue<AltMessageResponse> responses = new LinkedList<AltMessageResponse>();
     private static final Logger logger = LogManager.getLogger(MessageHandler.class);
-    private INotificationCallbacks notificationCallbacks;
-
-    public INotificationCallbacks getNotificationCallbacks() {
-        return notificationCallbacks;
-    }
-
-    public void setNotificationCallbacks(INotificationCallbacks notificationCallbacks) {
-        this.notificationCallbacks = notificationCallbacks;
-    }
+    private List<INotificationCallbacks> loadSceneNotificationList = new ArrayList<INotificationCallbacks>();
 
     private double commandTimeout = 20;
 
@@ -102,16 +96,15 @@ public class MessageHandler implements IMessageHandler {
     }
 
     private void handleNotification(AltMessageResponse message) {
-        if (notificationCallbacks == null) {
-            notificationCallbacks = new BaseNotificationCallbacks();
-        }
 
         switch (message.commandName) {
-        case "loadSceneNotification":
-            AltUnityLoadSceneNotificationResultParams data = new Gson().fromJson(message.data,
-                    AltUnityLoadSceneNotificationResultParams.class);
-            notificationCallbacks.SceneLoadedCallBack(data);
-            break;
+            case "loadSceneNotification":
+                AltUnityLoadSceneNotificationResultParams data = new Gson().fromJson(message.data,
+                        AltUnityLoadSceneNotificationResultParams.class);
+                for (INotificationCallbacks callback : loadSceneNotificationList) {
+                    callback.SceneLoadedCallBack(data);
+                }
+                break;
         }
     }
 
@@ -123,44 +116,44 @@ public class MessageHandler implements IMessageHandler {
         logger.error(error.trace);
 
         switch (error.type) {
-        case AltUnityErrors.errorNotFound:
-            throw new NotFoundException(error.message);
-        case AltUnityErrors.errorSceneNotFound:
-            throw new SceneNotFoundException(error.message);
-        case AltUnityErrors.errorPropertyNotFound:
-            throw new PropertyNotFoundException(error.message);
-        case AltUnityErrors.errorMethodNotFound:
-            throw new MethodNotFoundException(error.message);
-        case AltUnityErrors.errorComponentNotFound:
-            throw new ComponentNotFoundException(error.message);
-        case AltUnityErrors.errorAssemblyNotFound:
-            throw new AssemblyNotFoundException(error.message);
-        case AltUnityErrors.errorCouldNotPerformOperation:
-            throw new CouldNotPerformOperationException(error.message);
-        case AltUnityErrors.errorMethodWithGivenParametersNotFound:
-            throw new MethodWithGivenParametersNotFoundException(error.message);
-        case AltUnityErrors.errorFailedToParseArguments:
-            throw new FailedToParseArgumentsException(error.message);
-        case AltUnityErrors.errorInvalidParameterType:
-            throw new InvalidParameterTypeException(error.message);
-        case AltUnityErrors.errorObjectNotFound:
-            throw new ObjectWasNotFoundException(error.message);
-        case AltUnityErrors.errorPropertyNotSet:
-            throw new PropertyNotFoundException(error.message);
-        case AltUnityErrors.errorNullReference:
-            throw new NullReferenceException(error.message);
-        case AltUnityErrors.errorUnknownError:
-            throw new UnknownErrorException(error.message);
-        case AltUnityErrors.errorFormatException:
-            throw new FormatException(error.message);
-        case AltUnityErrors.errorInvalidPath:
-            throw new InvalidPathException(error.message);
-        case AltUnityErrors.errorInvalidCommand:
-            throw new InvalidCommandException(error.message);
-        case AltUnityErrors.errorInputModule:
-            throw new AltUnityInputModuleException(error.message);
-        case AltUnityErrors.errorCameraNotFound:
-            throw new CameraNotFoundException(error.message);
+            case AltUnityErrors.errorNotFound:
+                throw new NotFoundException(error.message);
+            case AltUnityErrors.errorSceneNotFound:
+                throw new SceneNotFoundException(error.message);
+            case AltUnityErrors.errorPropertyNotFound:
+                throw new PropertyNotFoundException(error.message);
+            case AltUnityErrors.errorMethodNotFound:
+                throw new MethodNotFoundException(error.message);
+            case AltUnityErrors.errorComponentNotFound:
+                throw new ComponentNotFoundException(error.message);
+            case AltUnityErrors.errorAssemblyNotFound:
+                throw new AssemblyNotFoundException(error.message);
+            case AltUnityErrors.errorCouldNotPerformOperation:
+                throw new CouldNotPerformOperationException(error.message);
+            case AltUnityErrors.errorMethodWithGivenParametersNotFound:
+                throw new MethodWithGivenParametersNotFoundException(error.message);
+            case AltUnityErrors.errorFailedToParseArguments:
+                throw new FailedToParseArgumentsException(error.message);
+            case AltUnityErrors.errorInvalidParameterType:
+                throw new InvalidParameterTypeException(error.message);
+            case AltUnityErrors.errorObjectNotFound:
+                throw new ObjectWasNotFoundException(error.message);
+            case AltUnityErrors.errorPropertyNotSet:
+                throw new PropertyNotFoundException(error.message);
+            case AltUnityErrors.errorNullReference:
+                throw new NullReferenceException(error.message);
+            case AltUnityErrors.errorUnknownError:
+                throw new UnknownErrorException(error.message);
+            case AltUnityErrors.errorFormatException:
+                throw new FormatException(error.message);
+            case AltUnityErrors.errorInvalidPath:
+                throw new InvalidPathException(error.message);
+            case AltUnityErrors.errorInvalidCommand:
+                throw new InvalidCommandException(error.message);
+            case AltUnityErrors.errorInputModule:
+                throw new AltUnityInputModuleException(error.message);
+            case AltUnityErrors.errorCameraNotFound:
+                throw new CameraNotFoundException(error.message);
         }
 
         logger.error(error.type + " is not handled by driver.");
@@ -195,6 +188,36 @@ public class MessageHandler implements IMessageHandler {
                 return null;
             }
         };
+    }
+
+    public void addNotificationListener(NotificationType notificationType, INotificationCallbacks callbacks,
+            boolean overwrite) {
+        switch (notificationType) {
+            case LOADSCENE:
+                if (overwrite) {
+                    loadSceneNotificationList.clear();
+                }
+                loadSceneNotificationList.add(callbacks);
+                break;
+            case UNLOADSCENE:
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    public void removeNotificationListener(NotificationType notificationType) {
+        switch (notificationType) {
+            case LOADSCENE:
+                loadSceneNotificationList.clear();
+                break;
+            case UNLOADSCENE:
+                break;
+            default:
+                break;
+
+        }
     }
 
 }

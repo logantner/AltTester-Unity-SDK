@@ -1,8 +1,6 @@
-from enum import IntFlag, auto
+from enum import IntEnum
 
 
-class NotificationType(IntFlag):
-    NONE = 0
-    LOADSCENE = auto()
-    UNLOADSCENE = auto()
-    ALL = LOADSCENE | UNLOADSCENE
+class NotificationType(IntEnum):
+    LOADSCENE = 0
+    UNLOADSCENE = 1

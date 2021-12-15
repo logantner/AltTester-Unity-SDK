@@ -1,9 +1,9 @@
 package ro.altom.altunitytester;
 
 import ro.altom.altunitytester.Notifications.AltUnityLoadSceneNotificationResultParams;
-import ro.altom.altunitytester.Notifications.INotificationCallbacks;
+import ro.altom.altunitytester.Notifications.BaseNotificationCallbacks;
 
-public class MockNotificationCallBacks implements INotificationCallbacks {
+public class MockNotificationCallBacks extends BaseNotificationCallbacks {
 
     public static String sceneName;
 

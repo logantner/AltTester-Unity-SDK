@@ -20,7 +20,11 @@ namespace Altom.AltUnityTester.Notification
             {
                 commandName = commandName,
                 messageId = null,
-                data = JsonConvert.SerializeObject(data),
+                data = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    Culture = CultureInfo.InvariantCulture
+                }),
                 error = null,
                 isNotification = true
             };

@@ -1396,7 +1396,6 @@ public class TestForScene1TestSample
         var scenes = altUnityDriver.GetAllLoadedScenes();
         Assert.IsTrue(scenes.Count == 2);
         altUnityDriver.LoadScene("Scene 2 Draggable Panel", true);
-        altUnityDriver.SetNotification(NotificationType.None);
 
     }
     [Test]

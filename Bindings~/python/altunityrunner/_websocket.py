@@ -5,9 +5,9 @@ from threading import Thread
 
 from loguru import logger
 import websocket
-from altunityrunner.commands.Notifications.base_notification_callbacks import BaseNotificationCallbacks
 from altunityrunner.commands.Notifications.load_scene_notification_result import LoadSceneNotificationResult
 from altunityrunner.commands.Notifications.load_scene_mode import LoadSceneMode
+from altunityrunner.commands.Notifications.notification_type import NotificationType
 
 from .exceptions import ConnectionError, ConnectionTimeoutError, CommandResponseTimeoutException
 
@@ -60,7 +60,7 @@ class WebsocketConnection:
         self._websocket = None
         self._is_open = False
         self.url = "ws://{}:{}/altws/".format(host, port)
-        self.notification_callbacks = None
+        self.load_scene_callbacks = []
 
     def __repr__(self):
         return "{}({!r}, {!r}, {!r})".format(
@@ -125,13 +125,12 @@ class WebsocketConnection:
             self._store.push(response.get("commandName"), response)
 
     def handle_notification(self, message):
-        if (self.notification_callbacks is None):
-            self.notification_callbacks = BaseNotificationCallbacks()
         if(message.get("commandName") == "loadSceneNotification"):
             data = json.loads(message.get("data"))
             load_scene_result = LoadSceneNotificationResult(
                 data.get("sceneName"), LoadSceneMode(data.get("loadSceneMode")))
-            self.notification_callbacks.scene_loaded_callback(load_scene_result)
+            for callback in self.load_scene_callbacks:
+                callback(load_scene_result)
 
     def _on_error(self, ws, error):
         """A callback which is called when the connection gets an error."""
@@ -191,3 +190,14 @@ class WebsocketConnection:
             self._websocket = None
 
         self._is_open = False
+
+    def add_notification_listener(self, notification_type, notification_callback, overwrite):
+        if(notification_type == NotificationType.LOADSCENE):
+            if(overwrite):
+                self.load_scene_callbacks = [notification_callback]
+            else:
+                self.load_scene_callbacks += notification_callback
+
+    def remove_notification_listener(self, notification_type):
+        if(notification_type == NotificationType.LOADSCENE):
+            self.load_scene_callbacks = []

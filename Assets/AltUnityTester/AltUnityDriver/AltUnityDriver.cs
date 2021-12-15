@@ -367,15 +367,13 @@ namespace Altom.AltUnityDriver
         {
             new AltUnityEndTouch(communicationHandler, fingerId).Execute();
         }
-        public void SetNotification(NotificationType notificationType, INotificationCallbacks notificationCallbacks = null)
+        public void AddNotificationListener<T>(NotificationType notificationType, Action<T> callback, bool overwrite)
         {
-            if (notificationCallbacks == null)
-            {
-                notificationCallbacks = new BaseNotificationCallBacks();
-            }
-            communicationHandler.NotificationCallbacks = notificationCallbacks;
-
-            new AltUnitySetNotification(communicationHandler, notificationType).Execute();
+            new AddNotificationListener<T>(communicationHandler, notificationType, callback, overwrite).Execute();
+        }
+        public void RemoveNotificationListener(NotificationType notificationType)
+        {
+            new RemoveNotificationListener(communicationHandler, notificationType).Execute();
         }
 
     }

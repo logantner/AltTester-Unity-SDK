@@ -711,11 +711,11 @@ Simulates holding left click button down for a specified amount of time at given
 
 **_Parameters_**
 
-| Name        | Type            | Required | Default | Description                                           |
-| ----------- | --------------- | -------- | ------- | ----------------------------------------------------- |
-| coordinates | Vector2         | Yes      |         | The coordinates where the button is held down.        |
-| duration    | float           | No       | 0.1     | The time measured in seconds to keep the button down. |
-| wait        | boolean         | No       | true    | If set wait for command to finish.                    |
+| Name        | Type    | Required | Default | Description                                           |
+| ----------- | ------- | -------- | ------- | ----------------------------------------------------- |
+| coordinates | Vector2 | Yes      |         | The coordinates where the button is held down.        |
+| duration    | float   | No       | 0.1     | The time measured in seconds to keep the button down. |
+| wait        | boolean | No       | true    | If set wait for command to finish.                    |
 
 **_Returns_**
 
@@ -770,12 +770,11 @@ Simulate mouse movement in your game
 
 **_Parameters_**
 
-| Name        | Type            | Required | Default |  Description                                                                                           |
-| ----------- | --------------- | -------- | ------- |  ----------------------------------------------------------------------------------------------------- |
-| coordinates | Vector2         | Yes      |         | The screen coordinates                                                                                 |
-| duration    | float           | No       | 0.1     | The time measured in seconds to move the mouse from the current mouse position to the set coordinates. |
-| wait        | boolean         | No       | true    | If set wait for command to finish.                                                                     |
-
+| Name        | Type    | Required | Default | Description                                                                                            |
+| ----------- | ------- | -------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| coordinates | Vector2 | Yes      |         | The screen coordinates                                                                                 |
+| duration    | float   | No       | 0.1     | The time measured in seconds to move the mouse from the current mouse position to the set coordinates. |
+| wait        | boolean | No       | true    | If set wait for command to finish.                                                                     |
 
 **_Returns_**
 
@@ -852,15 +851,14 @@ Simulate mouse movement in your game
 
 Simulates key press action in your game.
 
-
 **_Parameters_**
 
-| Name     | Type            | Required | Default  | Description                                                                             |
-| -------- | --------------- | -------- | -------- | --------------------------------------------------------------------------------------- |
-| keycode  | AltUnityKeyCode | Yes      |          | The key code of the key simulated to be pressed.                                        |
-| power    | float           | No       | 1        | A value between \[-1,1\] used for joysticks to indicate how hard the button was pressed |
-| duration | float           | No       | 0.1      | The time measured in seconds from the key press to the key release.                     |
-| wait     | boolean         | No       | true     | If set wait for command to finish.                                                      |
+| Name     | Type            | Required | Default | Description                                                                             |
+| -------- | --------------- | -------- | ------- | --------------------------------------------------------------------------------------- |
+| keycode  | AltUnityKeyCode | Yes      |         | The key code of the key simulated to be pressed.                                        |
+| power    | float           | No       | 1       | A value between \[-1,1\] used for joysticks to indicate how hard the button was pressed |
+| duration | float           | No       | 0.1     | The time measured in seconds from the key press to the key release.                     |
+| wait     | boolean         | No       | true    | If set wait for command to finish.                                                      |
 
 **_Returns_**
 
@@ -1003,12 +1001,12 @@ Simulates a swipe action between two points.
 
 **_Parameters_**
 
-| Name     | Type                | Required | Default | Description                                                                 |
-| -------- | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| start    | Vector2             | Yes      |         | Starting location of the swipe                                              |
-| end      | Vector2             | Yes      |         | Ending location of the swipe                                                |
-| duration | float               | No       | 0.1     | The time measured in seconds to move the mouse from start to end location.  |
-| wait     | boolean             | No       | true    | If set wait for command to finish.                                          |
+| Name     | Type    | Required | Default | Description                                                                |
+| -------- | ------- | -------- | ------- | -------------------------------------------------------------------------- |
+| start    | Vector2 | Yes      |         | Starting location of the swipe                                             |
+| end      | Vector2 | Yes      |         | Ending location of the swipe                                               |
+| duration | float   | No       | 0.1     | The time measured in seconds to move the mouse from start to end location. |
+| wait     | boolean | No       | true    | If set wait for command to finish.                                         |
 
 **_Returns_**
 
@@ -1143,11 +1141,11 @@ Simulates a multipoint swipe action.
 
 **_Parameters_**
 
-| Name      | Type                    | Required | Default | Description                                                                      |
-| --------  | ----------------------- | -------- | ------- | -------------------------------------------------------------------------------- |
-| positions | List\[AltUnityVector2\] | Yes      |         | A list of positions on the screen where the swipe be made                        |
-| duration  | float                   | No       | 0.1     | The time measured in seconds to swipe from first position to the last position.  |
-| wait      | boolean                 | No       | true    | If set wait for command to finish.                                               |
+| Name      | Type                    | Required | Default | Description                                                                     |
+| --------- | ----------------------- | -------- | ------- | ------------------------------------------------------------------------------- |
+| positions | List\[AltUnityVector2\] | Yes      |         | A list of positions on the screen where the swipe be made                       |
+| duration  | float                   | No       | 0.1     | The time measured in seconds to swipe from first position to the last position. |
+| wait      | boolean                 | No       | true    | If set wait for command to finish.                                              |
 
 **_Returns_**
 
@@ -1230,9 +1228,9 @@ Simulates starting of a touch on the screen. To further interact with the touch 
 
 **_Parameters_**
 
-| Name        | Type           | Required | Description        |
-| ----------- | -------------- | -------- | ------------------ |
-| coordinates | Vector2        | Yes      | Screen coordinates |
+| Name        | Type    | Required | Description        |
+| ----------- | ------- | -------- | ------------------ |
+| coordinates | Vector2 | Yes      | Screen coordinates |
 
 **_Returns_**
 
@@ -1297,10 +1295,10 @@ Simulates a touch movement on the screen. Move the touch created with [BeginTouc
 
 **_Parameters_**
 
-| Name        | Type         | Required | Description                                              |
-| ----------- | ------------ | -------- | -------------------------------------------------------- |
-| fingerId    | int          | Yes      | Identifier returned by [BeginTouch](#begintouch) command |
-| coordinates | Vector2      | Yes      | Screen coordinates where the touch will be moved         |
+| Name        | Type    | Required | Description                                              |
+| ----------- | ------- | -------- | -------------------------------------------------------- |
+| fingerId    | int     | Yes      | Identifier returned by [BeginTouch](#begintouch) command |
+| coordinates | Vector2 | Yes      | Screen coordinates where the touch will be moved         |
 
 **_Returns_**
 
@@ -1432,13 +1430,12 @@ Click at screen coordinates
 
 **_Parameters_**
 
-| Name        | Type            | Required | Default | Description                        |
-| ----------- | --------------- | -------- | ------- | ---------------------------------- |
-| coordinates | Vector2         | Yes      |         | The screen coordinates             |
-| count       | int             | No       | 1       | Number of clicks                   |
-| interval    | float           | No       | 0.1     | Interval between clicks in seconds |
-| wait        | boolean         | No       | true    | If set wait for command to finish. |
-
+| Name        | Type    | Required | Default | Description                        |
+| ----------- | ------- | -------- | ------- | ---------------------------------- |
+| coordinates | Vector2 | Yes      |         | The screen coordinates             |
+| count       | int     | No       | 1       | Number of clicks                   |
+| interval    | float   | No       | 0.1     | Interval between clicks in seconds |
+| wait        | boolean | No       | true    | If set wait for command to finish. |
 
 **_Returns_**
 
@@ -1494,12 +1491,12 @@ Tap at screen coordinates
 
 **_Parameters_**
 
-| Name        | Type            | Required | Default | Description                        |
-| ----------- | --------------- | -------- | ------- | ---------------------------------- |
-| coordinates | Vector2         | Yes      |         | The screen coordinates             |
-| count       | int             | No       | 1       | Number of taps                     |
-| interval    | float           | No       | 0.1     | Interval between taps in seconds   |
-| wait        | boolean         | No       | true    | If set wait for command to finish. |
+| Name        | Type    | Required | Default | Description                        |
+| ----------- | ------- | -------- | ------- | ---------------------------------- |
+| coordinates | Vector2 | Yes      |         | The screen coordinates             |
+| count       | int     | No       | 1       | Number of taps                     |
+| interval    | float   | No       | 0.1     | Interval between taps in seconds   |
+| wait        | boolean | No       | true    | If set wait for command to finish. |
 
 **_Returns_**
 
@@ -1555,13 +1552,11 @@ Simulates device rotation action in your game.
 
 **_Parameters_**
 
-
-| Name         | Type            | Required | Default | Description                                 |
-| ------------ | --------------- | -------- | ------- | ------------------------------------------- |
-| acceleration | Vector3         | Yes      |         | The linear acceleration of a device.        |
-| duration     | float           | No       | 0.1     | How long the rotation will take in seconds. |
-| wait         | boolean         | No       | true    | If set wait for command to finish.          |
-
+| Name         | Type    | Required | Default | Description                                 |
+| ------------ | ------- | -------- | ------- | ------------------------------------------- |
+| acceleration | Vector3 | Yes      |         | The linear acceleration of a device.        |
+| duration     | float   | No       | 0.1     | How long the rotation will take in seconds. |
+| wait         | boolean | No       | true    | If set wait for command to finish.          |
 
 **_Returns_**
 
@@ -1608,7 +1603,7 @@ Simulates device rotation action in your game.
             capsule = self.altdriver.find_object(By.NAME, "Capsule")
             initial_position = [capsule.worldX, capsule.worldY, capsule.worldZ]
             self.altdriver.tilt([1, 1, 1], 1)
-            
+
             capsule = self.altdriver.find_object(By.NAME, "Capsule")
             final_position = [capsule.worldX, capsule.worldY, capsule.worldZ]
             assert initial_position != final_position
@@ -2551,45 +2546,7 @@ Sets the level of logging in AltUnity Tester instrumented Unity application
 
 ```
 
-#### SetNotification
-
-Sets which notification will AltUnity Tester send from the instrumented Unity application
-
-**_Parameters_**
-
-| Name                  | Type                   | Required | Description                                                                                                                                                                                                                               |
-| --------------------- | ---------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| notificationType      | NotificationType       | Yes      | Flag that sets in AltUnityTester which notification to be turned on                                                                                                                                                                       |
-| notificationCallbacks | INotificationCallbacks | No       | Class with methods called by the notifications. Users should implement this methods themselves to react to their needs. If not class is offered then it will use the base class implementation which will only logs the notification info |
-
-**_Returns_**
-
--   Nothing
-
-**_Examples_**
-
-```eval_rst
-.. tabs::
-
-    .. code-tab:: c#
-
-        INotificationCallbacks notificationCallbacks = new MockNotificationCallBacks();
-        altUnityDriver.SetNotification(NotificationType.LOADSCENE, notificationCallbacks);
-
-    .. code-tab:: java
-
-        AltUnitySetNotificationParams altUnitySetNotificationParams = new AltUnitySetNotificationParams.Builder()
-                .addNotificationForLoadScene().build();
-        altUnityDriver.SetNotification(altUnitySetNotificationParams, new MockNotificationCallBacks());
-
-    .. code-tab:: py
-
-        test_notification_callbacks = TestNotificationCallback()
-        self.altdriver.set_notification(NotificationType.LOADSCENE, test_notification_callbacks)
-
-```
-
-### Notifications
+<!--### Notifications
 
 #### Scene loaded
 
@@ -2599,6 +2556,7 @@ If activated this notification will be called every time a scene is loaded in th
 
 -   sceneName - name of the loaded scene
 -   loadSceneMode - the way how the scene was loaded (Additive or Single)
+-->
 
 ## AltUnityObject
 
@@ -3560,7 +3518,6 @@ Is a solution offered by AltUnity Tester in order to find object easier. This is
 To add AltId to every object simply just click AddAltIdToEveryObject from AltUnityTester menu.
 
 ![addAltId](../_static/images/AddAltId.png)
-
 
 ## AltUnityPortForwarding
 

@@ -695,16 +695,27 @@ namespace Altom.AltUnityDriver.Commands
             this.fingerId = fingerId;
         }
     }
-    [Command("setNotification")]
-    public class AltUnitySetNotificationParams : CommandParams
+    [Command("activateNotification")]
+    public class ActivateNotification : CommandParams
     {
         public NotificationType NotificationType;
 
-        public AltUnitySetNotificationParams(NotificationType notificationType)
+        public ActivateNotification(NotificationType notificationType)
         {
             NotificationType = notificationType;
         }
     }
+    [Command("deactivateNotification")]
+    public class DeactivateNotification : CommandParams
+    {
+        public NotificationType NotificationType;
+
+        public DeactivateNotification(NotificationType notificationType)
+        {
+            NotificationType = notificationType;
+        }
+    }
+
 
 
 }

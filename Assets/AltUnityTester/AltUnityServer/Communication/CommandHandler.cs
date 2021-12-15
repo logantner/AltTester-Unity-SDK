@@ -294,9 +294,13 @@ namespace Altom.AltUnityTester.Communication
             {
                 return new AltUnitySetServerLoggingCommand(cmdParams as AltUnitySetServerLoggingParams).ExecuteAndSerialize;
             }
-            if (cmdParams is AltUnitySetNotificationParams)
+            if (cmdParams is ActivateNotification)
             {
-                return new AltUnitySetNotificationCommand(this, cmdParams as AltUnitySetNotificationParams).ExecuteAndSerialize;
+                return new AltUnityActivateNotificationCommand(this, cmdParams as ActivateNotification).ExecuteAndSerialize;
+            }
+            if (cmdParams is DeactivateNotification)
+            {
+                return new AltUnityDeactivateNotificationCommand(this, cmdParams as DeactivateNotification).ExecuteAndSerialize;
             }
 
             return new AltUnityInvalidCommand(cmdParams, new CommandNotFoundException(string.Format("Command {0} not handled", cmdParams.commandName))).ExecuteAndSerialize;

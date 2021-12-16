@@ -6,9 +6,7 @@ namespace Altom.AltUnityDriver.Notifications
     {
         LOADSCENE = 0,
         UNLOADSCENE = 1,
-        ADDOBJECT = 2,
-        DESTROYOBJECT = 3,
-        CHANGEOBJECTPARENT = 4
+        HIERARCHYCHANGED =2
 
     }
 }

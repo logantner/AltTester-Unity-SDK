@@ -13,4 +13,12 @@ public class BaseNotificationCallbacks implements INotificationCallbacks {
                 + altUnityLoadSceneNotificationResultParams.loadSceneMode);
     }
 
+    @Override
+    public void HierarchyChangedCallBack(
+        AltUnityHierarchyChangedNotificationResultParams altUnityLoadSceneNotificationResultParams){
+            logger.info("Object " + altUnityLoadSceneNotificationResultParams.objectName + " was " 
+                    + altUnityLoadSceneNotificationResultParams.hierarchyMode);
+        }
+    )
+
 }

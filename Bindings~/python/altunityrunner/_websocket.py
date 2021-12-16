@@ -7,6 +7,8 @@ from loguru import logger
 import websocket
 from altunityrunner.commands.Notifications.load_scene_notification_result import LoadSceneNotificationResult
 from altunityrunner.commands.Notifications.load_scene_mode import LoadSceneMode
+from altunityrunner.commands.Notifications.hierarchy_mode import HierarchyMode
+from altunityrunner.commands.Notifications.hierarchy_changed_notification_result import HierarchyChangedNotificationResult
 from altunityrunner.commands.Notifications.notification_type import NotificationType
 
 from .exceptions import ConnectionError, ConnectionTimeoutError, CommandResponseTimeoutException
@@ -61,6 +63,7 @@ class WebsocketConnection:
         self._is_open = False
         self.url = "ws://{}:{}/altws/".format(host, port)
         self.load_scene_callbacks = []
+        self.hierarchy_changed_callbacks = []
 
     def __repr__(self):
         return "{}({!r}, {!r}, {!r})".format(
@@ -131,6 +134,14 @@ class WebsocketConnection:
                 data.get("sceneName"), LoadSceneMode(data.get("loadSceneMode")))
             for callback in self.load_scene_callbacks:
                 callback(load_scene_result)
+        
+        if(message.get("commandName") == "hierarchyChangedNotification"):
+            data = json.loads(message.get("data"))
+            hierarchy_changed_result = HierarchyChangedNotificationResult(
+                data.get("objectName"), HierarchyMode(data.get("hierarchyMode")))
+            for callback in self.hierarchy_changed_callbacks:
+                callback(hierarchy_changed_result)
+
 
     def _on_error(self, ws, error):
         """A callback which is called when the connection gets an error."""
@@ -198,6 +209,15 @@ class WebsocketConnection:
             else:
                 self.load_scene_callbacks += notification_callback
 
+        if(notification_type == NotificationType.HIERARCHYCHANGED):
+            if(overwrite):
+                self.hierarchy_changed_callbacks = [notification_callback]
+            else:
+                self.hierarchy_changed_callbacks += notification_callback
+
     def remove_notification_listener(self, notification_type):
         if(notification_type == NotificationType.LOADSCENE):
             self.load_scene_callbacks = []
+
+        if(notification_type == NotificationType.HIERARCHYCHANGED):
+            self.hierarchy_changed_callbacks = []

@@ -5,6 +5,6 @@ namespace Altom.AltUnityDriver.Notifications
 
         Added = 0,
         Destroyed = 1,
-        Updated = 2
+        ParentChanged = 2
     }
 }

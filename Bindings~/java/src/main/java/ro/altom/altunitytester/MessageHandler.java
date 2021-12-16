@@ -45,6 +45,7 @@ public class MessageHandler implements IMessageHandler {
     private Queue<AltMessageResponse> responses = new LinkedList<AltMessageResponse>();
     private static final Logger logger = LogManager.getLogger(MessageHandler.class);
     private List<INotificationCallbacks> loadSceneNotificationList = new ArrayList<INotificationCallbacks>();
+    private List<INotificationCallbacks> hierarchyChangedNotificationList = new ArrayList<INotificationCallbacks>();
 
     private double commandTimeout = 20;
 
@@ -103,6 +104,13 @@ public class MessageHandler implements IMessageHandler {
                         AltUnityLoadSceneNotificationResultParams.class);
                 for (INotificationCallbacks callback : loadSceneNotificationList) {
                     callback.SceneLoadedCallBack(data);
+                }
+                break;
+            case "hierarchyChangedNotification":
+                AltUnityHierarchyChangedNotificationResultParams data = new Gson().fromJson(message.data,
+                        AltUnityHierarchyChangedNotificationResultParams.class);
+                for(INotificationCallbacks callback : hierarchyChangedNotificationList) {
+                    callback.HierarchyChangedCallBack(data);
                 }
                 break;
         }
@@ -201,6 +209,13 @@ public class MessageHandler implements IMessageHandler {
                 break;
             case UNLOADSCENE:
                 break;
+            case HIERARCHYCHANGED:
+                if(overwrite) {
+                    hierarchyChangedNotificationList.clear();
+                }
+                hierarchyChangedNotificationList.add(callbacks);
+                break;
+
             default:
                 break;
 
@@ -213,6 +228,9 @@ public class MessageHandler implements IMessageHandler {
                 loadSceneNotificationList.clear();
                 break;
             case UNLOADSCENE:
+                break;
+            case HIERARCHYCHANGED:
+                hierarchyChangedNotificationList.clear();
                 break;
             default:
                 break;

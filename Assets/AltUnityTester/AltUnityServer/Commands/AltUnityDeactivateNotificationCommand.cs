@@ -23,6 +23,9 @@ namespace Altom.AltUnityTester.Commands
                     break;
                 case NotificationType.UNLOADSCENE:
                     throw new NotImplementedException();
+                case NotificationType.HIERARCHYCHANGED:
+                    new AltUnityHierarchyChangedNotification(commandHandler, false);
+                    break;
             }
             return "Ok";
         }

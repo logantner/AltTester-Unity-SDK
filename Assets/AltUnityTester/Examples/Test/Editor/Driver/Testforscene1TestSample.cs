@@ -1389,7 +1389,6 @@ public class TestForScene1TestSample
     public void TestLoadAdditiveScenes()
     {
         var initialNumberOfElements = altUnityDriver.GetAllElements();
-        altUnityDriver.SetNotification(NotificationType.LOADSCENE);
         altUnityDriver.LoadScene("Scene 2 Draggable Panel", false);
         var finalNumberOfElements = altUnityDriver.GetAllElements();
         Assert.IsTrue(initialNumberOfElements.Count < finalNumberOfElements.Count);

@@ -21,6 +21,7 @@ namespace Altom.AltUnityDriver.Commands
         private readonly int _connectTimeout;
         private Queue<CommandResponse> messages;
         private List<Action<AltUnityLoadSceneNotificationResultParams>> loadSceneCallbacks = new List<Action<AltUnityLoadSceneNotificationResultParams>>();
+        private List<Action<AltUnityHierarchyNotificationResultParams>> hierarchyCallbacks = new List<Action<AltUnityHierarchyNotificationResultParams>>();
 
 
         private int commandTimeout = 20;
@@ -156,6 +157,13 @@ namespace Altom.AltUnityDriver.Commands
                         callback(data);
                     }
                     break;
+                case "hierarchyChangedNotification":
+                    AltUnityHierarchyNotificationResultParams hierarchyData = JsonConvert.DeserializeObject<AltUnityHierarchyNotificationResultParams>(message.data);
+                    foreach(var callback in hierarchyCallbacks)
+                    {
+                        callback(hierarchyData);
+                    }
+                    break;
             }
         }
 
@@ -236,6 +244,16 @@ namespace Altom.AltUnityDriver.Commands
                     break;
                 case NotificationType.UNLOADSCENE:
                     break;
+                case NotificationType.HIERARCHYCHANGED:
+                    if (callback.GetType() != typeof(Action<AltUnityHierarchyNotificationResultParams>))
+                    {
+                        throw new InvalidCastException(String.Format("callback must be of type: {0} and not {1}", typeof(Action<AltUnityHierarchyNotificationResultParams>), callback.GetType()));
+                    }
+                    if (overwrite)
+                        hierarchyCallbacks.Clear();
+                    hierarchyCallbacks.Add(callback as Action<AltUnityHierarchyNotificationResultParams>);
+                    break;
+                
             }
         }
         public void RemoveNotificationListener(NotificationType notificationType)
@@ -246,6 +264,9 @@ namespace Altom.AltUnityDriver.Commands
                     loadSceneCallbacks.Clear();
                     break;
                 case NotificationType.UNLOADSCENE:
+                    break;
+                case NotificationType.HIERARCHYCHANGED:
+                    hierarchyCallbacks.Clear();
                     break;
             }
         }

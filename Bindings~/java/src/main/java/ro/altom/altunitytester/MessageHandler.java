@@ -46,6 +46,7 @@ public class MessageHandler implements IMessageHandler {
     private static final Logger logger = LogManager.getLogger(MessageHandler.class);
     private List<INotificationCallbacks> loadSceneNotificationList = new ArrayList<INotificationCallbacks>();
     private List<INotificationCallbacks> hierarchyChangedNotificationList = new ArrayList<INotificationCallbacks>();
+    private List<INotificationCallbacks> unloadSceneNotificationList = new ArrayList<INotificationCallbacks>();
 
     private double commandTimeout = 20;
 
@@ -111,6 +112,12 @@ public class MessageHandler implements IMessageHandler {
                         AltUnityHierarchyChangedNotificationResultParams.class);
                 for(INotificationCallbacks callback : hierarchyChangedNotificationList) {
                     callback.HierarchyChangedCallBack(data);
+                }
+                break;
+            case "unloadSceneNotification":
+                String sceneName = new Gson().fromJson(message.data, String.class);
+                for (INotificationCallbacks callback : unloadSceneNotificationList) {
+                    callback.SceneUnloadedCallBack(sceneName);
                 }
                 break;
         }
@@ -208,6 +215,10 @@ public class MessageHandler implements IMessageHandler {
                 loadSceneNotificationList.add(callbacks);
                 break;
             case UNLOADSCENE:
+                if (overwrite) {
+                    unloadSceneNotificationList.clear();
+                }
+                unloadSceneNotificationList.add(callbacks);
                 break;
             case HIERARCHYCHANGED:
                 if(overwrite) {
@@ -228,6 +239,7 @@ public class MessageHandler implements IMessageHandler {
                 loadSceneNotificationList.clear();
                 break;
             case UNLOADSCENE:
+                unloadSceneNotificationList.clear();
                 break;
             case HIERARCHYCHANGED:
                 hierarchyChangedNotificationList.clear();

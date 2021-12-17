@@ -5,6 +5,7 @@ namespace Altom.AltUnityDriver.MockClasses
     {
         public static string LastSceneLoaded = "";
         public static string LastObjectChanged = "";
+        public static string LastSceneUnloaded = "";
         public void SceneLoadedCallback(AltUnityLoadSceneNotificationResultParams altUnityLoadSceneNotificationResultParams)
         {
             LastSceneLoaded = altUnityLoadSceneNotificationResultParams.sceneName;
@@ -14,5 +15,10 @@ namespace Altom.AltUnityDriver.MockClasses
             LastObjectChanged = altUnityHierarchyNotificationResultParams.objectName;
         }
 
+
+        public void SceneUnloadedCallback(string sceneName)
+        {
+            LastSceneUnloaded = sceneName;
+        }
     }
 }

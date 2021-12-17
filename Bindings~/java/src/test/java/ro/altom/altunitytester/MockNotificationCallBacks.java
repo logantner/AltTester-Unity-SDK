@@ -7,11 +7,18 @@ public class MockNotificationCallBacks extends BaseNotificationCallbacks {
 
     public static String sceneName;
     public static String objectName;
+    public static String lastLoadedScene;
+    public static String lastUnloadedScene;
 
     @Override
     public void SceneLoadedCallBack(
             AltUnityLoadSceneNotificationResultParams altUnityLoadSceneNotificationResultParams) {
-        sceneName = altUnityLoadSceneNotificationResultParams.sceneName;
+        lastLoadedScene = altUnityLoadSceneNotificationResultParams.sceneName;
+    }
+
+    @Override
+    public void SceneUnloadedCallBack(String sceneName) {
+        lastUnloadedScene = sceneName;
     }
 
     @Override

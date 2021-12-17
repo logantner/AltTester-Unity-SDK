@@ -135,13 +135,17 @@ class WebsocketConnection:
             for callback in self.load_scene_callbacks:
                 callback(load_scene_result)
         
-        if(message.get("commandName") == "hierarchyChangedNotification"):
+        elif(message.get("commandName") == "hierarchyChangedNotification"):
             data = json.loads(message.get("data"))
             hierarchy_changed_result = HierarchyChangedNotificationResult(
                 data.get("objectName"), HierarchyMode(data.get("hierarchyMode")))
             for callback in self.hierarchy_changed_callbacks:
                 callback(hierarchy_changed_result)
 
+        elif(message.get("commandName") == "unloadSceneNotification"):
+            scene_name = json.loads(message.get("data"))
+            for callback in self.unload_scene_callbacks:
+                callback(scene_name)
 
     def _on_error(self, ws, error):
         """A callback which is called when the connection gets an error."""
@@ -208,6 +212,11 @@ class WebsocketConnection:
                 self.load_scene_callbacks = [notification_callback]
             else:
                 self.load_scene_callbacks += notification_callback
+        if(notification_type == NotificationType.UNLOADSCENE):
+            if(overwrite):
+                self.unload_scene_callbacks = [notification_callback]
+            else:
+                self.unload_scene_callbacks += notification_callback
 
         if(notification_type == NotificationType.HIERARCHYCHANGED):
             if(overwrite):
@@ -221,3 +230,5 @@ class WebsocketConnection:
 
         if(notification_type == NotificationType.HIERARCHYCHANGED):
             self.hierarchy_changed_callbacks = []
+        if(notification_type == NotificationType.UNLOADSCENE):
+            self.unload_scene_callbacks = []

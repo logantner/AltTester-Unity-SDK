@@ -22,6 +22,7 @@ namespace Altom.AltUnityDriver.Commands
         private Queue<CommandResponse> messages;
         private List<Action<AltUnityLoadSceneNotificationResultParams>> loadSceneCallbacks = new List<Action<AltUnityLoadSceneNotificationResultParams>>();
         private List<Action<AltUnityHierarchyNotificationResultParams>> hierarchyCallbacks = new List<Action<AltUnityHierarchyNotificationResultParams>>();
+        private List<Action<String>> unloadSceneCallbacks = new List<Action<String>>();
 
 
         private int commandTimeout = 20;
@@ -164,6 +165,13 @@ namespace Altom.AltUnityDriver.Commands
                         callback(hierarchyData);
                     }
                     break;
+                case "unloadSceneNotification":
+                    string sceneName = JsonConvert.DeserializeObject<string>(message.data);
+                    foreach (var callback in unloadSceneCallbacks)
+                    {
+                        callback(sceneName);
+                    }
+                    break;
             }
         }
 
@@ -243,6 +251,13 @@ namespace Altom.AltUnityDriver.Commands
                     loadSceneCallbacks.Add(callback as Action<AltUnityLoadSceneNotificationResultParams>);
                     break;
                 case NotificationType.UNLOADSCENE:
+                    if (callback.GetType() != typeof(Action<String>))
+                    {
+                        throw new InvalidCastException(String.Format("callback must be of type: {0} and not {1}", typeof(Action<String>), callback.GetType()));
+                    }
+                    if (overwrite)
+                        unloadSceneCallbacks.Clear();
+                    unloadSceneCallbacks.Add(callback as Action<String>);
                     break;
                 case NotificationType.HIERARCHYCHANGED:
                     if (callback.GetType() != typeof(Action<AltUnityHierarchyNotificationResultParams>))
@@ -264,6 +279,7 @@ namespace Altom.AltUnityDriver.Commands
                     loadSceneCallbacks.Clear();
                     break;
                 case NotificationType.UNLOADSCENE:
+                    unloadSceneCallbacks.Clear();
                     break;
                 case NotificationType.HIERARCHYCHANGED:
                     hierarchyCallbacks.Clear();

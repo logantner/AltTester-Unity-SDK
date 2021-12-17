@@ -19,6 +19,9 @@ public class BaseNotificationCallbacks implements INotificationCallbacks {
             logger.info("Object " + altUnityLoadSceneNotificationResultParams.objectName + " was " 
                     + altUnityLoadSceneNotificationResultParams.hierarchyMode);
         }
-    )
+    
+    public void SceneUnloadedCallBack(String sceneName) {
+        logger.info("Scene " + sceneName + " was unloaded ");
+    }
 
 }

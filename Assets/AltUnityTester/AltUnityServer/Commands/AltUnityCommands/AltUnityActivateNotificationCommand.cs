@@ -22,11 +22,11 @@ namespace Altom.AltUnityTester.Commands
                     new AltUnityLoadSceneNotification(commandHandler, true);
                     break;
                 case NotificationType.UNLOADSCENE:
-                    throw new NotImplementedException();
+                    new AltUnityUnloadSceneNotification(commandHandler, true);
+                    break;
                 case NotificationType.HIERARCHYCHANGED:
                     new AltUnityHierarchyChangedNotification(commandHandler, true);
                     break;
-                
             }
             return "Ok";
         }

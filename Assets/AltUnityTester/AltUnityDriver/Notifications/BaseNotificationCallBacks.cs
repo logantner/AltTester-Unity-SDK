@@ -14,5 +14,9 @@ namespace Altom.AltUnityDriver.Notifications
         {
             logger.Log(LogLevel.Info, String.Format("Object {0} was updated to {1}", altUnityHierarchyNotificationResultParams.objectName, altUnityHierarchyNotificationResultParams.hierarchyMode.ToString()));
         }
+        public void SceneUnloadedCallback(string sceneName)
+        {
+            logger.Log(LogLevel.Info, String.Format("Scene {0} was unloaded", sceneName));
+        }
     }
 }

@@ -9,3 +9,5 @@ class BaseNotificationCallbacks():
     def hierarchy_changed_callback(self, hierarchy_changed_notification_result):
         logger.debug("Object {0} was {1}".format(str(hierarchy_changed_notification_result.object_name),
                                                 str(hierarchy_changed_notification_result.hierarchy_mode)))
+    def scene_unloaded_callback(self, scene_name):
+        logger.debug("Scene {0} was unloaded".format(scene_name))

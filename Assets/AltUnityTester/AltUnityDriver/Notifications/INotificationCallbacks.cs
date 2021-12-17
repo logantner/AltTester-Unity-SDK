@@ -5,5 +5,6 @@ namespace Altom.AltUnityDriver.Notifications
     {
         void SceneLoadedCallback(AltUnityLoadSceneNotificationResultParams altUnityLoadSceneNotificationResultParams);
         void HierarchyChangesCallback(AltUnityHierarchyNotificationResultParams altUnityHierarchyNotificationResultParams);
+        void SceneUnloadedCallback(string sceneName);
     }
 }

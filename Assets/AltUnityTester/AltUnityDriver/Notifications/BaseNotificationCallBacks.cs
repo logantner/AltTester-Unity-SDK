@@ -12,7 +12,7 @@ namespace Altom.AltUnityDriver.Notifications
         }
         public void HierarchyChangesCallback(AltUnityHierarchyNotificationResultParams altUnityHierarchyNotificationResultParams)
         {
-            logger.Log(LogLevel.Info, String.Format("Object {0} was updated to {1}", altUnityHierarchyNotificationResultParams.objectName, altUnityHierarchyNotificationResultParams.hierarchyMode.ToString()));
+            logger.Log(LogLevel.Info, String.Format("The objects in hierarchy were {0}", altUnityHierarchyNotificationResultParams.hierarchyMode.ToString()));
         }
         public void SceneUnloadedCallback(string sceneName)
         {

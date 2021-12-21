@@ -1,6 +1,7 @@
 using System.Reflection;
 using Altom.AltUnityDriver.Notifications;
 using Altom.AltUnityTester.Communication;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -11,21 +12,21 @@ namespace Altom.AltUnityTester.Notification
 {
     public class AltUnityHierarchyChangedNotification : BaseNotification
     {
-        
+        static bool sendNotification = false;
         public AltUnityHierarchyChangedNotification(ICommandHandler commandHandler, bool isOn) : base(commandHandler)
         {
-            EditorApplication.hierarchyChanged -= onHierarchyChanged;
-
-            if(isOn)
-            {
-                EditorApplication.hierarchyChanged += onHierarchyChanged;
-            }
+            sendNotification = isOn;
         }
 
-        static void onHierarchyChanged(GameObject gameObject, AltUnityHierarchyMode mode)
+        
+    
+        public static void onHierarchyChanged(string mode)
         {
-            var data = new AltUnityHierarchyNotificationResultParams(gameObject.name, (AltUnityHierarchyMode)mode);
-            SendNotification(data, "hierarchyChangedNotification");
+            if(sendNotification)
+            {
+                SendNotification(mode, "hierarchyChangedNotification");
+            }
+
         }
     }
 }

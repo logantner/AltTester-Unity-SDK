@@ -16,7 +16,7 @@ public class BaseNotificationCallbacks implements INotificationCallbacks {
     @Override
     public void HierarchyChangedCallBack(
         AltUnityHierarchyChangedNotificationResultParams altUnityLoadSceneNotificationResultParams){
-            logger.info("Object " + altUnityLoadSceneNotificationResultParams.objectName + " was " 
+            logger.info("Objects in hierarchy were " 
                     + altUnityLoadSceneNotificationResultParams.hierarchyMode);
         }
     

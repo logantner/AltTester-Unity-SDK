@@ -7,7 +7,7 @@ from loguru import logger
 import websocket
 from altunityrunner.commands.Notifications.load_scene_notification_result import LoadSceneNotificationResult
 from altunityrunner.commands.Notifications.load_scene_mode import LoadSceneMode
-from altunityrunner.commands.Notifications.hierarchy_mode import HierarchyMode
+from altunityrunner.commands.Notifications.hierarchy_changed_mode import HierarchyMode
 from altunityrunner.commands.Notifications.hierarchy_changed_notification_result import HierarchyChangedNotificationResult
 from altunityrunner.commands.Notifications.notification_type import NotificationType
 
@@ -138,7 +138,7 @@ class WebsocketConnection:
         elif(message.get("commandName") == "hierarchyChangedNotification"):
             data = json.loads(message.get("data"))
             hierarchy_changed_result = HierarchyChangedNotificationResult(
-                data.get("objectName"), HierarchyMode(data.get("hierarchyMode")))
+                HierarchyMode(data.get("hierarchyMode")))
             for callback in self.hierarchy_changed_callbacks:
                 callback(hierarchy_changed_result)
 
@@ -212,13 +212,13 @@ class WebsocketConnection:
                 self.load_scene_callbacks = [notification_callback]
             else:
                 self.load_scene_callbacks += notification_callback
-        if(notification_type == NotificationType.UNLOADSCENE):
+        elif(notification_type == NotificationType.UNLOADSCENE):
             if(overwrite):
                 self.unload_scene_callbacks = [notification_callback]
             else:
                 self.unload_scene_callbacks += notification_callback
 
-        if(notification_type == NotificationType.HIERARCHYCHANGED):
+        elif(notification_type == NotificationType.HIERARCHYCHANGED):
             if(overwrite):
                 self.hierarchy_changed_callbacks = [notification_callback]
             else:
@@ -228,7 +228,7 @@ class WebsocketConnection:
         if(notification_type == NotificationType.LOADSCENE):
             self.load_scene_callbacks = []
 
-        if(notification_type == NotificationType.HIERARCHYCHANGED):
+        elif(notification_type == NotificationType.HIERARCHYCHANGED):
             self.hierarchy_changed_callbacks = []
-        if(notification_type == NotificationType.UNLOADSCENE):
+        elif(notification_type == NotificationType.UNLOADSCENE):
             self.unload_scene_callbacks = []

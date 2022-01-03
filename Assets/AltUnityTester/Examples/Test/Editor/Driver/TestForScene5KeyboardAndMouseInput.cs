@@ -19,6 +19,8 @@ namespace Altom.AltUnityDriver.Tests
             altUnityDriver = new AltUnityDriver(host: TestsHelper.GetAltUnityDriverHost(), port: TestsHelper.GetAltUnityDriverPort(), enableLogging: true);
             DriverLogManager.SetMinLogLevel(AltUnityLogger.Console, AltUnityLogLevel.Info);
             DriverLogManager.SetMinLogLevel(AltUnityLogger.Unity, AltUnityLogLevel.Info);
+            altUnityDriver.LoadScene("Scene 5 Keyboard Input");
+
         }
 
         //At the end of the test closes the connection with the socket
@@ -32,14 +34,13 @@ namespace Altom.AltUnityDriver.Tests
         //Test input made with axis
         public void TestMovementCube()
         {
-            altUnityDriver.LoadScene("Scene 5 Keyboard Input");
 
 
             var cube = altUnityDriver.FindObject(By.NAME, "Player1");
             AltUnityVector3 cubeInitialPostion = new AltUnityVector3(cube.worldX, cube.worldY, cube.worldY);
-            altUnityDriver.PressKey(AltUnityKeyCode.K, 1, 2, wait: false);
-            Thread.Sleep(2000);
-            altUnityDriver.PressKey(AltUnityKeyCode.O, 1, 1);
+            altUnityDriver.PressKey(AltUnityKeyCode.K, wait: false);
+            Thread.Sleep(200);
+            altUnityDriver.PressKey(AltUnityKeyCode.O);
 
             cube = altUnityDriver.FindObject(By.NAME, "Player1");
             AltUnityVector3 cubeFinalPosition = new AltUnityVector3(cube.worldX, cube.worldY, cube.worldY);
@@ -52,12 +53,11 @@ namespace Altom.AltUnityDriver.Tests
         [Test]
         public void TestCameraMovement()
         {
-            altUnityDriver.LoadScene("Scene 5 Keyboard Input");
 
             var cube = altUnityDriver.FindObject(By.NAME, "Player1");
             AltUnityVector3 cubeInitialPostion = cube.getWorldPosition();
 
-            altUnityDriver.PressKey(AltUnityKeyCode.W, 1, 2);
+            altUnityDriver.PressKey(AltUnityKeyCode.W);
             cube = altUnityDriver.FindObject(By.NAME, "Player1");
             AltUnityVector3 cubeFinalPosition = cube.getWorldPosition();
 
@@ -68,7 +68,6 @@ namespace Altom.AltUnityDriver.Tests
         //Testing mouse movement and clicking
         public void TestCreatingStars()
         {
-            altUnityDriver.LoadScene("Scene 5 Keyboard Input");
 
             var stars = altUnityDriver.FindObjectsWhichContain(By.NAME, "Star", cameraValue: "Player2");
             var pressingpoint1 = altUnityDriver.FindObjectWhichContains(By.NAME, "PressingPoint1", cameraValue: "Player2");
@@ -89,16 +88,14 @@ namespace Altom.AltUnityDriver.Tests
         [Test]
         public void TestKeyboardPress()
         {
-            altUnityDriver.LoadScene("Scene 5 Keyboard Input");
             var lastKeyDown = altUnityDriver.FindObject(By.NAME, "LastKeyDownValue");
             var lastKeyUp = altUnityDriver.FindObject(By.NAME, "LastKeyUpValue");
             var lastKeyPress = altUnityDriver.FindObject(By.NAME, "LastKeyPressedValue");
-            var runner = altUnityDriver.FindObject(By.NAME, "AltUnityRunnerPrefab");
             foreach (AltUnityKeyCode kcode in Enum.GetValues(typeof(AltUnityKeyCode)))
             {
                 if (kcode != AltUnityKeyCode.NoKey)
                 {
-                    altUnityDriver.PressKey(kcode, duration: 0.2f);
+                    altUnityDriver.PressKey(kcode);
 
                     Assert.AreEqual((int)kcode, (int)Enum.Parse(typeof(AltUnityKeyCode), lastKeyDown.GetText(), true));
                     Assert.AreEqual((int)kcode, (int)Enum.Parse(typeof(AltUnityKeyCode), lastKeyUp.GetText(), true));
@@ -110,7 +107,6 @@ namespace Altom.AltUnityDriver.Tests
         [Test]
         public void TestKeyDownAndKeyUp()
         {
-            altUnityDriver.LoadScene("Scene 5 Keyboard Input");
             AltUnityKeyCode kcode = AltUnityKeyCode.A;
 
             altUnityDriver.KeyDown(kcode, 1);
@@ -175,12 +171,11 @@ namespace Altom.AltUnityDriver.Tests
         [Test]
         public void TestScroll()
         {
-            altUnityDriver.LoadScene("Scene 5 Keyboard Input");
             var player2 = altUnityDriver.FindObject(By.NAME, "Player2");
 
             AltUnityVector3 cubeInitialPostion = new AltUnityVector3(player2.worldX, player2.worldY, player2.worldY);
-            altUnityDriver.Scroll(4, 2, wait: false);
-            Thread.Sleep(2000);
+            altUnityDriver.Scroll(4, 1, wait: false);
+            Thread.Sleep(1000);
             player2 = altUnityDriver.FindObject(By.NAME, "Player2");
             AltUnityVector3 cubeFinalPosition = new AltUnityVector3(player2.worldX, player2.worldY, player2.worldY);
 
@@ -189,10 +184,9 @@ namespace Altom.AltUnityDriver.Tests
         [Test]
         public void TestScrollAndWait()
         {
-            altUnityDriver.LoadScene("Scene 5 Keyboard Input");
             var player2 = altUnityDriver.FindObject(By.NAME, "Player2");
             AltUnityVector3 cubeInitialPostion = new AltUnityVector3(player2.worldX, player2.worldY, player2.worldY);
-            altUnityDriver.Scroll(4, 2);
+            altUnityDriver.Scroll(4, 1);
 
             player2 = altUnityDriver.FindObject(By.NAME, "Player2");
             AltUnityVector3 cubeFinalPosition = new AltUnityVector3(player2.worldX, player2.worldY, player2.worldY);

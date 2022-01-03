@@ -6,6 +6,6 @@ public class AltUnityExampleScriptDestroyObject : MonoBehaviour {
 
     public void Awake()
     {
-        Destroy(gameObject, 5);
+        Destroy(gameObject, 1);
     }
 }

@@ -92,20 +92,11 @@ namespace Altom.AltUnityDriver.Tests
         [Test]
         public void TestGetAllEnabledElements()
         {
-            Thread.Sleep(2000);
-
+            altUnityDriver.WaitForObject(By.NAME, "EventSystem", timeout: 2, interval: 0.1f);
             var altElements = altUnityDriver.GetAllElements(enabled: true);
             Assert.IsNotEmpty(altElements);
 
-            string listOfElements = "";
-            foreach (var element in altElements)
-            {
-                listOfElements += element.name + "; ";
-            }
-
-            Debug.WriteLine(listOfElements);
-
-            Assert.AreEqual(24, altElements.Count, listOfElements);
+            Assert.AreEqual(24, altElements.Count);
             Assert.IsNotNull(altElements.Where(p => p.name == "EventSystem"));
             Assert.IsNotNull(altElements.Where(p => p.name == "Canvas"));
             Assert.IsNotNull(altElements.Where(p => p.name == "Panel Drag Area"));
@@ -124,18 +115,11 @@ namespace Altom.AltUnityDriver.Tests
         [Test]
         public void TestGetAllElements()
         {
-            altUnityDriver.WaitForObject(By.NAME, "EventSystem", timeout: 2);
+            altUnityDriver.WaitForObject(By.NAME, "EventSystem", timeout: 2, interval: 0.1f);
 
             var altElements = altUnityDriver.GetAllElements(enabled: false);
             Assert.IsNotEmpty(altElements);
-
-            string listOfElements = "";
-            foreach (var element in altElements)
-            {
-                listOfElements += element.name + "; ";
-            }
-            Assert.AreEqual(19, altElements.FindIndex(e => e.name == "AltUnityRunnerPrefab"));
-
+            Assert.AreEqual(19, altElements.Count());
             Assert.IsNotNull(altElements.Where(p => p.name == "EventSystem"));
             Assert.IsNotNull(altElements.Where(p => p.name == "Canvas"));
             Assert.IsNotNull(altElements.Where(p => p.name == "Panel Drag Area"));
@@ -163,6 +147,7 @@ namespace Altom.AltUnityDriver.Tests
             Thread.Sleep(1000);
             var color2 = panel.GetComponentProperty<AltUnityColor>("AltUnityExampleScriptPanel", "highlightColor");
             Assert.AreNotEqual(color1, color2);
+            panel.PointerUpFromObject();
         }
 
         [Test]
@@ -208,13 +193,14 @@ namespace Altom.AltUnityDriver.Tests
         [Test]
         public void TestCreateTouchTwice()
         {
-            var draggableArea = altUnityDriver.FindObject(By.NAME, "Drag Zone");
+            var dragZone = "Drag Zone";
+            var draggableArea = altUnityDriver.FindObject(By.NAME, dragZone);
             var initialPosition = draggableArea.getScreenPosition();
             int fingerId = altUnityDriver.BeginTouch(draggableArea.getScreenPosition());
             AltUnityVector2 newPosition = new AltUnityVector2(draggableArea.x + 20, draggableArea.y + 10);
             altUnityDriver.MoveTouch(fingerId, newPosition);
             altUnityDriver.EndTouch(fingerId);
-            draggableArea = altUnityDriver.FindObject(By.NAME, "Drag Zone");
+            draggableArea = altUnityDriver.FindObject(By.NAME, dragZone);
             var secondPosition = draggableArea.getScreenPosition();
             Assert.AreNotEqual(initialPosition, secondPosition);
 
@@ -222,7 +208,7 @@ namespace Altom.AltUnityDriver.Tests
             newPosition = new AltUnityVector2(draggableArea.x + 20, draggableArea.y + 10);
             altUnityDriver.MoveTouch(fingerId, newPosition);
             altUnityDriver.EndTouch(fingerId);
-            draggableArea = altUnityDriver.FindObject(By.NAME, "Drag Zone");
+            draggableArea = altUnityDriver.FindObject(By.NAME, dragZone);
             Assert.AreNotEqual(secondPosition, draggableArea.getScreenPosition());
 
         }

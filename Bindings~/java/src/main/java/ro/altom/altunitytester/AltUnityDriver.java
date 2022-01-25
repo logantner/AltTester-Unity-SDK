@@ -277,7 +277,7 @@ public class AltUnityDriver {
     /**
      * Simulate mouse movement in your game.
      *
-     * @param altMoveMouseParameters the builder for the move mouse command.
+     * @param altMoveMouseParams the builder for the move mouse command.
      */
     public void moveMouse(AltMoveMouseParams altMoveMouseParams) {
         new AltMoveMouse(this.connection.messageHandler, altMoveMouseParams).Execute();

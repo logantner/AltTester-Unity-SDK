@@ -26,7 +26,7 @@
 #   - pip install -e "Bindings~/python" --root "Bindings~/python"
 
 stages:
-  - unit-tests
+  # - unit-tests
   # - build
   # - test
   # - docs
@@ -56,18 +56,16 @@ stages:
 #   script:
 #     - flake8 .
 #     - pytest tests/unit
-
-# TODO: Add unit tests for Java
-java-unit-tests:
-  stage: unit-tests
-  image: maven:3-openjdk-11
-  interruptible: true
-  before_script:
-    - cd Bindings~/java/
-  script:
-    - mvn validate
-    - mvn compile
-    - mvn verify
+# # TODO: Add unit tests for Java
+# java-unit-tests:
+#   stage: unit-tests
+#   image: maven:3-openjdk-11
+#   interruptible: true
+#   before_script:
+#     - cd Bindings~/java/
+#   script:
+#     - mvn validate
+#     - mvn compile
 
 # # TODO: Add unit tests for .NET
 # dotnet-unit-tests:

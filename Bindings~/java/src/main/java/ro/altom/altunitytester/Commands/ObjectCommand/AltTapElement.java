@@ -5,14 +5,7 @@ import ro.altom.altunitytester.AltUnityObject;
 import ro.altom.altunitytester.Commands.AltBaseCommand;
 
 public class AltTapElement extends AltBaseCommand {
-    /**
-     * @param command The parameters
-     */
     private AltTapClickElementParams parameters;
-
-    /**
-     * @param altUnityObject The game object
-     */
 
     public AltTapElement(IMessageHandler messageHandler,
             AltTapClickElementParams parameters) {

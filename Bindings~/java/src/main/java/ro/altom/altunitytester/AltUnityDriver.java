@@ -120,7 +120,6 @@ public class AltUnityDriver {
     /**
      * Unloads a scene.
      * 
-     * @param sceneName - the scene name
      */
     public void unloadScene(AltUnloadSceneParams unloadSceneParams) {
         new AltUnloadScene(this.connection.messageHandler, unloadSceneParams).Execute();
@@ -346,7 +345,6 @@ public class AltUnityDriver {
      * 
      * @param altWaitForCurrentSceneToBeParameters - Wait for current scene
      *                                             parameters
-     * @return {String} -
      */
     public void waitForCurrentSceneToBe(AltWaitForCurrentSceneToBeParams altWaitForCurrentSceneToBeParameters) {
         new AltWaitForCurrentSceneToBe(this.connection.messageHandler, altWaitForCurrentSceneToBeParameters)

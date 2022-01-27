@@ -410,6 +410,6 @@ publish-maven-package:
   before_script:
     - cd "Bindings~/java"
   script:
-    - export GPG_TTY=$TTY
+    - export GPG_TTY=$(TTY)
     - echo $GPG_TTY
-    - mvn clean deploy -X -Darguments="-Dgpg.passphrase=${GPG_PASSWORD}" -f pom-release.xml -DskipTests
+    - mvn clean deploy -Darguments="-Dgpg.passphrase=${GPG_PASSWORD}" -f pom-release.xml -DskipTests

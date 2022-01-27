@@ -422,9 +422,9 @@ publish-maven-package:
 
 dev-docs:
   stage: docs
-  only:
-    refs:
-      - master
+#  only:
+#    refs:
+#      - master
   trigger: altom/altunity/altunitytester-dev
 
 pages:

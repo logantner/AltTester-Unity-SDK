@@ -29,6 +29,7 @@ stages:
   - unit-tests
   - build
   - test
+  - package
   - docs
   - deploy
 
@@ -308,13 +309,13 @@ java-android-tests:
       - AltUnityTesterLog.txt
 
 create-unity-package:
-  stage: docs
+  stage: package
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
       when: never
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: always
-    - when: never
+    - when: always
   tags:
     - unity
     - mac
@@ -337,13 +338,13 @@ create-unity-package:
       - public
 
 create-jar-archive:
-  stage: docs
+  stage: package
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_MESSAGE =~ /^Documentation.*/'
       when: never
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: always
-    - when: never
+    - when: always
   tags:
     - unity
     - mac
@@ -424,6 +425,10 @@ dev-docs:
   only:
     refs:
       - master
+  artifacts:
+    when: always
+    paths:
+      - public
   trigger: altom/altunity/altunitytester-dev
 
 pages:

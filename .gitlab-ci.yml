@@ -406,6 +406,7 @@ publish-maven-package:
   tags:
     - unity
     - mac
+    - java_release
   before_script:
     - cd "Bindings~/java"
   script:

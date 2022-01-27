@@ -425,10 +425,6 @@ dev-docs:
   only:
     refs:
       - master
-  artifacts:
-    when: always
-    paths:
-      - public
   trigger: altom/altunity/altunitytester-dev
 
 pages:

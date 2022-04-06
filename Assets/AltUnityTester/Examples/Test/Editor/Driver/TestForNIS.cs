@@ -12,6 +12,8 @@ public class TestForNIS
     string scene9 = "Assets/AltUnityTester/Examples/Scenes/scene 9 NIS.unity";
     string scene10 = "Assets/AltUnityTester/Examples/Scenes/Scene 10 Sample NIS.unity";
     string scene11 = "Assets/AltUnityTester/Examples/Scenes/Scene 7 New Input System Actions.unity";
+    string scene12 = "Assets/AltUnityTester/Examples/Scenes/Scene6.unity";
+
 
     [OneTimeSetUp]
     public void SetUp()
@@ -49,28 +51,37 @@ public class TestForNIS
         Assert.AreNotEqual(scrollbarPosition.y,scrollbarPositionFinal.y);
 
     }
-
-
     
-        [Test]
-        public void TestClickObject()
-        {
-            altUnityDriver.LoadScene(scene11);
-            var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");
-            capsule.Click();
-            Assert.True(capsule.GetComponentProperty<bool>("AltUnityExampleNewInputSystem", "wasClicked", "Assembly-CSharp"));
-            
-        }
+    [Test]
+    public void TestClickObject()
+    {
+        altUnityDriver.LoadScene(scene11);
+        var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");
+        capsule.Click();
+        Assert.True(capsule.GetComponentProperty<bool>("AltUnityExampleNewInputSystem", "wasClicked", "Assembly-CSharp"));
+        
+    }
 
-        [Test]
-        public void TestClickCoordinates()
-        {
-            altUnityDriver.LoadScene(scene11);
-            var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");
-            altUnityDriver.Click(new AltUnityVector2(capsule.x, capsule.y));
-            Assert.True(capsule.GetComponentProperty<bool>("AltUnityExampleNewInputSystem", "wasClicked", "Assembly-CSharp"));
+    [Test]
+    public void TestClickCoordinates()
+    {
+        altUnityDriver.LoadScene(scene11);
+        var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");
+        altUnityDriver.Click(new AltUnityVector2(capsule.x, capsule.y));
+        Assert.True(capsule.GetComponentProperty<bool>("AltUnityExampleNewInputSystem", "wasClicked", "Assembly-CSharp"));
 
-        }
+    }
+
+    [Test]
+    public void TestSwipe()
+    {
+        altUnityDriver.LoadScene(scene9);
+        var button = altUnityDriver.FindObject(By.PATH, "//Scroll View/Viewport/Content/Button (4)");
+        altUnityDriver.Swipe(new AltUnityVector2(button.x + 1, button.y + 1), new AltUnityVector2(button.x + 2, button.y + 10), 1);
+        Thread.Sleep(500);
+
+    }
+
        
 
 }

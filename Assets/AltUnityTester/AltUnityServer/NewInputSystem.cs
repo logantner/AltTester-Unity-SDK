@@ -118,6 +118,50 @@ public class NewInputSystem : MonoBehaviour
         }
     }
 
+    internal static IEnumerator MultipointSwipeLifeCycle(UnityEngine.Vector2[] positions, float duration)
+    {
+        Touchscreen.MakeCurrent();
+        // var touch = new UnityEngine.InputSystem.Controls.TouchControl
+        // {
+        //     phase = UnityEngine.InputSystem.TouchPhase.Began,
+        //     position = positions[0]
+        // };
+        var touch = new UnityEngine.Touch
+        {
+            phase = UnityEngine.TouchPhase.Began,
+            position = positions[0]
+        };
+        var touchId = 0;
+        yield return null;
+        // InputTestFixture.BeginTouch(touchId,positions[0]);
+        var oneInputDuration = duration / (positions.Length - 1);
+        UnityEngine.Vector2 touchPosition = positions[0]; 
+        for(var i = 1; i< positions.Length;i++)
+        {
+            var wholeDelta = positions[i] - positions[0];
+            var deltaPerSecond = wholeDelta / oneInputDuration;
+            float time = 0;
+            do
+            {
+                UnityEngine.Vector2 previousPosition = touchPosition;
+                if (time + UnityEngine.Time.unscaledDeltaTime < oneInputDuration)
+                {
+                    touchPosition += deltaPerSecond * UnityEngine.Time.unscaledDeltaTime;
+                }
+                else
+                {
+                    touchPosition = positions[i];
+                }
+                time += UnityEngine.Time.unscaledDeltaTime;
+                InputTestFixture.BeginTouch(touchId,touchPosition);
+                yield return null;
+            } while(time <= oneInputDuration);
+        }
+        yield return null;
+        InputTestFixture.EndTouch(touchId,positions[positions.Length - 1]);
+        // yield return null;
+    }
+
 }
 
 

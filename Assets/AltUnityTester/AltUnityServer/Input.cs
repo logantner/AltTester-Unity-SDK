@@ -699,10 +699,6 @@ public class Input : MonoBehaviour
         _instance.StartCoroutine(runThrowingIterator(tapClickCoordinatesLifeCycle(coordinates, count, interval, true), onFinish));
     }
 
-    public static void SetMultipointSwipe(UnityEngine.Vector2[] positions, float duration, Action<Exception> onFinish)
-    {
-        _instance.StartCoroutine(runThrowingIterator(MultipointSwipeLifeCycle(positions, duration), onFinish));
-    }
 
     public static System.Collections.IEnumerator MultipointSwipeLifeCycle(UnityEngine.Vector2[] positions, float duration)
     {

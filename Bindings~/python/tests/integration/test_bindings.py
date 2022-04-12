@@ -1421,3 +1421,49 @@ class TestPythonBindings:
         capsule = self.altdriver.find_object(By.NAME, "Capsule")
         self.altdriver.click(capsule.get_screen_position())
         assert capsule.get_component_property("AltUnityExampleNewInputSystem", "wasClicked", "Assembly-CSharp") is True
+
+    def test_multipoint_swipe_NIS(self):
+        self.altdriver.load_scene("Assets/AltUnityTester/Examples/Scenes/Scene 7 Drag And Drop NIS.unity")
+        alt_unity_object1 = self.altdriver.find_object(By.NAME, "Drag Image1")
+        alt_unity_object2 = self.altdriver.find_object(By.NAME, "Drop Box1")
+
+        multipointPositions = [alt_unity_object1.get_screen_position(), [alt_unity_object2.x, alt_unity_object2.y]]
+
+        self.altdriver.multipoint_swipe(multipointPositions, 2)
+        time.sleep(2)
+
+        alt_unity_object1 = self.altdriver.find_object(By.NAME, "Drag Image1")
+        alt_unity_object2 = self.altdriver.find_object(By.NAME, "Drop Box1")
+        alt_unity_object3 = self.altdriver.find_object(By.NAME, "Drop Box2")
+
+        positions = [
+            [alt_unity_object1.x, alt_unity_object1.y],
+            [alt_unity_object2.x, alt_unity_object2.y],
+            [alt_unity_object3.x, alt_unity_object3.y]
+        ]
+
+        self.altdriver.multipoint_swipe(positions, 3)
+        imageSource = self.altdriver.find_object(
+            By.NAME, "Drag Image1").get_component_property("UnityEngine.UI.Image", "sprite")
+        imageSourceDropZone = self.altdriver.find_object(
+            By.NAME, "Drop Image").get_component_property("UnityEngine.UI.Image", "sprite")
+        assert imageSource["name"] != imageSourceDropZone["name"]
+
+        imageSource = self.altdriver.find_object(
+            By.NAME, "Drag Image2").get_component_property("UnityEngine.UI.Image", "sprite")
+        imageSourceDropZone = self.altdriver.find_object(
+            By.NAME, "Drop").get_component_property("UnityEngine.UI.Image", "sprite")
+        assert imageSource["name"] != imageSourceDropZone["name"]
+
+    def test_swipe_NIS(self):
+        self.altdriver.load_scene("Assets/AltUnityTester/Examples/Scenes/scene 9 NIS.unity")
+        scrollbar = self.altdriver.find_object(By.NAME, "Handle")
+        scrollbarPosition = scrollbar.get_screen_position()
+        button = self.altdriver.find_object(By.PATH, "//Scroll View/Viewport/Content/Button (4)")
+        self.altdriver.swipe(button.get_screen_position(),
+            (button.x, button.y + 20),
+            duration = 2
+            )
+        scrollbarFinal = self.altdriver.find_object(By.NAME, "Handle")
+        scrollbarPositionFinal = scrollbarFinal.get_screen_position()
+        assert scrollbarPosition != scrollbarPositionFinal

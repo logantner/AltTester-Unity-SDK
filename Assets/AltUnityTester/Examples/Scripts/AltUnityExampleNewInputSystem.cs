@@ -17,6 +17,9 @@ public class AltUnityExampleNewInputSystem : MonoBehaviour
     public Text swipeText;
     public Rigidbody capsuleRigidBody;
     
+    void Update() {
+        wasClicked = Mouse.current.position.ReadValue() != Vector2.zero;
+    }
     public void Jump(InputAction.CallbackContext context)
     {
         if(context.action.name == "Jump" && context.phase is InputActionPhase.Performed)

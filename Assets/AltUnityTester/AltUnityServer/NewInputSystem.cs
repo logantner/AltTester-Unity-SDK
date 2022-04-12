@@ -142,7 +142,7 @@ public class NewInputSystem : MonoBehaviour
         InputTestFixture.EndTouch(touchId, positions[positions.Length-1]);
 
     }
-
+    
 }
 
 

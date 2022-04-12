@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 
 public class TestsForNIS {
     private static AltUnityDriver altUnityDriver;
-    String scene7 = "Assets/AltUnityTester/Examples/Scenes/Scene 7 Drag And Drop NIS";
+    String scene7 = "Assets/AltUnityTester/Examples/Scenes/Scene 7 Drag And Drop NIS.unity";
     String scene8 = "Assets/AltUnityTester/Examples/Scenes/Scene 8 Draggable Panel NIP.unity";
     String scene9 = "Assets/AltUnityTester/Examples/Scenes/scene 9 NIS.unity";
     String scene10 = "Assets/AltUnityTester/Examples/Scenes/Scene 10 Sample NIS.unity";

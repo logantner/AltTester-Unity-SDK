@@ -1460,9 +1460,10 @@ class TestPythonBindings:
         scrollbar = self.altdriver.find_object(By.NAME, "Handle")
         scrollbarPosition = scrollbar.get_screen_position()
         button = self.altdriver.find_object(By.PATH, "//Scroll View/Viewport/Content/Button (4)")
-        self.altdriver.swipe(button.get_screen_position(),
+        self.altdriver.swipe(
+            button.get_screen_position(),
             (button.x, button.y + 20),
-            duration = 2
+            duration=2
             )
         scrollbarFinal = self.altdriver.find_object(By.NAME, "Handle")
         scrollbarPositionFinal = scrollbarFinal.get_screen_position()

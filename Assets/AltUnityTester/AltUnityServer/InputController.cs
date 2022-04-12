@@ -116,11 +116,9 @@ public class InputController
         List<IEnumerator> coroutines = new List<IEnumerator>();
 #if ENABLE_INPUT_SYSTEM
         coroutines.Add(NewInputSystem.MultipointSwipeLifeCycle(positions, duration));
-        UnityEngine.Debug.Log("I m in new input");
 #endif
 #if ENABLE_LEGACY_INPUT_MANAGER
         coroutines.Add(Input.MultipointSwipeLifeCycle(positions, duration));
-        UnityEngine.Debug.Log("I m in old input");
 #endif
         AltUnityRunner._altUnityRunner.StartCoroutine(runThrowingIterator(coroutines, onFinish));
 #else

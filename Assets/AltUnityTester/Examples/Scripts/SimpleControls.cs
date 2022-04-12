@@ -55,7 +55,7 @@ public class @SimpleControls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""abb776f3-f329-4f7b-bbf8-b577d13be018"",
-                    ""path"": ""*/{PrimaryAction}"",
+                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -188,28 +188,12 @@ public class @SimpleControls : IInputActionCollection, IDisposable
         },
         {
             ""name"": ""Capsule"",
-            ""id"": ""ec9a535c-c00a-4ba6-9230-22565bffa523"",
+            ""id"": ""e6769226-6e59-4aca-8428-1adae166c9ac"",
             ""actions"": [
-                {
-                    ""name"": ""PrimaryContact"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""c6c972ea-8cec-4486-94d3-24dfc5a78685"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press""
-                },
-                {
-                    ""name"": ""PrimaryPosition"",
-                    ""type"": ""Button"",
-                    ""id"": ""f939400d-6689-4783-9268-8abb0b66536b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
                 {
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
-                    ""id"": ""40b0b7b7-7e77-4d98-957c-e8dffc01fbaf"",
+                    ""id"": ""cb6ff29f-da1c-49df-8aa4-0842111b3b9c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -218,29 +202,7 @@ public class @SimpleControls : IInputActionCollection, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""d2298ad4-af70-4cb2-816b-fda9292b6b44"",
-                    ""path"": ""<Touchscreen>/primaryTouch/press"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PrimaryContact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5e3bf571-3155-49c4-ba32-c43e07e27f9c"",
-                    ""path"": ""<Touchscreen>/touch1/tap"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PrimaryPosition"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e349e1b7-3429-4215-9862-95e0388f064f"",
+                    ""id"": ""45176413-3f66-4962-8349-b3222796103a"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -251,9 +213,9 @@ public class @SimpleControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3e9374ce-22c4-4507-8ae5-4e3799c00545"",
+                    ""id"": ""a0f7c6ea-623c-451c-95c5-103175203af7"",
                     ""path"": ""<Touchscreen>/primaryTouch/tap"",
-                    ""interactions"": """",
+                    ""interactions"": ""Tap"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Jump"",
@@ -273,8 +235,6 @@ public class @SimpleControls : IInputActionCollection, IDisposable
         m_gameplay_jump = m_gameplay.FindAction("jump", throwIfNotFound: true);
         // Capsule
         m_Capsule = asset.FindActionMap("Capsule", throwIfNotFound: true);
-        m_Capsule_PrimaryContact = m_Capsule.FindAction("PrimaryContact", throwIfNotFound: true);
-        m_Capsule_PrimaryPosition = m_Capsule.FindAction("PrimaryPosition", throwIfNotFound: true);
         m_Capsule_Jump = m_Capsule.FindAction("Jump", throwIfNotFound: true);
     }
 
@@ -382,15 +342,11 @@ public class @SimpleControls : IInputActionCollection, IDisposable
     // Capsule
     private readonly InputActionMap m_Capsule;
     private ICapsuleActions m_CapsuleActionsCallbackInterface;
-    private readonly InputAction m_Capsule_PrimaryContact;
-    private readonly InputAction m_Capsule_PrimaryPosition;
     private readonly InputAction m_Capsule_Jump;
     public struct CapsuleActions
     {
         private @SimpleControls m_Wrapper;
         public CapsuleActions(@SimpleControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @PrimaryContact => m_Wrapper.m_Capsule_PrimaryContact;
-        public InputAction @PrimaryPosition => m_Wrapper.m_Capsule_PrimaryPosition;
         public InputAction @Jump => m_Wrapper.m_Capsule_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Capsule; }
         public void Enable() { Get().Enable(); }
@@ -401,12 +357,6 @@ public class @SimpleControls : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_CapsuleActionsCallbackInterface != null)
             {
-                @PrimaryContact.started -= m_Wrapper.m_CapsuleActionsCallbackInterface.OnPrimaryContact;
-                @PrimaryContact.performed -= m_Wrapper.m_CapsuleActionsCallbackInterface.OnPrimaryContact;
-                @PrimaryContact.canceled -= m_Wrapper.m_CapsuleActionsCallbackInterface.OnPrimaryContact;
-                @PrimaryPosition.started -= m_Wrapper.m_CapsuleActionsCallbackInterface.OnPrimaryPosition;
-                @PrimaryPosition.performed -= m_Wrapper.m_CapsuleActionsCallbackInterface.OnPrimaryPosition;
-                @PrimaryPosition.canceled -= m_Wrapper.m_CapsuleActionsCallbackInterface.OnPrimaryPosition;
                 @Jump.started -= m_Wrapper.m_CapsuleActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_CapsuleActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_CapsuleActionsCallbackInterface.OnJump;
@@ -414,12 +364,6 @@ public class @SimpleControls : IInputActionCollection, IDisposable
             m_Wrapper.m_CapsuleActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @PrimaryContact.started += instance.OnPrimaryContact;
-                @PrimaryContact.performed += instance.OnPrimaryContact;
-                @PrimaryContact.canceled += instance.OnPrimaryContact;
-                @PrimaryPosition.started += instance.OnPrimaryPosition;
-                @PrimaryPosition.performed += instance.OnPrimaryPosition;
-                @PrimaryPosition.canceled += instance.OnPrimaryPosition;
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
@@ -436,8 +380,6 @@ public class @SimpleControls : IInputActionCollection, IDisposable
     }
     public interface ICapsuleActions
     {
-        void OnPrimaryContact(InputAction.CallbackContext context);
-        void OnPrimaryPosition(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
     }
 }

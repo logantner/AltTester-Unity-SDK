@@ -5,21 +5,16 @@ using UnityEngine.InputSystem.Interactions;
 using UnityEngine.UI;
 
 
-
-
 public class AltUnityExampleNewInputSystem : MonoBehaviour
 {
-   
     int jumpCounter = 0;
     public bool wasClicked = false;
     public Text counterText;
     public Text actionText;
-    public Text swipeText;
     public Rigidbody capsuleRigidBody;
+    public static Mouse Mouse;
+    public static Touchscreen Touchscreen;
     
-    void Update() {
-        wasClicked = Mouse.current.position.ReadValue() != Vector2.zero;
-    }
     public void Jump(InputAction.CallbackContext context)
     {
         if(context.action.name == "Jump" && context.phase is InputActionPhase.Performed)

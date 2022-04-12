@@ -8,8 +8,10 @@ using Altom.AltUnityDriver;
 using Altom.AltUnityTester;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Scripting;
 using Altom.AltUnityTester.InputModule;
 
+[Preserve]
 public class Input : MonoBehaviour
 {
     private static bool _useCustomInput;
@@ -689,17 +691,6 @@ public class Input : MonoBehaviour
         _instance.StartCoroutine(endTouch(fingerId));
     }
 
-    public static void TapElement(UnityEngine.GameObject target, int count, float interval, Action<Exception> onFinish)
-    {
-        _instance.StartCoroutine(runThrowingIterator(tapClickElementLifeCycle(target, count, interval, true), onFinish));
-    }
-
-    public static void TapCoordinates(UnityEngine.Vector2 coordinates, int count, float interval, Action<Exception> onFinish)
-    {
-        _instance.StartCoroutine(runThrowingIterator(tapClickCoordinatesLifeCycle(coordinates, count, interval, true), onFinish));
-    }
-
-
     public static System.Collections.IEnumerator MultipointSwipeLifeCycle(UnityEngine.Vector2[] positions, float duration)
     {
         var touch = new UnityEngine.Touch
@@ -1032,8 +1023,6 @@ public class Input : MonoBehaviour
         pointerEventData.pointerPressRaycast = firstRaycastResult;
         return firstRaycastResult.gameObject;
     }
-
-
 
     internal static IEnumerator tapClickCoordinatesLifeCycle(UnityEngine.Vector2 screenPosition, int count, float interval, bool tap)
     {

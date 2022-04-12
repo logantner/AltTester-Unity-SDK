@@ -2,50 +2,51 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Altom.AltUnityDriver;
-using Altom.AltUnityTester;
 
-public class InputController
+namespace Altom.AltUnityTester
 {
-    protected static IEnumerator runThrowingIterator(
-           List<IEnumerator> enumerators,
-           Action<Exception> done)
+    public class InputController
     {
-        Exception err = null;
-        while (true)
+        protected static IEnumerator runThrowingIterator(
+               List<IEnumerator> enumerators,
+               Action<Exception> done)
         {
-            object current;
-            try
+            Exception err = null;
+            while (true)
             {
-                bool isDone = true;
-                for (int i = 0; i < enumerators.Count; i++)
+                object current;
+                try
                 {
-                    if (enumerators[i].MoveNext() != false)
+                    bool isDone = true;
+                    for (int i = 0; i < enumerators.Count; i++)
                     {
-                        current = enumerators[i];
-                        isDone = false;
-                        break;
+                        if (enumerators[i].MoveNext() != false)
+                        {
+                            current = enumerators[i];
+                            isDone = false;
+                            break;
+                        }
                     }
+                    if (isDone)
+                        break;
+
+                    current = enumerators[0];
+
                 }
-                if (isDone)
-                    break;
-
-                current = enumerators[0];
-
+                catch (Exception ex)
+                {
+                    UnityEngine.Debug.LogError(ex.ToString());
+                    err = ex;
+                    yield break;
+                }
+                yield return current;
             }
-            catch (Exception ex)
-            {
-                UnityEngine.Debug.LogError(ex.ToString());
-                err = ex;
-                yield break;
-            }
-            yield return current;
+
+            done.Invoke(err);
         }
 
-        done.Invoke(err);
-    }
-
-    public static void Scroll(float scrollValue, float duration, Action<Exception> onFinish)
-    {
+        public static void Scroll(float scrollValue, float duration, Action<Exception> onFinish)
+        {
 #if ALTUNITYTESTER
         List<IEnumerator> coroutines = new List<IEnumerator>();
 #if ENABLE_INPUT_SYSTEM
@@ -58,10 +59,10 @@ public class InputController
 #else
         throw new AltUnityInputModuleException(AltUnityErrors.errorInputModule);
 #endif
-    }
+        }
 
-    public static void MoveMouse(UnityEngine.Vector2 location, float duration, Action<Exception> onFinish)
-    {
+        public static void MoveMouse(UnityEngine.Vector2 location, float duration, Action<Exception> onFinish)
+        {
 #if ALTUNITYTESTER
         List<IEnumerator> coroutines = new List<IEnumerator>();
 #if ENABLE_INPUT_SYSTEM
@@ -74,10 +75,42 @@ public class InputController
 #else
         throw new AltUnityInputModuleException(AltUnityErrors.errorInputModule);
 #endif
-    }
+        }
 
-    public static void ClickElement(UnityEngine.GameObject target, int count,float interval,Action<Exception> onFinish)
-    {
+        public static void TapElement(UnityEngine.GameObject target, int count, float interval, Action<Exception> onFinish)
+        {
+#if ALTUNITYTESTER
+        List<IEnumerator> coroutines = new List<IEnumerator>();
+#if ENABLE_INPUT_SYSTEM
+        coroutines.Add(NewInputSystem.TapElementCycle(target, count, interval));
+#endif
+#if ENABLE_LEGACY_INPUT_MANAGER
+        coroutines.Add(Input.tapClickElementLifeCycle(target, count, interval,true));
+#endif
+        AltUnityRunner._altUnityRunner.StartCoroutine(runThrowingIterator(coroutines, onFinish));
+#else
+        throw new AltUnityInputModuleException(AltUnityErrors.errorInputModule);
+#endif
+        }
+
+        public static void TapCoordinates(UnityEngine.Vector2 coordinates, int count, float interval, Action<Exception> onFinish)
+        {
+#if ALTUNITYTESTER
+        List<IEnumerator> coroutines = new List<IEnumerator>();
+#if ENABLE_INPUT_SYSTEM
+        coroutines.Add(NewInputSystem.TapCoordinatesCycle(coordinates, count, interval));
+#endif
+#if ENABLE_LEGACY_INPUT_MANAGER
+        coroutines.Add(Input.tapClickCoordinatesLifeCycle(coordinates, count, interval,true));
+#endif
+        AltUnityRunner._altUnityRunner.StartCoroutine(runThrowingIterator(coroutines, onFinish));
+#else
+        throw new AltUnityInputModuleException(AltUnityErrors.errorInputModule);
+#endif
+        }
+    
+        public static void ClickElement(UnityEngine.GameObject target, int count, float interval, Action<Exception> onFinish)
+        {
 #if ALTUNITYTESTER
         List<IEnumerator> coroutines = new List<IEnumerator>();
 #if ENABLE_INPUT_SYSTEM
@@ -86,16 +119,14 @@ public class InputController
 #if ENABLE_LEGACY_INPUT_MANAGER
         coroutines.Add(Input.tapClickElementLifeCycle(target, count, interval,false));
 #endif
-#if ENABLE_LEGACY_INPUT_MANAGER
-#endif
         AltUnityRunner._altUnityRunner.StartCoroutine(runThrowingIterator(coroutines, onFinish));
 #else
         throw new AltUnityInputModuleException(AltUnityErrors.errorInputModule);
 #endif
-    }
+        }
 
-    public static void ClickCoordinates(UnityEngine.Vector2 screenPosition, int count, float interval,Action<Exception> onFinish)
-    {
+        public static void ClickCoordinates(UnityEngine.Vector2 screenPosition, int count, float interval, Action<Exception> onFinish)
+        {
 #if ALTUNITYTESTER
         List<IEnumerator> coroutines = new List<IEnumerator>();
 #if ENABLE_INPUT_SYSTEM
@@ -110,8 +141,8 @@ public class InputController
 #endif
     }
 
-    public static void SetMultipointSwipe(UnityEngine.Vector2[] positions, float duration, Action<Exception> onFinish)
-    {
+        public static void SetMultipointSwipe(UnityEngine.Vector2[] positions, float duration, Action<Exception> onFinish)
+        {
 #if ALTUNITYTESTER
         List<IEnumerator> coroutines = new List<IEnumerator>();
 #if ENABLE_INPUT_SYSTEM
@@ -124,6 +155,8 @@ public class InputController
 #else
         throw new AltUnityInputModuleException(AltUnityErrors.errorInputModule);
 #endif
+        }
+        
     }
 
 }

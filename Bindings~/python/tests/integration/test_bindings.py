@@ -1493,6 +1493,7 @@ class TestPythonBindings:
         scrollbarFinal = self.altdriver.find_object(By.NAME, "Handle")
         scrollbarPositionFinal = scrollbarFinal.get_screen_position()
         assert scrollbarPosition != scrollbarPositionFinal
+
     def test_tilt(self):
         self.altdriver.load_scene(
             "Assets/AltUnityTester/Examples/Scenes/Scene 7 New Input System Actions.unity")

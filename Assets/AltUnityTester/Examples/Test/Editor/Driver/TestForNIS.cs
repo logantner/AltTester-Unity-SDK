@@ -91,17 +91,6 @@ public class TestForNIS
         Assert.AreEqual(counter, 1);
     }
 
-
-    [Test]
-    public void TestClickObject()
-    {
-        altUnityDriver.LoadScene(scene11);
-        var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");
-        capsule.Click();
-        Assert.True(capsule.GetComponentProperty<bool>("AltUnityExampleNewInputSystem", "wasClicked", "Assembly-CSharp"));
-
-    }
-
     [Test]
     public void TestClickCoordinates()
     {

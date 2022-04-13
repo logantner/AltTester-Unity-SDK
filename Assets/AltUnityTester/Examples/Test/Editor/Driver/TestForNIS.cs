@@ -142,6 +142,8 @@ public class TestForNIS
         Assert.AreNotEqual(imageSource["name"], imageSourceDropZone["name"]);
     }
 
+
+    [Test]
     public void TestTilt()
     {
         altUnityDriver.LoadScene(scene11);

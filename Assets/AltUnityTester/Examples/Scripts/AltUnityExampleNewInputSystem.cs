@@ -59,7 +59,6 @@ public class AltUnityExampleNewInputSystem : MonoBehaviour
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit))
                 {
-                    Debug.LogFormat("You hit [{0}]", hit.collider.gameObject.name);
                     if (hit.collider.gameObject.name == "Capsule")
                     {
                         JumpCapsule();

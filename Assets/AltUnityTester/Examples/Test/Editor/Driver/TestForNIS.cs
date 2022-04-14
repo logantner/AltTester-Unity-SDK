@@ -45,7 +45,7 @@ public class TestForNIS
         var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");
         capsule.Tap();
         var counter = capsule.GetComponentProperty<int>("AltUnityExampleNewInputSystem", "jumpCounter", "Assembly-CSharp");
-        Assert.AreEqual(counter, 1);
+        Assert.AreEqual(1, counter);
     }
 
     [Test]
@@ -55,7 +55,7 @@ public class TestForNIS
         var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");
         capsule.Tap(count: 2, interval: 1.0f);
         var counter = capsule.GetComponentProperty<int>("AltUnityExampleNewInputSystem", "jumpCounter", "Assembly-CSharp");
-        Assert.AreEqual(counter, 2);
+        Assert.AreEqual(2, counter);
     }
 
     [Test]
@@ -88,7 +88,7 @@ public class TestForNIS
         var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");
         capsule.Click();
         var counter = capsule.GetComponentProperty<int>("AltUnityExampleNewInputSystem", "jumpCounter", "Assembly-CSharp");
-        Assert.AreEqual(counter, 1);
+        Assert.AreEqual(1, counter);
     }
 
     [Test]

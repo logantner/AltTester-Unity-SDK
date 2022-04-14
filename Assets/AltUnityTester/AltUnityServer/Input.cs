@@ -1,4 +1,5 @@
-#if ALTUNITYTESTER && ENABLE_LEGACY_INPUT_MANAGER
+#if ALTUNITYTESTER 
+// && ENABLE_LEGACY_INPUT_MANAGER
 
 using System;
 using System.Collections;
@@ -6,10 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Altom.AltUnityDriver;
 using Altom.AltUnityTester;
+using Altom.AltUnityTester.InputModule;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Scripting;
-using Altom.AltUnityTester.InputModule;
 
 [Preserve]
 public class Input : MonoBehaviour
@@ -84,7 +85,7 @@ public class Input : MonoBehaviour
     private void Update()
     {
         _useCustomInput = UnityEngine.Input.touchCount == 0 && !UnityEngine.Input.anyKey && UnityEngine.Input.mouseScrollDelta == UnityEngine.Vector2.zero;
-        var monoBehaviourTarget = AltUnityMockUpPointerInputModule.GetGameObjectHitMonoBehaviour(mousePosition);
+        var monoBehaviourTarget = FindObjectViaRayCast.GetGameObjectHitMonoBehaviour(mousePosition);
         var pointerEventData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current)
         {
             position = mousePosition,
@@ -838,20 +839,7 @@ public class Input : MonoBehaviour
     }
 
 
-    public static UnityEngine.GameObject FindObjectAtCoordinates(UnityEngine.Vector2 screenPosition)
-    {
-        var pointerEventData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current)
-        {
-            position = screenPosition,
-            button = UnityEngine.EventSystems.PointerEventData.InputButton.Left,
-            eligibleForClick = true,
-            pressPosition = screenPosition
-        };
-        var eventSystemTarget = findEventSystemObject(pointerEventData);
-        if (eventSystemTarget != null) return eventSystemTarget;
-        var monoBehaviourTarget = AltUnityMockUpPointerInputModule.FindMonoBehaviourObject(screenPosition);
-        return monoBehaviourTarget;
-    }
+
 
     internal static System.Collections.IEnumerator ScrollLifeCycle(float scrollValue, float duration)
     {
@@ -1035,7 +1023,7 @@ public class Input : MonoBehaviour
             pressPosition = screenPosition
         };
         var eventSystemTarget = findEventSystemObject(pointerEventData);
-        var monoBehaviourTarget = AltUnityMockUpPointerInputModule.FindMonoBehaviourObject(screenPosition);
+        var monoBehaviourTarget = FindObjectViaRayCast.FindMonoBehaviourObject(screenPosition);
 
         yield return new WaitForEndOfFrame();//run after Update
 
@@ -1245,7 +1233,7 @@ public class Input : MonoBehaviour
             pressPosition = mousePosition
         };
         eventSystemTarget = findEventSystemObject(pointerEventData);
-        monoBehaviourTarget = AltUnityMockUpPointerInputModule.FindMonoBehaviourObject(mousePosition);
+        monoBehaviourTarget = FindObjectViaRayCast.FindMonoBehaviourObject(mousePosition);
 
     }
 
@@ -1465,7 +1453,6 @@ public class Input : MonoBehaviour
     {
         return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
     }
-
     #endregion
 }
 

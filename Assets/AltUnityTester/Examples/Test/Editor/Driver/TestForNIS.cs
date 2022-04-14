@@ -1,8 +1,5 @@
-using System;
-using System.Threading;
 using Altom.AltUnityDriver;
 using NUnit.Framework;
-using UnityEngine.UI;
 
 public class TestForNIS
 {

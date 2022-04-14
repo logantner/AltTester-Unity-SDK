@@ -43,7 +43,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -118,6 +118,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -156,8 +158,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -106.8, y: -89.3}
-  m_SizeDelta: {x: -573, y: -388}
+  m_AnchoredPosition: {x: -104.967865, y: -103.5}
+  m_SizeDelta: {x: -569.3358, y: -359.59}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &278086296
 MonoBehaviour:
@@ -174,6 +176,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -213,6 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wasClicked: 0
+  previousAcceleration: {x: 0, y: 0, z: 0}
   counterText: {fileID: 662202623}
   actionText: {fileID: 278086296}
   capsuleRigidBody: {fileID: 2118580003}
@@ -263,6 +267,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -287,6 +292,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &631899525
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -344,8 +350,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 71.3, y: -90.2}
-  m_SizeDelta: {x: -573, y: -388}
+  m_AnchoredPosition: {x: 121.2503, y: -103.95}
+  m_SizeDelta: {x: -587.1718, y: -360.49}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &662202623
 MonoBehaviour:
@@ -362,6 +368,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -401,6 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wasClicked: 0
+  previousAcceleration: {x: 0, y: 0, z: 0}
   counterText: {fileID: 662202623}
   actionText: {fileID: 278086296}
   capsuleRigidBody: {fileID: 2118580003}
@@ -462,6 +470,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &902780487
 Canvas:
   m_ObjectHideFlags: 0
@@ -580,6 +589,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &955989872
@@ -730,6 +740,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -754,6 +765,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2118580001
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -837,6 +849,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2118580006}
+        m_TargetAssemblyTypeName: 
         m_MethodName: Jump
         m_Mode: 0
         m_Arguments:
@@ -849,10 +862,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: cb6ff29f-da1c-49df-8aa4-0842111b3b9c
     m_ActionName: Capsule/New action
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 99da09e0-8681-4564-b9ce-6a5d0b74f8be
-    m_ActionName: UI/Jump[/Mouse/leftButton,/Touchscreen/primaryTouch/tap]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Capsule
@@ -871,6 +880,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wasClicked: 0
+  previousAcceleration: {x: 0, y: 0, z: 0}
   counterText: {fileID: 662202623}
   actionText: {fileID: 278086296}
   capsuleRigidBody: {fileID: 2118580003}

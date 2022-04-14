@@ -529,8 +529,8 @@ class AltUnityDriver:
         """Simulate scroll mouse action in your game.
 
         Args:
-            speed_vertical (:obj:`int`, :obj:`float`): Set how fast to scroll. Positive values will scroll up and negative
-                values will scroll down. Defaults to ``1``
+            speed_vertical (:obj:`int`, :obj:`float`): Set how fast to scroll. Positive values will scroll up and 
+                negative values will scroll down. Defaults to ``1``
             duration (:obj:`int`, :obj:`float`, optional): The duration of the scroll in seconds. Defaults to ``0.1``.
             wait (:obj:`bool`, optional): If set wait for command to finish. Defaults to ``True``.
             speed_horizontal (:obj:`int`, :obj:`float`): Set how fast to scroll right or left. Defaults to ``1``

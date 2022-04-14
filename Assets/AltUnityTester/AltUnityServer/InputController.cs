@@ -54,7 +54,7 @@ namespace Altom.AltUnityTester
             coroutines.Add(NewInputSystem.ScrollLifeCycle(speedVertical, speedHorizontal, duration));
 #endif
 #if ENABLE_LEGACY_INPUT_MANAGER
-            coroutines.Add(Input.ScrollLifeCycle(scrollValue, duration));
+            coroutines.Add(Input.ScrollLifeCycle(speedVertical, speedHorizontal, duration));
 #endif
             AltUnityRunner._altUnityRunner.StartCoroutine(runThrowingIterator(coroutines, onFinish));
 #else

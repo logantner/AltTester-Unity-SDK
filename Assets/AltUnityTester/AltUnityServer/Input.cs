@@ -841,7 +841,7 @@ public class Input : MonoBehaviour
 
 
 
-    internal static System.Collections.IEnumerator ScrollLifeCycle(float scrollValue, float duration)
+    internal static System.Collections.IEnumerator ScrollLifeCycle(float scrollVertical, float scrollHorizontal, float duration)
     {
         float timeSpent = 0;
 
@@ -849,7 +849,8 @@ public class Input : MonoBehaviour
         {
             yield return null;
             timeSpent += UnityEngine.Time.unscaledDeltaTime;
-            float scrollStep = scrollValue * UnityEngine.Time.unscaledDeltaTime / duration;
+            float scrollVerticalStep = scrollVertical * UnityEngine.Time.unscaledDeltaTime / duration;
+            float scrollHorizontalStep = scrollHorizontal * UnityEngine.Time.unscaledDeltaTime / duration;
 
             var pointerEventData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current)
             {
@@ -858,7 +859,7 @@ public class Input : MonoBehaviour
                 eligibleForClick = true,
             };
             var eventSystemTarget = findEventSystemObject(pointerEventData);
-            _mouseScrollDelta = new UnityEngine.Vector2(0, scrollStep);//x value is not taken in consideration
+            _mouseScrollDelta = new UnityEngine.Vector2(scrollHorizontalStep, scrollVerticalStep);
             pointerEventData.scrollDelta = _mouseScrollDelta;
             UnityEngine.EventSystems.ExecuteEvents.ExecuteHierarchy(eventSystemTarget, pointerEventData, UnityEngine.EventSystems.ExecuteEvents.scrollHandler);
         }

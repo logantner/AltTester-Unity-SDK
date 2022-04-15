@@ -71,8 +71,8 @@ namespace Altom.AltUnityTester
         {
             float time = 0;
             Mouse.MakeCurrent();
-            var mousePosition = Mouse.current.position;
-            var distance = location - new UnityEngine.Vector2(mousePosition.x.ReadValue(), mousePosition.y.ReadValue());
+            var mousePosition = Mouse.current.position.ReadValue();
+            var distance = location - new UnityEngine.Vector2(mousePosition.x, mousePosition.y);
             do
             {
                 UnityEngine.Vector2 delta;
@@ -82,10 +82,10 @@ namespace Altom.AltUnityTester
                 }
                 else
                 {
-                    delta = location - new UnityEngine.Vector2(mousePosition.x.ReadValue(), mousePosition.y.ReadValue());
+                    delta = location - new UnityEngine.Vector2(mousePosition.x, mousePosition.y);
                 }
-
-                InputTestFixture.Move(Mouse.current.position, delta);
+                mousePosition +=delta;
+                InputTestFixture.Move(Mouse.current.position,mousePosition, delta);
                 yield return null;
                 time += UnityEngine.Time.unscaledDeltaTime;
             } while (time < duration);

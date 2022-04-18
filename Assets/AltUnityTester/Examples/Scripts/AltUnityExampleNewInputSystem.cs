@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.UI;
+using System.Collections;
 
 
 
@@ -15,9 +16,10 @@ public class AltUnityExampleNewInputSystem : MonoBehaviour
     public Vector3 previousAcceleration = Vector3.zero;
     public Text counterText;
     public Text actionText;
+    public Text hoverText;
     public Rigidbody capsuleRigidBody;
-    public static Mouse Mouse;
-    public static Touchscreen Touchscreen;
+    public Transform target;
+
 
     void OnEnable()
     {
@@ -34,6 +36,7 @@ public class AltUnityExampleNewInputSystem : MonoBehaviour
 #endif
 
     }
+  
     void Update()
     {
         wasClicked = Mouse.current.position.ReadValue() != Vector2.zero;
@@ -46,6 +49,12 @@ public class AltUnityExampleNewInputSystem : MonoBehaviour
             transform.Rotate(acceleration);
         }
 #endif
+        Vector3 screenPos=Camera.main.WorldToScreenPoint(target.position);
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        if(screenPos.x == mousePos.x && screenPos.y == mousePos.y){
+            hoverText.text = "Capsule was hovered!";
+        }
+ 
 
     }
 

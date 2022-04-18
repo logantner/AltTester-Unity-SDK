@@ -85,7 +85,8 @@ namespace Altom.AltUnityTester
                     delta = location - new UnityEngine.Vector2(mousePosition.x, mousePosition.y);
                 }
                 mousePosition +=delta;
-                InputTestFixture.Move(Mouse.current.position,mousePosition, delta);
+                InputTestFixture.Move(Mouse.current.position, mousePosition, delta);
+                // InputTestFixture.Set(Mouse.current.position,mousePosition);
                 yield return null;
                 time += UnityEngine.Time.unscaledDeltaTime;
             } while (time < duration);

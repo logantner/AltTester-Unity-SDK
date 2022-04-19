@@ -55,7 +55,6 @@ namespace Altom.AltUnityTester
 
             float currentTime = 0;
             float frameTime = 0;// using this because of a bug with yield return which waits only every other iteration
-            Debug.Log("klashdlashdla" + speedVertical + " " + speedHorizontal);
             while (currentTime <= duration - Time.fixedUnscaledDeltaTime)
             {
                 InputTestFixture.Set(Mouse.scroll, new Vector2(speedHorizontal * frameTime / duration, speedVertical * frameTime / duration), queueEventOnly: true);

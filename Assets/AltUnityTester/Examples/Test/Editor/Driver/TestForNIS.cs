@@ -115,7 +115,7 @@ public class TestForNIS
         altUnityDriver.LoadScene(scene7);
         var altElement1 = altUnityDriver.FindObject(By.NAME, "Drag Image1");
         var altElement2 = altUnityDriver.FindObject(By.NAME, "Drop Box1");
-        altUnityDriver.MultipointSwipe(new[] { new AltUnityVector2(altElement1.x, altElement1.y), new AltUnityVector2(altElement2.x, altElement2.y) }, 2,);
+        altUnityDriver.MultipointSwipe(new[] { new AltUnityVector2(altElement1.x, altElement1.y), new AltUnityVector2(altElement2.x, altElement2.y) }, 2);
 
         altElement1 = altUnityDriver.FindObject(By.NAME, "Drag Image1");
         altElement2 = altUnityDriver.FindObject(By.NAME, "Drop Box1");

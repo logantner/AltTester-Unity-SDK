@@ -96,7 +96,6 @@ namespace Altom.AltUnityTester
             var touchId = 0;
             UnityEngine.Vector3 screenPosition;
             AltUnityRunner._altUnityRunner.FindCameraThatSeesObject(target, out screenPosition);
-            InputTestFixture.SetTouch(touchId,phase:UnityEngine.InputSystem.TouchPhase.Began,position:screenPosition,screen:Touchscreen);
             for (int i = 0; i < count; i++)
             {
                 float time = 0;
@@ -112,12 +111,11 @@ namespace Altom.AltUnityTester
         {
             Touchscreen.MakeCurrent();
             var touchId = 0;
-            InputTestFixture.SetTouch(touchId,phase:UnityEngine.InputSystem.TouchPhase.Began,position:screenPosition,screen:Touchscreen);
             for (int i = 0; i < count; i++)
             {
                 float time = 0;
                 InputTestFixture.BeginTouch(touchId, screenPosition, screen: Touchscreen);
-                yield return new WaitForSecondsRealtime(Time.fixedUnscaledDeltaTime);
+                yield return null;
                 time += Time.fixedUnscaledDeltaTime;
                 InputTestFixture.EndTouch(touchId, screenPosition, screen: Touchscreen);
                 if (i != count - 1 && time < interval)
@@ -136,7 +134,7 @@ namespace Altom.AltUnityTester
             {
                 float time = 0;
                 InputTestFixture.Press(Mouse.leftButton, queueEventOnly: true);
-                yield return new WaitForSecondsRealtime(Time.fixedUnscaledDeltaTime);
+                yield return null;
                 time += Time.fixedUnscaledDeltaTime;
                 InputTestFixture.Release(Mouse.leftButton, queueEventOnly: true);
                 if (i != count - 1 && time < interval)
@@ -151,7 +149,7 @@ namespace Altom.AltUnityTester
             {
                 float time = 0;
                 InputTestFixture.Press(Mouse.leftButton);
-                yield return new WaitForSecondsRealtime(Time.fixedUnscaledDeltaTime);
+                yield return null;
                 time += Time.fixedUnscaledDeltaTime;
                 InputTestFixture.Release(Mouse.leftButton);
                 if (i != count - 1 && time < interval)

@@ -104,7 +104,6 @@ public class TestForNIS
         var scrollbarPosition = altUnityDriver.FindObject(By.NAME, "Handle").getScreenPosition();
         var button = altUnityDriver.FindObject(By.PATH, "//Scroll View/Viewport/Content/Button (4)");
         altUnityDriver.Swipe(new AltUnityVector2(button.x + 1, button.y + 1), new AltUnityVector2(button.x + 1, button.y + 20), 1);
-        Thread.Sleep(500);
         var scrollbarPositionFinal = altUnityDriver.FindObject(By.NAME, "Handle").getScreenPosition();
         Assert.AreNotEqual(scrollbarPosition.y,scrollbarPositionFinal.y);
 
@@ -116,8 +115,7 @@ public class TestForNIS
         altUnityDriver.LoadScene(scene7);
         var altElement1 = altUnityDriver.FindObject(By.NAME, "Drag Image1");
         var altElement2 = altUnityDriver.FindObject(By.NAME, "Drop Box1");
-        altUnityDriver.MultipointSwipe(new[] { new AltUnityVector2(altElement1.x, altElement1.y), new AltUnityVector2(altElement2.x, altElement2.y) }, 2, wait: false);
-        Thread.Sleep(2000);
+        altUnityDriver.MultipointSwipe(new[] { new AltUnityVector2(altElement1.x, altElement1.y), new AltUnityVector2(altElement2.x, altElement2.y) }, 2,);
 
         altElement1 = altUnityDriver.FindObject(By.NAME, "Drag Image1");
         altElement2 = altUnityDriver.FindObject(By.NAME, "Drop Box1");

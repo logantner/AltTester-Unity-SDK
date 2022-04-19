@@ -131,14 +131,15 @@ namespace Altom.AltUnityTester
             Mouse.MakeCurrent();
             UnityEngine.Vector3 screenPosition;
             AltUnityRunner._altUnityRunner.FindCameraThatSeesObject(target, out screenPosition);
-            InputTestFixture.Set(Mouse.current.position, screenPosition);
+            InputTestFixture.Set(Mouse.position,new Vector2(screenPosition.x,screenPosition.y), queueEventOnly: true);
+           
             for (int i = 0; i < count; i++)
             {
                 float time = 0;
-                InputTestFixture.Press(Mouse.leftButton);
+                InputTestFixture.Press(Mouse.leftButton, queueEventOnly: true);
                 yield return new WaitForSecondsRealtime(Time.fixedUnscaledDeltaTime);
                 time += Time.fixedUnscaledDeltaTime;
-                InputTestFixture.Release(Mouse.leftButton);
+                InputTestFixture.Release(Mouse.leftButton, queueEventOnly: true);
                 if (i != count - 1 && time < interval)
                     yield return new WaitForSecondsRealtime(interval - time);
             }
@@ -146,7 +147,7 @@ namespace Altom.AltUnityTester
         internal static IEnumerator ClickCoordinatesLifeCycle(UnityEngine.Vector2 screenPosition, int count, float interval)
         {
             Mouse.MakeCurrent();
-            InputTestFixture.Set(Mouse.current.position, screenPosition);
+            InputTestFixture.Set(Mouse.position, screenPosition);
             for (int i = 0; i < count; i++)
             {
                 float time = 0;

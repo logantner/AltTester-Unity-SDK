@@ -97,11 +97,12 @@ namespace Altom.AltUnityTester
             var touchId = 0;
             UnityEngine.Vector3 screenPosition;
             AltUnityRunner._altUnityRunner.FindCameraThatSeesObject(target, out screenPosition);
+            InputTestFixture.SetTouch(touchId,phase:UnityEngine.InputSystem.TouchPhase.Began,position:screenPosition,screen:Touchscreen);
             for (int i = 0; i < count; i++)
             {
                 float time = 0;
                 InputTestFixture.BeginTouch(touchId, screenPosition, screen: Touchscreen);
-                yield return new WaitForSecondsRealtime(Time.fixedUnscaledDeltaTime);
+                yield return null;
                 time += Time.fixedUnscaledDeltaTime;
                 InputTestFixture.EndTouch(touchId, screenPosition, screen: Touchscreen);
                 if (i != count - 1 && time < interval)
@@ -112,6 +113,7 @@ namespace Altom.AltUnityTester
         {
             Touchscreen.MakeCurrent();
             var touchId = 0;
+            InputTestFixture.SetTouch(touchId,phase:UnityEngine.InputSystem.TouchPhase.Began,position:screenPosition,screen:Touchscreen);
             for (int i = 0; i < count; i++)
             {
                 float time = 0;
@@ -160,25 +162,36 @@ namespace Altom.AltUnityTester
         internal static IEnumerator MultipointSwipeLifeCycle(UnityEngine.Vector2[] positions, float duration)
         {
             Touchscreen.MakeCurrent();
-            var oneTouchDuration = duration / (positions.Length-1);
             var touchId =0;
-            InputTestFixture.BeginTouch(touchId, positions[0]);
+            float oneTouchDuration = duration / (positions.Length-1);
+            yield return new WaitForEndOfFrame();
+            InputTestFixture.BeginTouch(touchId, positions[0], screen:Touchscreen);
             for (int i = 1; i < positions.Length; i++)
             {
                 float timeExecuted = 0;
                 Vector2 curentPosition = positions[i-1];
+                var wholeDelta = positions[i] - curentPosition;
+                var deltaPerSecond = wholeDelta / oneTouchDuration;
+                Vector2 nextFramePosition = curentPosition;
                 do
                 {
                     timeExecuted += Time.deltaTime;
-                    Vector2 nextFramePosition = new Vector2(timeExecuted * positions[i].x / oneTouchDuration, timeExecuted * positions[i].y / oneTouchDuration);
+                    if(timeExecuted < oneTouchDuration)
+                    {
+                        nextFramePosition += deltaPerSecond*Time.unscaledDeltaTime;
+                    }
+                    else
+                    {
+                        nextFramePosition = positions[i];
+                    }
                     Vector2 delta = nextFramePosition - curentPosition;
 
-                    InputTestFixture.MoveTouch(touchId, nextFramePosition, delta);
+                    InputTestFixture.MoveTouch(touchId, nextFramePosition, delta, screen:Touchscreen);
                     yield return null;
 
                 } while (timeExecuted <= oneTouchDuration);
             }
-            InputTestFixture.EndTouch(touchId, positions[positions.Length-1]);
+            InputTestFixture.EndTouch(touchId, positions[positions.Length-1], screen:Touchscreen);
         }
     
         internal static IEnumerator AccelerationLifeCycle(Vector3 accelerationValue, float duration)

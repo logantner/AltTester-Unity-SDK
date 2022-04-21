@@ -16,10 +16,7 @@ public class AltUnityExampleNewInputSystem : MonoBehaviour
     public Vector3 previousAcceleration = Vector3.zero;
     public Text counterText;
     public Text actionText;
-    public Text hoverText;
     public Rigidbody capsuleRigidBody;
-    public Transform target;
-
 
     void OnEnable()
     {

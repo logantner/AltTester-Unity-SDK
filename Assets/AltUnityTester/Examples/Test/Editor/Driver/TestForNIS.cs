@@ -211,14 +211,5 @@ public class TestForNIS
         Assert.AreNotEqual(initialPosition, altUnityDriver.FindObject(By.NAME, "Capsule").getWorldPosition());
     }
 
-    [Test]
-    public void TestMoveMouse()
-    {
-        altUnityDriver.LoadScene(scene11);
-        var capsule = altUnityDriver.FindObject(By.NAME, "Capsule");
-        altUnityDriver.MoveMouse(capsule.getScreenPosition(), 1f);
-        Thread.Sleep(1000);
-        altUnityDriver.WaitForObject(By.PATH, "//HoverText[@text=Capsule was hovered!]");
 
-    }
 }

@@ -1459,13 +1459,16 @@ class TestPythonBindings:
 
     def test_scroll_element_NIS(self):
         self.altdriver.load_scene("Assets/AltUnityTester/Examples/Scenes/scene 9 NIS.unity")
-        scrollbar = self.altdriver.find_object(By.NAME, "Handle")
-        scrollbarPosition = scrollbar.get_screen_position()
-        self.altdriver.move_mouse(scrollbarPosition, duration=1, wait=False)
-        self.altdriver.scroll(300, 1, True)
-        scrollbarFinal = self.altdriver.find_object(By.NAME, "Handle")
-        scrollbarPositionFinal = scrollbarFinal.get_screen_position()
-        assert scrollbarPosition != scrollbarPositionFinal
+        scrollbar = self.altdriver.find_object(By.NAME, "Scrollbar Vertical")
+        scrollbar_value = scrollbar.get_component_property(
+            "UnityEngine.UI.Scrollbar", "value", "UnityEngine.UI")
+        self.altdriver.move_mouse(self.altdriver.find_object(
+            By.NAME, "Scroll View").get_screen_position(), duration=1, wait=True)
+        self.altdriver.scroll(-3000, 1, True)
+        scrollbarFinal = self.altdriver.find_object(By.NAME, "Scrollbar Vertical")
+        scrollbar_value_final = scrollbarFinal.get_component_property(
+            "UnityEngine.UI.Scrollbar", "value", "UnityEngine.UI")
+        assert scrollbar_value != scrollbar_value_final
 
     def test_click_element_NIS(self):
         self.altdriver.load_scene("Assets/AltUnityTester/Examples/Scenes/Scene 7 New Input System Actions.unity")
@@ -1493,3 +1496,51 @@ class TestPythonBindings:
         initialPosition = capsule.get_world_position()
         self.altdriver.tilt([1000, 10, 10], 1)
         assert initialPosition != self.altdriver.find_object(By.NAME, "Capsule").get_world_position()
+
+    def test_key_down_and_key_up_NIS(self):
+        self.altdriver.load_scene("Assets/AltUnityTester/Examples/Scenes/Scene 10 Sample NIS.unity")
+        player = self.altdriver.find_object(By.NAME, "Player")
+        initial_pos = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        self.altdriver.key_down(AltUnityKeyCode.A)
+        self.altdriver.key_up(AltUnityKeyCode.A)
+        pos_left = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        assert pos_left != initial_pos
+        self.altdriver.key_down(AltUnityKeyCode.D)
+        self.altdriver.key_up(AltUnityKeyCode.D)
+        pos_right = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        assert pos_right != pos_left
+        self.altdriver.key_down(AltUnityKeyCode.W)
+        self.altdriver.key_up(AltUnityKeyCode.W)
+        pos_up = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        assert pos_up != pos_right
+        self.altdriver.key_down(AltUnityKeyCode.S)
+        self.altdriver.key_up(AltUnityKeyCode.S)
+        pos_down = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        assert pos_down != pos_up
+
+    def test_press_key_NIS(self):
+        self.altdriver.load_scene("Assets/AltUnityTester/Examples/Scenes/Scene 10 Sample NIS.unity")
+        player = self.altdriver.find_object(By.NAME, "Player")
+        initial_pos = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        self.altdriver.press_key(AltUnityKeyCode.A)
+        pos_left = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        assert pos_left != initial_pos
+        self.altdriver.press_key(AltUnityKeyCode.D)
+        pos_right = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        assert pos_right != pos_left
+        self.altdriver.press_key(AltUnityKeyCode.W)
+        pos_up = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        assert pos_up != pos_right
+        self.altdriver.press_key(AltUnityKeyCode.S)
+        pos_down = player.get_component_property(
+            "UnityEngine.Transform", "position")
+        assert pos_down != pos_up

@@ -23,39 +23,25 @@ public class AltUnityExampleNewInputSystem : MonoBehaviour
 
     void OnEnable()
     {
-#if UNITY_ANDROID
         InputSystem.EnableDevice(Accelerometer.current);
-#endif
 
     }
     protected void OnDisable()
     {
-#if UNITY_ANDROID
 
         InputSystem.DisableDevice(Accelerometer.current);
-#endif
 
     }
   
     void Update()
     {
         wasClicked = Mouse.current.position.ReadValue() != Vector2.zero;
-#if UNITY_ANDROID
-
         var acceleration = Accelerometer.current.acceleration.ReadValue();
         if (acceleration != previousAcceleration)
         {
             previousAcceleration = acceleration;
             transform.Rotate(acceleration);
         }
-#endif
-        Vector3 screenPos=Camera.main.WorldToScreenPoint(target.position);
-        Vector2 mousePos = Mouse.current.position.ReadValue();
-        if(screenPos.x == mousePos.x && screenPos.y == mousePos.y){
-            hoverText.text = "Capsule was hovered!";
-        }
- 
-
     }
 
     public void Jump(InputAction.CallbackContext context)

@@ -37,7 +37,7 @@ To instrument your Unity application with AltUnity Tester you first need to impo
 
     .. tab:: UnityPackage from GitLab pages
 
-        1. Download from `GitLab pages (deployed using CI) - link <https://altom.gitlab.io/altunity/altunitytester/AltUnityPackage/AltUnityTester.unitypackage>`_.
+        1. Download from `GitLab pages (deployed using CI) - link <https://altom.com/app/uploads/AltUnityPackage/AltUnityPackage/AltUnityTesterPackage>`_.
         2. Import it by drag and drop inside your Unity project.
 
 ```
@@ -240,18 +240,18 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
             .. tab:: Unity Editor & PC
 
-                .. literalinclude:: ../_static/examples/get-started/csharp-test.cs
+                .. literalinclude:: ../_static/examples~/get-started/csharp-test.cs
                     :language: c#
 
             .. tab:: Android
 
-                .. literalinclude:: ../_static/examples/common/csharp-android-test.cs
+                .. literalinclude:: ../_static/examples~/common/csharp-android-test.cs
                     :language: c#
                     :emphasize-lines: 11,19
 
             .. tab:: iOS
 
-                .. literalinclude:: ../_static/examples/common/csharp-ios-test.cs
+                .. literalinclude:: ../_static/examples~/common/csharp-ios-test.cs
                     :language: c#
                     :emphasize-lines: 11,19
 
@@ -292,18 +292,18 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
             .. tab:: Unity Editor & PC
 
-                .. literalinclude:: ../_static/examples/get-started/csharp-test.cs
+                .. literalinclude:: ../_static/examples~/get-started/csharp-test.cs
                     :language: c#
 
             .. tab:: Android
 
-                .. literalinclude:: ../_static/examples/common/csharp-android-test.cs
+                .. literalinclude:: ../_static/examples~/common/csharp-android-test.cs
                     :language: c#
                     :emphasize-lines: 11,19
 
             .. tab:: iOS
 
-                .. literalinclude:: ../_static/examples/common/csharp-ios-test.cs
+                .. literalinclude:: ../_static/examples~/common/csharp-ios-test.cs
                     :language: c#
                     :emphasize-lines: 11,19
 
@@ -324,7 +324,7 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
             **Method 2**: Use the ``.jar`` file from GIT (**without building it from source**)
 
-                * Download `AltUnity Java Driver <https://altom.gitlab.io/altunity/altunitytester/AltUnityJAR/altunitytester-java-client-jar.jar>`__.
+                * Download `AltUnity Java Driver <https://altom.com/app/uploads/AltUnityJAR/altunitytester-java-client-jar.jar>`__.
 
                 * Install the ``.jar`` file:
 
@@ -345,18 +345,18 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
             .. tab:: Unity Editor & PC
 
-                .. literalinclude:: ../_static/examples/get-started/java-test.java
+                .. literalinclude:: ../_static/examples~/get-started/java-test.java
                     :language: java
 
             .. tab:: Android
 
-                .. literalinclude:: ../_static/examples/common/java-android-test.java
+                .. literalinclude:: ../_static/examples~/common/java-android-test.java
                     :language: java
                     :emphasize-lines: 19,26
 
             .. tab:: iOS
 
-                .. literalinclude:: ../_static/examples/common/java-ios-test.java
+                .. literalinclude:: ../_static/examples~/common/java-ios-test.java
                     :language: java
                     :emphasize-lines: 19,26
 
@@ -397,18 +397,18 @@ AltUnity Tester package contains AltUnityDriver class used to connect to the ins
 
             .. tab:: Unity Editor & PC
 
-                .. literalinclude:: ../_static/examples/get-started/python-test.py
+                .. literalinclude:: ../_static/examples~/get-started/python-test.py
                     :language: py
 
             .. tab:: Android
 
-                .. literalinclude:: ../_static/examples/common/python-android-test.py
+                .. literalinclude:: ../_static/examples~/common/python-android-test.py
                     :language: py
                     :emphasize-lines: 12,18
 
             .. tab:: iOS
 
-                .. literalinclude:: ../_static/examples/common/python-ios-test.py
+                .. literalinclude:: ../_static/examples~/common/python-ios-test.py
                     :language: py
                     :emphasize-lines: 12,18
 

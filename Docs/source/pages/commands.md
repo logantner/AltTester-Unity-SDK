@@ -1038,6 +1038,76 @@ Simulates key press action in your game.
 
 ```
 
+#### PressKeys
+
+Simulates multiple key press action in your game.
+
+**_Parameters_**
+
+| Name     | Type            | Required | Default | Description                                                                              |
+| -------- | --------------- | -------- | ------- | ---------------------------------------------------------------------------------------- |
+| keycodes  | List\[AltUnityKeyCode\] | Yes      |         | The list of keycodes simulated to be pressed simultaneously.                    |
+| power    | float           | No       | 1       | A value between \[-1,1\] used for joysticks to indicate how hard the buttons were pressed. |
+| duration | float           | No       | 0.1     | The time measured in seconds from the multiple key press to the multiple key release.     |
+| wait     | boolean         | No       | true    | If set, wait for command to finish.                                                       |
+
+**_Returns_**
+
+- Nothing
+
+**_Examples_**
+
+```eval_rst
+.. tabs::
+    .. code-tab:: c#
+
+        [Test]
+        public void TestPressKeys()
+        {
+            AltUnityKeyCode[] keys = { AltUnityKeyCode.K, AltUnityKeyCode.L };
+            altUnityDriver.PressKeys(keys);
+            var altUnityObject = altUnityDriver.FindObject(By.NAME, "Capsule");
+            var finalPropertyValue = altUnityObject.GetComponentProperty<string>("AltUnityExampleScriptCapsule", "stringToSetFromTests", "Assembly-CSharp");
+            Assert.AreEqual("multiple keys pressed", finalPropertyValue);
+        }
+
+    .. code-tab:: java
+
+        @Test
+        public void testPressKeys()
+        {
+            AltUnityKeyCode[] keys = {AltUnityKeyCode.K, AltUnityKeyCode.L};
+
+            altUnityDriver.pressKeys(new AltPressKeysParams.Builder(keys).build());
+
+            AltFindObjectsParams altFindObjectsParams = new AltFindObjectsParams.Builder(
+                    AltUnityDriver.By.NAME, "Capsule").build();
+            AltUnityObject altUnityObject = altUnityDriver.findObject(altFindObjectsParams);
+
+            AltGetComponentPropertyParams altGetComponentPropertyParams = new AltGetComponentPropertyParams.Builder(
+                "AltUnityExampleScriptCapsule",
+                "stringToSetFromTests").withAssembly("Assembly-CSharp").build();
+            String finalPropertyValue = altUnityObject.getComponentProperty(altGetComponentPropertyParams, String.class);
+
+            assertEquals(finalPropertyValue, "multiple keys pressed");
+        }
+
+    .. code-tab:: py
+
+        def test_press_keys(self):
+            keys = [AltUnityKeyCode.K, AltUnityKeyCode.L]
+            self.altdriver.press_keys(keys)
+
+            alt_unity_object = self.altdriver.find_object(By.NAME, "Capsule")
+            property_value = alt_unity_object.get_component_property(
+                "AltUnityExampleScriptCapsule",
+                "stringToSetFromTests",
+                assembly="Assembly-CSharp"
+            )
+            assert property_value == "multiple keys pressed"
+
+```
+
 #### Scroll
 
 Simulate scroll action in your game.
@@ -1807,7 +1877,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             - int
 
-            .. literalinclude:: ../_static/examples/commands/csharp-player-pref-int.cs
+            .. literalinclude:: ../_static/examples~/commands/csharp-player-pref-int.cs
                 :language: C#
                 :emphasize-lines: 6,11
 
@@ -1827,7 +1897,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             - float
 
-            .. literalinclude:: ../_static/examples/commands/csharp-player-pref-float.cs
+            .. literalinclude:: ../_static/examples~/commands/csharp-player-pref-float.cs
                 :language: C#
                 :emphasize-lines: 6,11
 
@@ -1847,7 +1917,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             - string
 
-            .. literalinclude:: ../_static/examples/commands/csharp-player-pref-string.cs
+            .. literalinclude:: ../_static/examples~/commands/csharp-player-pref-string.cs
                 :language: C#
                 :emphasize-lines: 6,11
 
@@ -1869,7 +1939,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             - float
 
-            .. literalinclude:: ../_static/examples/commands/java-player-pref-float.java
+            .. literalinclude:: ../_static/examples~/commands/java-player-pref-float.java
                 :language: java
                 :emphasize-lines: 6,11
 
@@ -1889,7 +1959,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             - int
 
-            .. literalinclude:: ../_static/examples/commands/java-player-pref-int.java
+            .. literalinclude:: ../_static/examples~/commands/java-player-pref-int.java
                 :language: java
                 :emphasize-lines: 6,11
 
@@ -1909,7 +1979,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             - string
 
-            .. literalinclude:: ../_static/examples/commands/java-player-pref-string.java
+            .. literalinclude:: ../_static/examples~/commands/java-player-pref-string.java
                 :language: java
                 :emphasize-lines: 6,11
 
@@ -1931,7 +2001,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             - string/float/int
 
-            .. literalinclude:: ../_static/examples/commands/python-player-prefs.py
+            .. literalinclude:: ../_static/examples~/commands/python-player-prefs.py
                 :language: py
                 :emphasize-lines: 6,10
 
@@ -1964,7 +2034,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             *Examples*
 
-            .. literalinclude:: ../_static/examples/commands/csharp-player-pref-string.cs
+            .. literalinclude:: ../_static/examples~/commands/csharp-player-pref-string.cs
                 :language: C#
                 :emphasize-lines: 5
 
@@ -1990,7 +2060,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             *Examples*
 
-            .. literalinclude:: ../_static/examples/commands/java-player-pref-string.java
+            .. literalinclude:: ../_static/examples~/commands/java-player-pref-string.java
                 :language: java
                 :emphasize-lines: 5
 
@@ -2018,7 +2088,7 @@ This is an enum type used for the **option** parameter in the [set_player_pref_k
 
             *Examples*
 
-            .. literalinclude:: ../_static/examples/commands/python-player-prefs.py
+            .. literalinclude:: ../_static/examples~/commands/python-player-prefs.py
                 :language: py
                 :emphasize-lines: 4,5
 ```
@@ -2087,7 +2157,7 @@ Removes key and its corresponding value from PlayerPrefs.
 
     .. tab:: Python
 
-        .. literalinclude:: ../_static/examples/commands/python-player-prefs.py
+        .. literalinclude:: ../_static/examples~/commands/python-player-prefs.py
             :language: py
             :emphasize-lines: 8
 

@@ -8,6 +8,7 @@ public class AltUnityInputFieldRaisedEvents: MonoBehaviour, ISubmitHandler{
     private bool onValueChangedInvoked = false;
     private bool onSubmitInvoked = false;
     private bool onEndEditInvoked = false;
+    
     public void OnValueChanged()
     {
         onValueChangedInvoked = true;

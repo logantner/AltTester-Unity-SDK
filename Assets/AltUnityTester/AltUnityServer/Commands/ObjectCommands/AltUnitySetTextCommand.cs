@@ -38,6 +38,7 @@ namespace Altom.AltUnityTester.Commands
                     {
                         uiInputFieldComp.onValueChanged.Invoke(CommandParams.value);
                         checkSubmit(uiInputFieldComp.gameObject);
+                        uiInputFieldComp.onEndEdit.Invoke(CommandParams.value);
                     }
                     else
                     {

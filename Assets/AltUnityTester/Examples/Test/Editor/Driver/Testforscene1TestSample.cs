@@ -175,13 +175,25 @@ namespace Altom.AltUnityDriver.Tests
         }
 
         [Test]
-        public void TestSetTextForElement()
+        public void TestSetTextForUnityUIInputField()
         {
-            const string name = "InputField";
-            const string text = "InputFieldTest";
-            var input = altUnityDriver.FindObject(By.NAME, name).SetText(text);
-            Assert.NotNull(input);
-            Assert.AreEqual(input.GetText(), text);
+            var inputField = altUnityDriver.FindObject(By.NAME, "UnityUIInputField").SetText("exampleUnityUIInputField", true);
+            Assert.AreEqual("exampleUnityUIInputField", inputField.GetText());
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onValueChangedInvoked", "Assembly-CSharp"));
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onSubmitInvoked", "Assembly-CSharp"));
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onEndEditInvoked", "Assembly-CSharp"));
+
+        }
+        
+        [Test]
+        public void TestSetTextForTextMeshInputField()
+        {
+            var inputField = altUnityDriver.FindObject(By.NAME, "TextMeshInputField").SetText("exampleTextMeshInputField", true);
+            Assert.AreEqual("exampleTextMeshInputField", inputField.GetText());
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onValueChangedInvoked", "Assembly-CSharp"));
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onSubmitInvoked", "Assembly-CSharp"));
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onEndEditInvoked", "Assembly-CSharp"));
+
         }
 
         [Test]
@@ -970,7 +982,11 @@ namespace Altom.AltUnityDriver.Tests
         public void TestFindObjectsByLayer()
         {
             var altElements = altUnityDriver.FindObjects(By.LAYER, "Default");
+#if UNITY_ANDROID
             Assert.AreEqual(12, altElements.Count);
+#else
+            Assert.AreEqual(13, altElements.Count);
+#endif
         }
         [Test]
         public void TestFindObjectsByContainName()
@@ -2000,14 +2016,6 @@ namespace Altom.AltUnityDriver.Tests
             Assert.AreNotEqual(initialScene, currentScene);
         }
 
-        [Test]
-        public void TestInputFieldEvents()
-        {
-            var inputField = altUnityDriver.FindObject(By.NAME, "InputField").SetText("example", true);
-            Assert.AreEqual("example", inputField.GetText());
-            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onValueChangedInvoked", "Assembly-CSharp"));
-            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onSubmitInvoked", "Assembly-CSharp"));
-        }
         [Test]
         //uses InvokeMethod
         [Category("WebGLUnsupported")]

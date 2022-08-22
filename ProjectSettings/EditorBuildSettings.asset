@@ -36,6 +36,9 @@ EditorBuildSettings:
     path: Assets/AltUnityTester/Examples/Scenes/Scene 10 Sample NIS.unity
     guid: 244f1ab64a936478a88c45243ee5d285
   - enabled: 1
+    path: Assets/AltUnityTester/Examples/Scenes/Scene 11 ScrollView Scene.unity
+    guid: 664cea8e61a023d43a08160169e52940
+  - enabled: 1
     path: Assets/AltUnityTester/Examples/Scenes/Scene6.unity
     guid: 5197c7b6f3ba7a84fbb6c6d5743d3bc7
   m_configObjects:

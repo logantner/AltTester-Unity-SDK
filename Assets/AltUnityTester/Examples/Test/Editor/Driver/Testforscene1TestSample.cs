@@ -982,11 +982,12 @@ namespace Altom.AltUnityDriver.Tests
         public void TestFindObjectsByLayer()
         {
             var altElements = altUnityDriver.FindObjects(By.LAYER, "Default");
-#if UNITY_ANDROID
-            Assert.AreEqual(12, altElements.Count);
-#else
-            Assert.AreEqual(13, altElements.Count);
-#endif
+            Assert.AreEqual(13,altElements.Count);
+// #if UNITY_ANDROID
+//             Assert.AreEqual(12, altElements.Count);
+// #else
+//             Assert.AreEqual(13, altElements.Count);
+// #endif
         }
         [Test]
         public void TestFindObjectsByContainName()

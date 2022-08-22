@@ -104,8 +104,11 @@ namespace Altom.AltUnityDriver.Tests
             }
 
             Debug.WriteLine(listOfElements);
-            Assert.AreEqual(25,altElements.Count);
-
+#if UNITY_ANDROID
+            Assert.AreEqual(24, altElements.Count);
+#else
+            Assert.AreEqual(25, altElements.Count);
+#endif
             Assert.IsNotNull(altElements.Where(p => p.name == "EventSystem"));
             Assert.IsNotNull(altElements.Where(p => p.name == "Canvas"));
             Assert.IsNotNull(altElements.Where(p => p.name == "Panel Drag Area"));

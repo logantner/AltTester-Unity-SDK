@@ -676,7 +676,7 @@ class TestScene01:
             self.altdriver.find_object(By.NAME, "Capsule", By.NAME, "Camera")
 
     def test_input_field_events(self):
-        input_field = self.altdriver.find_object(By.NAME, "InputField").set_text("example", submit=True)
+        input_field = self.altdriver.find_object(By.NAME, "UnityUIInputField").set_text("example", submit=True)
 
         assert input_field.get_text() == "example"
         assert input_field.get_component_property(

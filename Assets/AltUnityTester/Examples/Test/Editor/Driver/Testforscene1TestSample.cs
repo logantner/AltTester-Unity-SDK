@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using Altom.AltUnityDriver.Logging;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Altom.AltUnityDriver.Tests
 {
@@ -982,8 +983,12 @@ namespace Altom.AltUnityDriver.Tests
         public void TestFindObjectsByLayer()
         {
             var altElements = altUnityDriver.FindObjects(By.LAYER, "Default");
-            Assert.IsTrue(altElements.Count >= 12);
-            Assert.IsTrue(altElements.Count <= 13);
+            // Assert.IsTrue(altElements.Count >= 12);
+            // Assert.IsTrue(altElements.Count <= 13);
+            if (Application.platform == RuntimePlatform.Android)
+                Assert.AreEqual(12, altElements.Count);
+            else
+                Assert.AreEqual(13, altElements.Count);
 // #if UNITY_ANDROID
 //             Assert.AreEqual(12, altElements.Count);
 // #else

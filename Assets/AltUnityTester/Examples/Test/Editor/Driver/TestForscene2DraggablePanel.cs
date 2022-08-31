@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using Altom.AltUnityDriver.Logging;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace Altom.AltUnityDriver.Tests
 {
@@ -104,13 +103,14 @@ namespace Altom.AltUnityDriver.Tests
                 listOfElements += element.name + "; ";
             }
 
-            System.Diagnostics.Debug.Print(listOfElements);
+            Debug.Print(listOfElements);
             // Assert.IsTrue(altElements.Count >= 24);
             // Assert.IsTrue(altElements.Count <= 25);
-             if (Application.platform == RuntimePlatform.Android)
-                Assert.AreEqual(24, altElements.Count);
-            else
-                Assert.AreEqual(25, altElements.Count);
+#if UNITY_ANDROID && !UNITY_EDITOR
+        Assert.AreEqual(24, altElements.Count);
+#else
+        Assert.AreEqual(25, altElements.Count);
+#endif
 // #if UNITY_ANDROID
 //             Assert.AreEqual(24, altElements.Count);
 // #else

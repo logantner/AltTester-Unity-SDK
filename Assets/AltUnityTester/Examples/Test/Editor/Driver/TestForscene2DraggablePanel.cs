@@ -104,13 +104,8 @@ namespace Altom.AltUnityDriver.Tests
             }
 
             Debug.Print(listOfElements);
-            // Assert.IsTrue(altElements.Count >= 24);
-            // Assert.IsTrue(altElements.Count <= 25);
-#if UNITY_ANDROID && !UNITY_EDITOR
-        Assert.AreEqual(24, altElements.Count);
-#else
-        Assert.AreEqual(25, altElements.Count);
-#endif
+            Assert.IsTrue(altElements.Count >= 24);
+            Assert.IsTrue(altElements.Count <= 25);
 
 // #if UNITY_ANDROID
 //             Assert.AreEqual(24, altElements.Count);

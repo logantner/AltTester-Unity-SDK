@@ -104,7 +104,7 @@ namespace Altom.AltUnityDriver.Tests
                 listOfElements += element.name + "; ";
             }
 
-            Debug.WriteLine(listOfElements);
+            System.Diagnostics.Debug.Print(listOfElements);
             // Assert.IsTrue(altElements.Count >= 24);
             // Assert.IsTrue(altElements.Count <= 25);
              if (Application.platform == RuntimePlatform.Android)

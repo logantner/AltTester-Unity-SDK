@@ -982,15 +982,11 @@ namespace Altom.AltUnityDriver.Tests
         public void TestFindObjectsByLayer()
         {
             var altElements = altUnityDriver.FindObjects(By.LAYER, "Default");
+            //for android device they are 12 elements, and 13 elements otherway
             Assert.IsTrue(altElements.Count >= 12);
             Assert.IsTrue(altElements.Count <= 13);
-            
-// #if UNITY_ANDROID
-//             Assert.AreEqual(12, altElements.Count);
-// #else
-//             Assert.AreEqual(13, altElements.Count);
-// #endif
         }
+
         [Test]
         public void TestFindObjectsByContainName()
         {

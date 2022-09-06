@@ -44,6 +44,8 @@ build-docs:
     - when: never
   script:
     - cd Docs
+    - python3 -m venv altunity-docs
+    - source altunity-docs/bin/activate
     - pip install --upgrade pip
     - pip install --upgrade setuptools wheel
     - pip install -r requirements.txt

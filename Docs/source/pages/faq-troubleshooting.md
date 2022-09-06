@@ -123,21 +123,6 @@ To use the Input from AltUnity Tester you have to:
  <br>
 
 <details>
-<summary>I get the error: <strong>Error while running command: iproxy 13000 13000 </strong></summary>
-<br>
-
-If the inner exception is:
-<br>
-
-<em>System.ComponentModel.Win32Exception : ApplicationName='iproxy', CommandLine='13000 13000', CurrentDirectory='', Native error= Cannot find the specified file</em>
-<br>
-
-Pass the full path of iproxy to <em>AltUnityPortForwarding.ForwardIos</em>
-
-</details>
-<br>
-
-<details>
 <summary> I downloaded the AltUnity Tester package v1.7.2 from the documentation on MacOS. I got a warning pop-up about the input system where I chose 'Yes' because I am using the New Input System. After reopening Unity Editor, <strong>AltUnity Tester is missing.</strong></summary>
 <br>
 

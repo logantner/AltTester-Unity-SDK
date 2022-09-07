@@ -30,9 +30,6 @@ namespace Altom.AltUnityTester.UI
         public UnityEngine.UI.Image Icon = null;
 
         [UnityEngine.SerializeField]
-        public UnityEngine.UI.Text PortLabel = null;
-
-        [UnityEngine.SerializeField]
         public UnityEngine.UI.InputField HostInputField = null;
 
         [UnityEngine.SerializeField]

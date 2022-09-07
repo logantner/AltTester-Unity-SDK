@@ -156,22 +156,22 @@ namespace Altom.AltUnityTesterTools
             MessageText.color = Color.white;
             MessageText.alignment = TextAnchor.MiddleCenter;
 
-            // Create Port Label
-            var PortLabel = new GameObject("PortLabel", new System.Type[] { typeof(RectTransform), typeof(CanvasRenderer), typeof(Text) });
-            var PortLabelRectTransform = PortLabel.GetComponent<RectTransform>();
-            PortLabelRectTransform.SetParent(DialogTransform, false);
+            // Create Info Label
+            var InfoLabel = new GameObject("InfoLabel", new System.Type[] { typeof(RectTransform), typeof(CanvasRenderer), typeof(Text) });
+            var InfoLabelRectTransform = InfoLabel.GetComponent<RectTransform>();
+            InfoLabelRectTransform.SetParent(DialogTransform, false);
 
-            PortLabelRectTransform.localPosition = new Vector3(0, -50, 0);
-            PortLabelRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            PortLabelRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-            PortLabelRectTransform.sizeDelta = new Vector2(400, 75);
-            PortLabelRectTransform.pivot = new Vector2(0.5f, 0.5f);
+            InfoLabelRectTransform.localPosition = new Vector3(0, -50, 0);
+            InfoLabelRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            InfoLabelRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            InfoLabelRectTransform.sizeDelta = new Vector2(400, 75);
+            InfoLabelRectTransform.pivot = new Vector2(0.5f, 0.5f);
 
-            var PortLabelText = PortLabel.GetComponent<Text>();
-            PortLabelText.text = "To change the port number input a new port and press the Restart button.";
-            PortLabelText.fontSize = 20;
-            PortLabelText.color = Color.white;
-            PortLabelText.alignment = TextAnchor.MiddleCenter;
+            var InfoLabelText = InfoLabel.GetComponent<Text>();
+            InfoLabelText.text = "To change the host, port or game name input a new value and press the Restart button.";
+            InfoLabelText.fontSize = 20;
+            InfoLabelText.color = Color.white;
+            InfoLabelText.alignment = TextAnchor.MiddleCenter;
 
             // Create Host Input Field
             var HostInputFieldGameObject = new GameObject("HostInputField", new System.Type[] { typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(InputField) });
@@ -356,7 +356,6 @@ namespace Altom.AltUnityTesterTools
             CloseButtonImage.SetNativeSize();
             var CloseButton = CloseButtonGameObject.GetComponent<Button>();
 
-
             // Create Icon
             var Icon = new GameObject("Icon", new System.Type[] { typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button), typeof(AltUnityPrefabDrag) });
             var IconRectTransform = Icon.GetComponent<RectTransform>();
@@ -381,15 +380,15 @@ namespace Altom.AltUnityTesterTools
             AltUnityrunner.RunOnlyInDebugMode = true;
             AltUnityrunner.InputsVisualizer = AltUnityInputsVisualiser;
 
-
             // Set AltUnityDialog variables
             AltUnityDialog.Dialog = DialogGameObject;
             AltUnityDialog.TitleText = TitleText;
             AltUnityDialog.MessageText = MessageText;
             AltUnityDialog.CloseButton = CloseButton;
             AltUnityDialog.Icon = IconImage;
-            AltUnityDialog.PortLabel = PortLabelText;
+            AltUnityDialog.HostInputField = HostInputField;
             AltUnityDialog.PortInputField = PortInputField;
+            AltUnityDialog.GameNameInputField = GameNameInputField;
             AltUnityDialog.RestartButton = RestartButton;
 
             var testPath = "Assets/Editor/AltUnityRunnerPrefab.prefab";

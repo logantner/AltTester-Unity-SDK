@@ -103,9 +103,10 @@ namespace Altom.AltUnityDriver.Tests
                 listOfElements += element.name + "; ";
             }
 
-            Debug.WriteLine(listOfElements);
+            // for android device they are 24 elements, and 25 elements otherwise
+            Assert.IsTrue(altElements.Count >= 24);
+            Assert.IsTrue(altElements.Count <= 25);
 
-            Assert.AreEqual(24, altElements.Count, listOfElements);
             Assert.IsNotNull(altElements.Where(p => p.name == "EventSystem"));
             Assert.IsNotNull(altElements.Where(p => p.name == "Canvas"));
             Assert.IsNotNull(altElements.Where(p => p.name == "Panel Drag Area"));

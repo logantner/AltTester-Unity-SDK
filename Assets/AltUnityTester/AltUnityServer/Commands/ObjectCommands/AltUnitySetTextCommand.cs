@@ -37,7 +37,9 @@ namespace Altom.AltUnityTester.Commands
                     if (uiInputFieldComp != null)
                     {
                         uiInputFieldComp.onValueChanged.Invoke(CommandParams.value);
+                        uiInputFieldComp.onSubmit.Invoke(CommandParams.value);
                         checkSubmit(uiInputFieldComp.gameObject);
+                        uiInputFieldComp.onEndEdit.Invoke(CommandParams.value);
                     }
                     else
                     {
@@ -45,6 +47,7 @@ namespace Altom.AltUnityTester.Commands
                         if (tMPInputFieldComp != null)
                         {
                             tMPInputFieldComp.onValueChanged.Invoke(CommandParams.value);
+                            tMPInputFieldComp.onSubmit.Invoke(CommandParams.value);
                             checkSubmit(tMPInputFieldComp.gameObject);
                             tMPInputFieldComp.onEndEdit.Invoke(CommandParams.value);
                         }

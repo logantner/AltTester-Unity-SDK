@@ -179,20 +179,20 @@ namespace Altom.AltUnityDriver.Tests
         {
             var inputField = altUnityDriver.FindObject(By.NAME, "UnityUIInputField").SetText("exampleUnityUIInputField", true);
             Assert.AreEqual("exampleUnityUIInputField", inputField.GetText());
-            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onValueChangedInvoked", "Assembly-CSharp"));
-            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onSubmitInvoked", "Assembly-CSharp"));
-            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onEndEditInvoked", "Assembly-CSharp"));
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onValueChangedInvoked", "Assembly-CSharp"), "onValueChangedInvoked was false");
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onSubmitInvoked", "Assembly-CSharp"), "onSubmitInvoked was false");
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onEndEditInvoked", "Assembly-CSharp"), "onEndEditInvoked was false");
 
         }
-        
+
         [Test]
         public void TestSetTextForTextMeshInputField()
         {
             var inputField = altUnityDriver.FindObject(By.NAME, "TextMeshInputField").SetText("exampleTextMeshInputField", true);
             Assert.AreEqual("exampleTextMeshInputField", inputField.GetText());
-            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onValueChangedInvoked", "Assembly-CSharp"));
-            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onSubmitInvoked", "Assembly-CSharp"));
-            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onEndEditInvoked", "Assembly-CSharp"));
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onValueChangedInvoked", "Assembly-CSharp"), "onValueChangedInvoked was false");
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onSubmitInvoked", "Assembly-CSharp"), "onSubmitInvoked was false");
+            Assert.IsTrue(inputField.GetComponentProperty<bool>("AltUnityInputFieldRaisedEvents", "onEndEditInvoked", "Assembly-CSharp"), "onEndEditInvoked was false");
 
         }
 

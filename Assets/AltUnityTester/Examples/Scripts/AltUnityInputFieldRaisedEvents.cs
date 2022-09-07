@@ -1,20 +1,21 @@
 
-using UnityEngine.UI;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System;
+using UnityEngine.UI;
 
-public class AltUnityInputFieldRaisedEvents: MonoBehaviour, ISubmitHandler{
+public class AltUnityInputFieldRaisedEvents : MonoBehaviour
+{
     private bool onValueChangedInvoked = false;
     private bool onSubmitInvoked = false;
     private bool onEndEditInvoked = false;
-    
+
     public void OnValueChanged()
     {
         onValueChangedInvoked = true;
     }
 
-    public void OnSubmit(BaseEventData eventData)
+    public void OnSubmit()
     {
         onSubmitInvoked = true;
     }

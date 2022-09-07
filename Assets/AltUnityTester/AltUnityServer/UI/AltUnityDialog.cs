@@ -104,6 +104,15 @@ namespace Altom.AltUnityTester.UI
         {
             logger.Debug("Restart the AltUnity Tester.");
 
+            if (Uri.CheckHostName(HostInputField.text) != UriHostNameType.Unknown) {
+                InstrumentationSettings.ProxyHost = HostInputField.text;
+            }
+            else
+            {
+                setDialog("The host should be a valid host.", ERROR_COLOR, true);
+                return;
+            }
+
             int port;
             if (Int32.TryParse(PortInputField.text, out port) && port > 0 && port <= 65535)
             {
@@ -207,13 +216,13 @@ namespace Altom.AltUnityTester.UI
 
         private void onStart()
         {
-            setDialog("Connecting to AltUnity Proxy on " + InstrumentationSettings.ProxyHost + ":" + InstrumentationSettings.ProxyPort, SUCCESS_COLOR, Dialog.activeSelf || wasConnectedBeforeToProxy);
+            setDialog("Connected to AltUnity Proxy on " + InstrumentationSettings.ProxyHost + ":" + InstrumentationSettings.ProxyPort + " with game name " + InstrumentationSettings.GameName, SUCCESS_COLOR, Dialog.activeSelf || wasConnectedBeforeToProxy);
             wasConnectedBeforeToProxy = false;
         }
 
         private void onProxyConnect()
         {
-            string message = "Connected to AltUnity Proxy on " + InstrumentationSettings.ProxyHost + ":" + InstrumentationSettings.ProxyPort;
+            string message = "Connected to AltUnity Proxy on " + InstrumentationSettings.ProxyHost + ":" + InstrumentationSettings.ProxyPort + " with game name " + InstrumentationSettings.GameName;
 #if ALTUNITYTESTER && ENABLE_LEGACY_INPUT_MANAGER
             Input.UseCustomInput = true;
             UnityEngine.Debug.Log("Custom input: " + Input.UseCustomInput);

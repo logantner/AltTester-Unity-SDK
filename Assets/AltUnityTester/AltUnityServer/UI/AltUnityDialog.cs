@@ -14,7 +14,6 @@ namespace Altom.AltUnityTester.UI
         private readonly UnityEngine.Color WARNING_COLOR = new UnityEngine.Color32(255, 255, 95, 255);
         private readonly UnityEngine.Color ERROR_COLOR = new UnityEngine.Color32(191, 71, 85, 255);
 
-
         [UnityEngine.SerializeField]
         public UnityEngine.GameObject Dialog = null;
 
@@ -34,7 +33,13 @@ namespace Altom.AltUnityTester.UI
         public UnityEngine.UI.Text PortLabel = null;
 
         [UnityEngine.SerializeField]
+        public UnityEngine.UI.InputField HostInputField = null;
+
+        [UnityEngine.SerializeField]
         public UnityEngine.UI.InputField PortInputField = null;
+
+        [UnityEngine.SerializeField]
+        public UnityEngine.UI.InputField GameNameInputField = null;
 
         [UnityEngine.SerializeField]
         public UnityEngine.UI.Button RestartButton = null;
@@ -48,7 +53,10 @@ namespace Altom.AltUnityTester.UI
 
         protected void Start()
         {
+            SetUpHostInputField();
             SetUpPortInputField();
+            SetUpGameNameInputField();
+
             SetUpRestartButton();
 
             Dialog.SetActive(InstrumentationSettings.ShowPopUp);
@@ -78,11 +86,21 @@ namespace Altom.AltUnityTester.UI
             }
         }
 
+        public void SetUpHostInputField()
+        {
+            HostInputField.text = InstrumentationSettings.ProxyHost;
+        }
+
         public void SetUpPortInputField()
         {
-            PortInputField.text = InstrumentationSettings.AltUnityTesterPort.ToString();
+            PortInputField.text = InstrumentationSettings.ProxyPort.ToString();
             PortInputField.onValueChanged.AddListener(OnPortInputFieldValueChange);
             PortInputField.characterValidation = UnityEngine.UI.InputField.CharacterValidation.Integer;
+        }
+
+        public void SetUpGameNameInputField()
+        {
+            GameNameInputField.text = InstrumentationSettings.GameName;
         }
 
         private void OnRestartButtonPress()
@@ -92,7 +110,7 @@ namespace Altom.AltUnityTester.UI
             int port;
             if (Int32.TryParse(PortInputField.text, out port) && port > 0 && port <= 65535)
             {
-                InstrumentationSettings.AltUnityTesterPort = port;
+                InstrumentationSettings.ProxyPort = port;
             }
             else
             {
@@ -158,13 +176,11 @@ namespace Altom.AltUnityTester.UI
 #if UNITY_WEBGL && !UNITY_EDITOR
             communication = new WebSocketWebGLCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
 #else
-
-            communication = new WebSocketClientCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort);
+            communication = new WebSocketClientCommunication(cmdHandler, InstrumentationSettings.ProxyHost, InstrumentationSettings.ProxyPort, InstrumentationSettings.GameName);
 #endif
             communication.OnConnect += onProxyConnect;
             communication.OnDisconnect += onProxyDisconnect;
             communication.OnError += onError;
-
         }
 
         private void startProxyCommProtocol()

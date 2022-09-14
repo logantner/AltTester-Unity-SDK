@@ -31,10 +31,12 @@ namespace Altom.AltUnityTester.Communication
             wsClient = new WebSocket(uri.ToString());
             wsClient.Log.Level = LogLevel.Fatal;
             websocketHandler = new AltClientWebSocketHandler(wsClient, cmdHandler);
+
             wsClient.OnOpen += (sender, message) =>
             {
                 if (this.OnConnect != null) this.OnConnect();
             };
+
             wsClient.OnClose += (sender, args) =>
             {
                 if (this.OnDisconnect != null) this.OnDisconnect();

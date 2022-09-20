@@ -226,7 +226,7 @@ namespace Altom.AltUnityTesterEditor
                             EditorConfiguration.LatestInspectorVersion = releasedVersion;
                             downloadURl = match.Value;
                             version = releasedVersion;
-                            EditorConfiguration.ShowInsectorPopUpInEditor = true;
+                            EditorConfiguration.ShowInspectorPopUpInEditor = true;
                         }
                     }
                 }
@@ -510,7 +510,7 @@ namespace Altom.AltUnityTesterEditor
         {
             var screenWidth = UnityEditor.EditorGUIUtility.currentViewWidth;
 
-            if (EditorConfiguration.ShowInsectorPopUpInEditor)
+            if (EditorConfiguration.ShowInspectorPopUpInEditor)
             {
                 popUpPosition = new UnityEngine.Rect(screenWidth / 2 - 300, 0, 600, 100);
                 popUpContentPosition = new UnityEngine.Rect(screenWidth / 2 - 296, 4, 592, 92);
@@ -531,7 +531,7 @@ namespace Altom.AltUnityTesterEditor
                     }
                     if (closeButtonPosition.Contains(UnityEngine.Event.current.mousePosition))
                     {
-                        EditorConfiguration.ShowInsectorPopUpInEditor = false;
+                        EditorConfiguration.ShowInspectorPopUpInEditor = false;
                         UnityEngine.GUIUtility.ExitGUI();
                     }
                 }
@@ -823,7 +823,7 @@ namespace Altom.AltUnityTesterEditor
             UnityEditor.EditorGUILayout.EndHorizontal();
 
             UnityEditor.EditorGUILayout.EndScrollView();
-            if (EditorConfiguration.ShowInsectorPopUpInEditor)
+            if (EditorConfiguration.ShowInspectorPopUpInEditor)
             {
                 showAltUnityPopup();
             }
